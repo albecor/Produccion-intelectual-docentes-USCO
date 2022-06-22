@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-let PID_APP_HOST='localhost:27017'
+let PID_APP_HOST='127.0.0.1'
 let PID_APP_DATABASE='PID_DB'
 
 const MONGODB_URI = `mongodb://${PID_APP_HOST}/${PID_APP_DATABASE}`;
