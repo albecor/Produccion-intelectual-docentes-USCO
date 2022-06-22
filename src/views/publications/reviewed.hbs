@@ -1,0 +1,49 @@
+<div class="container">
+<div> 
+  <hr>
+  <h2> <p class="font-italic inline">Solicitudes</p></h2>  
+  <hr>
+</div>
+{{#if publications}}
+  <table class="table table-light table-bordered table-hover overflow-y: hidden">
+    <thead class="table-secondary">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Docente</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Tipo</th>
+        <th scope="col">URL</th>
+        <th scope="col">Fecha</th>
+        <th scope="col">Estado</th>
+      </tr>
+    </thead>
+    <tbody>   
+      {{#publications}} 
+        <tr>
+            <th scope="row">{{index}}</th>
+            <td>{{docente}}</td>
+            <td>{{name}}</td>
+            <td>{{type}}</td>
+            <td>
+              <a href="{{URL}}" target="_blank"><i class="fas fa-globe"></i></a>
+            </td>
+            <td>{{fecha_i}}</td>
+            {{#if approved}}
+              <td>Aprobado</td>
+            {{else}}
+              <td>No aprobado</td>
+            {{/if}}
+            
+        </tr>
+      {{/publications}}     
+    </tbody>
+  </table>
+{{else}}
+  <br>
+  <br>
+  <br>
+  <div>
+    <h4>No se encontraron solicitudes</h4>
+  </div>
+{{/if}}
+</div>

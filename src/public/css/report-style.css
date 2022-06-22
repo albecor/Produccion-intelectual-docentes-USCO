@@ -1,0 +1,108 @@
+@page {
+  size: letterx;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+}
+
+html {
+  display: flex;
+  justify-content: center;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  /*border: 1px solid #000;*/
+}
+
+body {
+  width: 22cm;
+  height: 27.5cm;
+  padding: 1.5cm 2cm 0cm 2cm;
+}
+
+.main{
+  display: grid;
+  grid-template-rows: 250px, auto, auto;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.header, .main-content{
+  grid-column: 1 / -1;
+}
+
+.header-image{
+  width: 80%;
+}
+
+.header{
+  text-align: center;
+  height: 150px;
+}
+
+h1{
+  text-align: center;
+  font-size: 25px;
+}
+
+.apply{
+  
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.apply > div{
+  display: inline-block;
+}
+
+.w-100{
+  grid-column: 1 / -1;
+}
+
+.w-1-50{
+    grid-column: 1 / 4;
+}
+
+.w-2-50 {
+    grid-column: 4 / -1;
+}
+
+.label, .value{
+  width: 100%;
+  padding: 5px;
+}
+
+.label{
+  background-color: #ccc;
+}
+
+.footer{
+  text-align: center;
+  width: 100%;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 15px;
+}
+
+.footer > div > p{
+  font-size: 11px;
+  margin: 0px;
+}
+
+.noPrint{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+@media print {
+  .noPrint {
+    display: none;
+  }
+}

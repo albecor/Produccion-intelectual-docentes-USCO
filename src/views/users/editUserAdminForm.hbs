@@ -1,0 +1,101 @@
+<div class="col-md-8 mx-auto mt-0">
+    <div class="card ">
+        <div class="card-header text-center bg-secondary">            
+            <h1 class="h4 text-white font-weight-bold">Edición de usuarios</h1>
+        </div>
+        <div class="card-body">  
+
+            <form action="/users/editUserAdmin/{{user1.id}}?_method=PUT" class= "justify-content-center" method="POST">             
+                <input type="hidden" name="_method" value="PUT">  
+                
+                <h6 class="font-weight-bold mt-0 mb-1">Información personal</h6>                              
+                <div class="form-group row d-flex justify-content-center"> 
+                    <div class="col-md-6 mb-2">                        
+                        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="identification_type">
+                            <!-- Circulear externa 024 de 2019 Ministerio de protección social -->                            
+                            <option selected>{{user1.identification_type}}</option>                            
+                            <option value="Cedula">Cédula</option>
+                            <option value="Cedula_extrangeria">Cédula de extrangeria</option>
+                            <option value="Pasaporte">Pasaporte</option>
+                            <option value="Tarjeta_identidad">Tarjeta de identidad</option>
+                            <option value="Registro_civil">Registri civil</option>
+                            <option value="Carnet_diplomatico">Carné diplomático</option>
+                            <option value="Salvoconducto">Salvoconducto</option>
+                            <option value="Perm_especial_permanencia">Perrmiso especial de permanencia</option>
+                            <option value="Documento_extrangero">Documento extrangero</option>
+                            <option value="Sin_identificacion">Sin identificación</option>
+                        </select>
+                    </div> 
+                    <div class="col-md-6 mb-2">
+                        <input type="number" class="form-control bg-light" name="identification" placeholder="Número de identificación"
+                            value="{{user1.identification}}">
+                    </div>     
+                    <div class="col-md-4 mb-0">
+                        <input type="text" class="form-control bg-light" name="name" placeholder="Nombres"
+                            value="{{user1.name}}">
+                    </div>
+                    <div class="col-md-4 mb-0">
+                        <input type="text" class="form-control bg-light" name="lastname" placeholder="Primer apellido"
+                            value="{{user1.lastname}}">
+                    </div>
+                    <div class="col-md-4 mb-0">
+                        <input type="text" class="form-control bg-light" name="sec_lastname"
+                            placeholder="Segundo apellido" value="{{user1.sec_lastname}}">
+                    </div>                                       
+                </div>                                  
+                <hr>
+
+                <h6 class="font-weight-bold mt-0 mb-1">Datos de localización</h6>                              
+                <div class="form-group row"> 
+                    <div class="col-md-6 mb-2"> 
+                        <input type="number" class="form-control bg-light" name="phone"
+                            placeholder="Teléfono de la casa" value="{{user1._phone}}">
+                    </div>
+                    <div class="col-md-6 mb-2"> 
+                        <input type="text" class="form-control bg-light" name="address"
+                            placeholder="Dirección" value="{{user1.address}}">
+                    </div>
+                    <div class="col-md-6 mb-0"> 
+                        <select class="custom-select mr-sm-2" name="departamento" id="departamentoSelect"
+                            onchange="if (this.selectedIndex) municipiosList(this);" required>
+                            <option selected disabled value="">-- Departamento --</option>
+                            {{#json}}
+                            <option value="{{departamento}}">{{departamento}}</option>
+                            {{/json}}
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-0"> 
+                        <select class="custom-select mr-sm-2" name="municipio" id="munipiosSelect" required>
+                            <option selected disabled value="">-- Municipio --</option>
+                        </select>
+                    </div>
+                </div>
+                <hr>
+
+                <h6 class="font-weight-bold mt-0 mb-1">Información de sesión</h6>                              
+                <div class="form-group row d-flex justify-content-center">                    
+                    <div class="col-md-6 mb-2">                        
+                        <select class="custom-select mr-sm-2" id="role" name="role">
+                            <option selected>{{user1.role}}</option>
+                            <option value="Docente">Docente</option>
+                            <option value="Funcionario">Funcionario</option>
+                            <option value="Admin">Administrador de la plataforma</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <input type="email" class="form-control bg-light" name="email" placeholder="Email"
+                            value="{{user1.email}}">
+                    </div>                                    
+                </div>
+                <hr>        
+                
+                <div class="col-md-4 mx-auto">                  
+                    <button class="btn btn-primary btn-block">Guardar</button>
+                </div>
+                
+            </form>            
+        </div>
+    </div>    
+</div>
+
+<br>

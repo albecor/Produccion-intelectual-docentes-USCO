@@ -1,0 +1,93 @@
+[  
+    {  
+        "id":0,
+        "name":"Artículo Full Paper",
+        "types":[  
+            "Artículo tipo A1",
+            "Artículo tipo A2",
+            "Artículo tipo B",
+            "Artículo tipo C"
+        ]
+    },
+    {  
+        "id":1,
+        "name":"Otras modalidades de publicaciones en  revistas especializadas.",
+        "types":[  
+            "“Comunicación corta” (“short comunication”, “artículo corto”)",
+            "Reportes de caso o Revisiones de tema o Cartas al editor o Editoriales"
+        ]
+    },
+    {  
+        "id":2,
+        "name":"Producción de vídeos, cinematográficas o fonográficas.",
+        "types":[  
+            "Producción de vídeos, cinematográficas o fonográficas de difusión e impacto internacional",
+            "Producción de vídeos, cinematográficas o fonográficas de difusión e impacto nacional"
+        ]
+    },
+    {  
+        "id":3,
+        "name":"Libros que resulten de una labor de investigación.",
+        "types":[  
+            "Investigación"
+        ]
+    },
+    {  
+        "id":4,
+        "name":"Libros de ensayo.",
+        "types":[  
+            "Libro de ensayo"
+        ]
+    },
+    {  
+        "id":5,
+        "name":"Premios nacionales e internacionales",
+        "types":[  
+            "Premios nacionales e internacionales"
+        ]
+    },
+    {  
+        "id":6,
+        "name":"Patentes.",
+        "types":[  
+            "Patente"
+        ]
+    },
+    {  
+        "id":7,
+        "name":"Traducciones de libros.",
+        "types":[  
+            "Traducciones publicadas de libros"
+        ]
+    },
+    {  
+        "id":8,
+        "name":"Obras artísticas.",
+        "types":[  
+            "Obras de creación original artística con impacto o trascendencia internacional.",
+            "Obras de creación original artística con impacto o trascendencia nacional.",
+            "Obras de creación complementaria o de apoyo con impacto o trascendencia internacional.",
+            "Obras de creación complementaria o de apoyo con impacto o trascendencia nacional.",
+            "Interpretación con impacto o trascendencia internacional.",
+            "Interpretación con impacto o trascendencia nacional."
+        ]
+    },
+    {  
+        "id":9,
+        "name":"Producción técnica.",
+        "types":[  
+            "Innovación tecnológica con impacto y aplicación.",
+            "Adaptación tecnológica con impacto y aplicación."
+        ]
+    },
+    {  
+        "id":10,
+        "name":"Producción de software.",
+        "types":[  
+            "Software con un único Autor.",
+            "Software con 2-3 Autores.",
+            "Software con 4-5 Autores.",
+            "Software con 6 o más Autores."
+        ]
+    }
+]

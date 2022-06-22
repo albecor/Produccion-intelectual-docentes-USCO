@@ -1,0 +1,70 @@
+<div class="col-md-12 mx-auto mt-0">
+    <div class="card ">
+        <div class="card-header text-center bg-light">
+            <h1 class="h4 text-black font-weight-bold">Solicitud de Reconocimiento</h1>
+        </div>
+        <div class="card-body">
+            <form action="/publications/add" enctype="multipart/form-data" class= "justify-content-center" id="realForm" onkeydown="return event.key != 'Enter';" method="POST">                         
+                <div class="form-group row">
+                    <div class="col mb-0">
+                        <label for="name">Título</label>
+                        <input id="name" type="text" class="form-control bg-light" name="name" placeholder="Nombre de la Producción Académica"
+                            required>
+                    </div>
+                    <div class="col mb-0">
+                        <label for="url">URL</label>
+                        <input id="URL" type="url" class="form-control bg-light" name="URL" placeholder="URL del título para revisión" 
+                            required>
+                    </div>
+                    <div class="col mb-0">
+                        <label for="date">Fecha de Publicación</label>
+                        <input id="datePublication" type="date" class="form-control bg-light" name="datePublication"
+                                placeholder="Fecha de publicación" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col mb-2">                     
+                        <select class="form-select mr-sm-2" name="clase" id="clase"
+                            onchange="if (this.selectedIndex) PublicationsList(this);" required>
+                            <option selected disabled value="">-- Clase --</option>
+                            {{#json}}
+                            <option value="{{name}}">{{name}}</option>
+                            {{/json}}
+                        </select>
+                    </div> 
+                    <div class="col mb-2">
+                        <select class="form-select mr-sm-2" name="subclase" id="subclase" required>
+                            <option selected disabled value="">-- Subclase --</option>
+                        </select>
+                    </div>
+                    <div class="col mb-2">
+                        <select class="form-select mr-sm-2" name="caracter" id="caracter" required>
+                            <option selected disabled value="">-- Carácter --</option>
+                            <option value="1">Científico</option>
+                            <option value="2">Técnico</option>
+                            <option value="3">Humanístico</option>
+                            <option value="4">Artístico</option>
+                            <option value="5">Pedagógico</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col mb-2">
+                        <textarea class="form-control" name="description" id="description" placeholder="Descripción de la Solicitud" required></textarea>
+                    </div>
+                    <div class="col mb-2">
+                        <input type="file" class="custom-select mr-sm-2 p-0" style="border: 0px;" id="uploadFile" name="upFile" required>
+                    </div>
+                </div>
+                <hr>
+                <div class="col-md-2 mx-auto">                  
+                    <a type="button" class="btn btn-block btn-primary" id="sizeLimitButton" style="color: white;" onclick="sizeLimit()">Crear</a>
+                </div>        
+            </form>        
+        </div>
+    </div>    
+</div>
+<br>
+<form action="/publications/myPublications" method="get">
+    <button type="submit" id="submitButton" style="display: none;"></button>
+</form>
