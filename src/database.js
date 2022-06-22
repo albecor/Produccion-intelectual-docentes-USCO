@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 
-const {PID_APP_HOST, PID_APP_DATABASE} = process.env;
+let PID_APP_HOST='localhost:27017'
+let PID_APP_DATABASE='PID_DB'
+
 const MONGODB_URI = `mongodb://${PID_APP_HOST}/${PID_APP_DATABASE}`;
 
 //mongoose.set('useFindAndModify', false);
