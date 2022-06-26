@@ -106,6 +106,13 @@ async function sizeLimit(){
                 }
             },
             error: function (e) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'El tamaño debe ser menor a 5MB',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#8c141b'
+                });
                 console.log("some error", e);
             }
         });
