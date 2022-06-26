@@ -10,11 +10,10 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">Nombre</th>
-        <th scope="col">Tipo</th>
+        <th scope="col">Clase</th>
         <th scope="col">URL</th>
         <th scope="col">Fecha</th>
         <th scope="col">Aprobado</th>
-        <th scope="col">Editar</th>
         <th scope="col">Eliminar</th>
       </tr>
     </thead>
@@ -28,11 +27,15 @@
           <td>{{fecha_i}}</td>
           <td>{{approved}}</td>
           <td>
+            {{#if delete}}
             <a index="{{@index}}" type="button" onclick="comprobarEliminar(this)"  color="8c141b" title="Eliminar" class="pt-1"><i class="fa fa-trash" style="color: black;"></i></a>
             <form action="/publications/delete/{{_id}}?_method=DELETE" method="POST">
               <button type="submit" style="display: none;" id="deleteButton{{@index}}" class="btn"><i class="fa fa-trash"></i>
               </button>
             </form>
+            {{else}}
+            <a type="button" onclick="noEliminar()"  color="8c141b" title="Eliminar" class="pt-1"><i class="fa fa-trash" style="color: black;"></i></a>
+            {{/if}}
           </td>
         </tr>
       {{/publications}}     

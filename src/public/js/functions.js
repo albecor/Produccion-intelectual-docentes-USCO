@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    $('#sidebarCollapse').on('click', function () {
-        $('#sidebar').toggleClass('active');
+    $('#sidebarCollapse').click(function () {
+        $('#sidebar').toggleClass('act');
     });
 });
 
@@ -126,6 +126,16 @@ function comprobarEliminar(data){
             $('#deleteButton'+selectId).click()
         }
       })
+}
+
+function noEliminar(){
+    Swal.fire({
+        title: 'Error!',
+        text: 'El tiempo límite para eliminar es de 5min, ese tiempo ya expiró',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#8c141b'
+    });
 }
 
 function confirmation2(){

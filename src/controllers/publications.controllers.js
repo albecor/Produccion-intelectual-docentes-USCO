@@ -9,17 +9,9 @@ const fs = require('fs');
 
 
 publicationsCtrl.renderAddPublication = (req, res) => {
-    let Admin =  Docente = null;
-    switch (req.user.role) {
-        case 'Admin':
-            Admin = true;
-            break;
-        case 'Docente':
-            Docente = true;
-            break;
-    }
+    let Docente = true;
     let json = require('../public/json/types_publications.json');
-    res.render('publications/addPublication',{json,Docente,Admin})
+    res.render('publications/addPublication',{json,Docente})
 };
 
 const storage = multer.diskStorage({
@@ -112,7 +104,9 @@ publicationsCtrl.renderMyPublications = async (req, res) => {
 };
 
 publicationsCtrl.deleteMyPublication = async (req,res) => {
-    let {path} = await Publication.findById(req.params.id)
+    let {path,createdAt} = await Publication.findById(req.params.id)
+    console.log("createdAt: ",createdAt)
+    /*
     fs.unlink(path, async (err) =>{
         if (err) {
             console.error(err);
@@ -121,6 +115,7 @@ publicationsCtrl.deleteMyPublication = async (req,res) => {
             res.redirect('/publications/myPublications')
         }
     });
+    */
 }
 
 //Funcionario

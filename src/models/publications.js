@@ -6,7 +6,7 @@ const PublicationSchema = Schema({
 
     approved: {
         type: Boolean,
-        required: false,
+        default: false,
     },
 
     check: {
