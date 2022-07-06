@@ -10,11 +10,21 @@
         ]
     },
     {  
-        "id":1,
-        "name":"Otras modalidades de publicaciones en  revistas especializadas.",
+        "name":"Artículo Short Communication",
         "types":[  
-            "“Comunicación corta” (“short comunication”, “artículo corto”)",
-            "Reportes de caso o Revisiones de tema o Cartas al editor o Editoriales"
+            "Artículo tipo A1",
+            "Artículo tipo A2",
+            "Artículo tipo B",
+            "Artículo tipo C"
+        ]
+    },
+    {  
+        "name":"Revista Especializada Reportes de caso o Revisiones de tema o Cartas al editor o Editoriales",
+        "types":[  
+            "Artículo tipo A1",
+            "Artículo tipo A2",
+            "Artículo tipo B",
+            "Artículo tipo C"
         ]
     },
     {  

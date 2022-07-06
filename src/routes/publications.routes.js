@@ -14,8 +14,8 @@ const {
     renderReviewed,
     renderSearchPublication,
     renderCreateReport,
-    renderAplication,
-    dowloadFile
+    renderRequest,
+    dowloadFile,
 } = require('../controllers/publications.controllers');
 
 router.get('/publications/add',isAuthenticated, isDocente, renderAddPublication);
@@ -34,7 +34,7 @@ router.get('/publications/reviewed',isAuthenticated, isFuncionario, renderReview
 
 router.get('/publications/search',isAuthenticated, isFuncionario, renderSearchPublication);
 
-router.get('/publications/application', renderAplication);
+router.get('/publications/request/:id', isAuthenticated, isFuncionario, renderRequest);
 
 router.get('/file/download/:id', isAuthenticated, dowloadFile);
 

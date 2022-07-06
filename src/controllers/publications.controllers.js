@@ -6,6 +6,7 @@ const path = require('path');
 const multer = require('multer');
 const uuid = require('uuid/v4');
 const fs = require('fs');
+const moment = require('moment');
 
 
 publicationsCtrl.renderAddPublication = (req, res) => {
@@ -216,8 +217,16 @@ function caracterToView(data){
     }
 }
 
-publicationsCtrl.renderAplication = async (req, res) => {
-    res.render('publications/application',{doc:true})
+publicationsCtrl.renderRequest = async (req, res) => {
+    let {id} = req.params
+    let {id_Docente,name,datePublication,description,clase,subclase,caracter,createdAt} = await Publication.findById(id).lean()
+    fechaSolicitud = moment(createdAt).utc().format('DD/MM/YYYY');
+    fechaPublicacion = moment(datePublication).utc().format('DD/MM/YYYY');
+    let docente = await User.findById(id_Docente).lean();
+    res.render('publications/request',{
+        docente,fechaSolicitud,fechaPublicacion,name,description,clase,subclase,caracter,
+        doc:true,
+    })
 }
 
 publicationsCtrl.dowloadFile = async (req, res) => {

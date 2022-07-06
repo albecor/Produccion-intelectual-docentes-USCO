@@ -26,31 +26,31 @@
       <span>{{fecha}}</span>
       <span>Neiva - Huila</span>
       <p>
-        El docente {{titulo}} {{nombre}} ascrito a la {{facultad}}
-        de la universidad Surcolombiana identificado con {{documentoType}}
-        No {{documentoNumber}} solicita una asignación
+        El docente {{docente.name}} {{docente.lastname}} {{docente.sec_lastname}} ascrito a la {{facultad}}
+        de la universidad Surcolombiana identificado con {{identification_type}}
+        No {{identification}} solicita una asignación
         de puntaje salarial.
       </p>
       <div class="apply">
         <div class="w-100">
           <div class="label">Autor</div>
-          <div class="value">{{nombre}}</div>
+          <div class="value">{{docente.name}} {{docente.lastname}} {{docente.sec_lastname}}</div>
         </div>
         <div class="w-1-50">
           <div class="label">Documento</div>
-          <div class="value">{{documentoType}}</div>
+          <div class="value">{{docente.identification_type}}</div>
         </div>
         <div class="w-2-50">
           <div class="label">Numero de documento</div>
-          <div class="value">{{documentoNumber}}</div>
+          <div class="value">{{docente.identification}}</div>
         </div>
         <div class="w-100">
           <div class="label">Facultad</div>
-          <div class="value">{{facultad}}</div>
+          <div class="value">{{docente.facultad}}</div>
         </div>
         <div class="w-100">
           <div class="label">Título de la publicación</div>
-          <div class="value">{{nombreArt}}</div>
+          <div class="value">{{name}}</div>
         </div>
         <div class="w-1-50">
           <div class="label">Fecha de la publicación</div>

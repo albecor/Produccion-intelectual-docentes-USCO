@@ -14,6 +14,7 @@
         <th scope="col">URL</th>
         <th scope="col">Fecha de Publicación</th>
         <th scope="col">Descargar</th>
+        <th scope="col">Ver Solicitud</th>
         <th scope="col">Revisar</th>
       </tr>
     </thead>
@@ -28,10 +29,13 @@
             </td>
             <td class="text-center">{{fecha_i}}</td>
             <td class="text-center">
-              <a href="/file/download/{{_id}}"><i class="fas fa-download"></i></a>
+              <a href="/file/download/{{_id}}" title="Descargar"><i class="fas fa-download"></i></a>
             </td>
             <td class="text-center">
-              <a href="#" onclick="noFunction()"><i class="fas fa-eye"></i></a>
+              <a href="/publications/request/{{_id}}" target="_blank" title="Ver" ><i class="fas fa-eye" style="color: black;"></i></a>
+            </td>
+            <td class="text-center">
+              <a href="#" onclick="noFunction()" title="Revisar"><i class="fas fa-file" style="color: black;"></i></a>
             </td>
         </tr>
       {{/publications}}     
