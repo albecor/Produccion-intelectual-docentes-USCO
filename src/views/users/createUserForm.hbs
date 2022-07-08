@@ -5,14 +5,14 @@
         </div>
         <div class="card-body"> 
 
-            <form action="/users/createUser" class= "justify-content-center" method="POST">  
+            <form action="/users/createUser" class= "justify-content-center" method="POST" id="FormValidate">  
 
-                <h6 class="font-weight-bold mt-0 mb-1">Información personal</h6>                              
+                <h6 class="fw-bold mt-0 mb-1">Información personal</h6>                              
                 <div class="form-group row">
                     <div class="col mb-2">                        
-                        <select class="form-select mr-sm-2" id="inlineFormCustomSelect" name="identification_type">
+                        <select class="form-select mr-sm-2" id="inlineFormCustomSelect" name="identification_type" required>
                                 <!-- Circulear externa 024 de 2019 Ministerio de protección social -->                            
-                                <option selected>--- Elija un tipo de identificación ---</option>                            
+                                <option value="" selected>--- Elija un tipo de identificación ---</option>                            
                                 <option value="Cedula">Cédula</option>
                                 <option value="Cedula_extrangeria">Cédula de extrangeria</option>
                                 <option value="Pasaporte">Pasaporte</option>
@@ -26,31 +26,27 @@
                         </select>
                     </div> 
                     <div class="col mb-2">
-                        <input type="number" class="form-control bg-light" name="identification" placeholder="No. de identificación" value="{{identification}}">
+                        <input type="number" class="form-control bg-light" name="identification" placeholder="No. de identificación" value="{{identification}}" required>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col mb-0">
-                            <input type="text" class="form-control bg-light" name="name" placeholder="Nombres"
-                                value="{{name}}">
+                            <input type="text" class="form-control bg-light" name="name" placeholder="Nombres" value="{{name}}" required>
                     </div>
                     <div class="col mb-0">
-                        <input type="text" class="form-control bg-light" name="lastname" placeholder="Primer apellido"
-                                value="{{lastname}}">
+                        <input type="text" class="form-control bg-light" name="lastname" placeholder="Primer apellido" value="{{lastname}}" required>
                     </div>
                     <div class="col mb-0">
-                        <input type="text" class="form-control bg-light" name="sec_lastname"
-                                placeholder="Segundo apellido" value="{{sec_lastname}}">
+                        <input type="text" class="form-control bg-light" name="sec_lastname" placeholder="Segundo apellido" value="{{sec_lastname}}" required>
                     </div>
                 </div>
                                                         
                 <hr>
 
-                <h6 class="font-weight-bold mt-0 mb-1">Datos de localización</h6>                              
+                <h6 class="fw-bold mt-0 mb-1">Datos de localización</h6>                              
                 <div class="form-group row"> 
                     <div class="col-md-6 mb-2"> 
-                        <input type="number" class="form-control bg-light" name="phone"
-                            placeholder="Teléfono" value="{{phone}}">
+                        <input type="number" class="form-control bg-light" name="phone" placeholder="Teléfono" value="{{phone}}">
                     </div>
                     <div class="col-md-6 mb-2"> 
                         <input type="text" class="form-control bg-light" name="address"
@@ -58,7 +54,7 @@
                     </div>
                     <div class="col-md-6 mb-0"> 
                         <select class="form-select mr-sm-2" name="departamento" id="departamentoSelect"
-                            onchange="if (this.selectedIndex) municipiosList(this);" required>
+                            onchange="if (this.selectedIndex) municipiosList(this);">
                             <option selected disabled value="">-- Departamento --</option>
                             {{#json}}
                             <option value="{{departamento}}">{{departamento}}</option>
@@ -66,38 +62,38 @@
                         </select>
                     </div>
                     <div class="col-md-6 mb-0"> 
-                        <select class="form-select mr-sm-2" name="municipio" id="munipiosSelect" required>
+                        <select class="form-select mr-sm-2" name="municipio" id="munipiosSelect">
                             <option selected disabled value="">-- Municipio --</option>
                         </select>
                     </div>
                 </div>
                 <hr>
 
-                <h6 class="font-weight-bold mt-0 mb-1">Información de sesión</h6>                              
+                <h6 class="fw-bold mt-0 mb-1">Información de sesión</h6>                              
                 <div class="form-group row d-flex justify-content-center">                    
-                    <div class="col-md-6 mb-2">                        
-                        <select class="form-select mr-sm-2" id="role" name="role">
-                            <option selected>--- Elija un tipo de usuario ---</option>
+                    <div class="col-md-6 mb-2" id="divF">                        
+                        <select class="form-select mr-sm-2" id="role" name="role" onchange="if (this.selectedIndex) assignment(this);" required>
+                            <option value="" disabled selected>--- Elija un tipo de usuario ---</option>
                             <option value="Docente">Docente</option>
                             <option value="Funcionario">Funcionario</option>
                             <option value="Admin">Administrador de la plataforma</option>
                         </select>
                     </div>
-                    <div class="col-md-6 mb-2">
-                        <input type="email" class="form-control bg-light" name="email" placeholder="Email"
-                            value="{{email}}">
+                    <div class="col-md-6 mb-2" id="divP">
+                        <input type="email" class="form-control bg-light" name="email" placeholder="Email" value="{{email}}" required>
+                    </div>
+                    <div class="col-md-6 mb-0" id="password">
+                        <input type="password" class="form-control bg-light" name="password" placeholder="Contraseña" required>
                     </div>
                     <div class="col-md-6 mb-0">
-                        <input type="password" class="form-control bg-light" name="password" placeholder="Contraseña">
-                    </div>
-                    <div class="col-md-6 mb-0">
-                        <input type="password" class="form-control bg-light" name="confirm_password" placeholder="Confirmar contraseña">           
+                        <input type="password" class="form-control bg-light" name="confirm_password" placeholder="Confirmar contraseña" required>           
                     </div>                   
                 </div>
                 <hr>        
 
-                <div class="col-md-4 mx-auto">                  
-                    <button class="btn btn-primary btn-block">Agregar</button>
+                <div class="col-md-4 mx-auto">             
+                    <a type="button" class="btn btn-primary btn-block" onclick="checkInputs()">Agregar</a>
+                    <button class="d-none" id="realClick"></button>
                 </div>        
             </form>            
         </div>

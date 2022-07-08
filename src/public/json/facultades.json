@@ -1,0 +1,69 @@
+[
+    {
+        "facultad":"Ciencias Exactas y Naturales",
+        "programas":[
+            "Tecnología en Acuicultura Continental",
+            "Matemática Aplicada",
+            "Física",
+            "Biología Aplicada"
+        ]
+    },
+    {
+        "facultad":"Ciencias Jurídicas y Políticas",
+        "programas":[
+            "Ciencia Política",
+            "Derecho"
+        ]
+    },
+    {
+        "facultad":"Ciencias Sociales y Humanas",
+        "programas":[
+            "Antropología",
+            "Comunicación Social y Periodismo",
+            "Psicología"
+        ]
+    },
+    {
+        "facultad":"Economía y Administración",
+        "programas":[
+            "Administración de Empresas",
+            "Administración Financiera",
+            "Contaduría Pública",
+            "Economía",
+            "Administración Turística y Hotelera"
+        ]
+    },
+    {
+        "facultad":"Educación",
+        "programas":[
+            "Licenciatura en Matemáticas",
+            "Licenciatura en Lenguas Extranjeras con Énfasis en Inglés",
+            "Licenciatura en Literatura y Lengua Castellana",
+            "Licenciatura en Educación Infantil",
+            "Licenciatura en Educación Artística",
+            "Licenciatura en Educación Física, Recreación y Deportes",
+            "Licenciatura en Ciencias Naturales y Educación Ambiental",
+            "Licenciatura en Ciencias Sociales"
+        ]
+    },
+    {
+        "facultad":"Ingeniería",
+        "programas":[
+            "Ingeniería Agrícola",
+            "Ingeniería Agroindustrial",
+            "Ingeniería Civil",
+            "Ingeniería Electrónica",
+            "Ingeniería de Petróleos",
+            "Ingeniería de Software",
+            "Tecnología en Desarrollo de Software",
+            "Tecnología en Obras Civiles"
+        ]
+    },
+    {
+        "facultad":"Salud",
+        "programas":[
+            "Enfermería",
+            "Medicina"
+        ]
+    }
+]

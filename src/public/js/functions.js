@@ -10,6 +10,25 @@ $(document).ready(function () {
     });
 });
 
+function checkInputs(){
+    var start = true;
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('#FormValidate')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                if (!form.checkValidity()) {
+                    start = false;
+                    form.classList.add('was-validated')
+                }
+            })
+    })()
+
+    if(start){
+        $('#realClick').click();
+    }
+}
+
 function municipiosList(data){
     $('#munipiosSelect').children().remove();
     var selectId = data.attributes[2].value;
@@ -163,6 +182,104 @@ function confirmation2(){
           )
         }
       })
+}
+
+function assignment(data){
+    $('#facultadDiv').remove();
+    $('#programasDiv').remove();
+    $('#vinculacionDiv').remove();
+    $('#vinculacionDiv2').remove();
+    $('#investigacionDiv').remove();
+    $('#investigacionDiv2').remove();
+    $('#titleV').remove();
+    $('#titleI').remove();
+    let option = $(`#role option`).toArray().map( o => o.value ).slice(-3);
+    var selectId = data.attributes[2].value;
+    var index = $('#' + selectId)[0].selectedIndex - 1;
+    let selected = option[index];
+    if(selected === 'Docente'){
+        $.ajax({
+            type: "get",
+            url: "../../json/facultades.json",
+            data: {},
+            success: function (r) {
+                let option=''; let html = '';
+                for (let i in r) {
+                    option += '<option value="' + r[i].facultad + '">' + r[i].facultad + '</option>'
+                }
+                html += '<div class="col pt-2" id="facultadDiv">';
+                html += '<select class="form-select" name="facultad" id="facultad" onchange="if (this.selectedIndex) selectPrograma(this);" required>';
+                html += '<option selected disabled value="">Seleccione una Facultad</option>';
+                html += option;
+                html += '</select>';
+                html += '</div>';
+                $('#divF').append(html)
+                html = '<div class="col pt-2" id="programasDiv">';
+                html += '<select class="form-select" name="programa" id="programa" required>';
+                html += '<option selected disabled value="">Seleccione un Programa</option>';
+                html += '</select>';
+                html += '</div>';
+                $('#divP').append(html)
+                html = '<h6 class="fw-bold pt-2" id="titleV">Vinculación</h6>'
+                html += '<div class="form-check" id="vinculacionDiv">'
+                html += '<input class="form-check-input" type="radio" name="vinculacion" id="vinculacion1" checked>'
+                html += '<label class="form-check-label" for="vinculacion1">'
+                html += 'Tiempo completo planta'
+                html += '</label>'
+                html += '</div>'
+                html += '<div class="form-check" id="vinculacionDiv2">'
+                html += '<input class="form-check-input" type="radio" name="vinculacion" id="vinculacion2">'
+                html += '<label class="form-check-label" for="vinculacion2">'
+                html += 'Medio tiempo planta'
+                html += '</label>'
+                html += '</div>'
+                $('#divF').append(html)
+                html = '<h6 class="fw-bold pt-2" id="titleI">Pertenece a un grupo de investigación?</h6>'
+                html += '<div class="form-check pt-1" id="investigacionDiv">'
+                html += '<input class="form-check-input" type="radio" name="investigacion" id="investigacion1" checked>'
+                html += '<label class="form-check-label" for="investigacion1">'
+                html += 'Si'
+                html += '</label>'
+                html += '</div>'
+                html += '<div class="form-check" id="investigacionDiv2">'
+                html += '<input class="form-check-input" type="radio" name="investigacion" id="investigacion2">'
+                html += '<label class="form-check-label" for="investigacion2">'
+                html += 'No'
+                html += '</label>'
+                html += '</div>'
+                $('#divP').append(html)
+            }
+        });
+    }else{
+        $('#facultadDiv').remove()
+        $('#programasDiv').remove()
+        $('#vinculacionDiv').remove();
+        $('#vinculacionDiv2').remove();
+        $('#investigacionDiv').remove();
+        $('#investigacionDiv2').remove();
+        $('#titleV').remove();
+        $('#titleI').remove();
+    }
+
+}
+
+function selectPrograma(){
+    let index = $("#facultad")[0].selectedIndex - 1;
+    $('#programa').children().remove();
+    $.ajax({
+        type: "get",
+        url: "../../json/facultades.json",
+        data: {},
+        success: function (r) {
+            let {programas} = r[index];
+            let option='';
+            for (let i in programas) {
+                option = '<option id="programaOption'+i+'" value="' + programas[i] + '">' + programas[i] + '</option>'
+                $('#programa').append(option)
+            }
+        }
+    });
+
 }
 
 function noFunction(){
