@@ -9,7 +9,8 @@ const {
         createUserForm, 
         createUser, 
         signInForm, 
-        signIn, 
+        signIn,
+        uptadeLogin, 
         home, 
         logout, 
         changePasswdForm, 
@@ -37,6 +38,7 @@ const {
 router.get('/users/signInForm', signInForm);
 router.post('/users/signIn', signIn);
 router.get('/users/signInError', signInError);
+router.get('/users/updateLogin', isAuthenticated, uptadeLogin);
 router.get('/users/home', isAuthenticated, home);  
 
 /////////// Salida de la plataforma /////////////////////////

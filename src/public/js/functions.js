@@ -193,6 +193,8 @@ function assignment(data){
     $('#investigacionDiv2').remove();
     $('#titleV').remove();
     $('#titleI').remove();
+    $('#divInvestigacion1').remove()
+    $('#divInvestigacion2').remove()
     let option = $(`#role option`).toArray().map( o => o.value ).slice(-3);
     var selectId = data.attributes[2].value;
     var index = $('#' + selectId)[0].selectedIndex - 1;
@@ -222,13 +224,13 @@ function assignment(data){
                 $('#divP').append(html)
                 html = '<h6 class="fw-bold pt-2" id="titleV">Vinculación</h6>'
                 html += '<div class="form-check" id="vinculacionDiv">'
-                html += '<input class="form-check-input" type="radio" name="vinculacion" id="vinculacion1" checked>'
+                html += '<input class="form-check-input" type="radio" name="vinculacion" id="vinculacion1" value="true" required>'
                 html += '<label class="form-check-label" for="vinculacion1">'
                 html += 'Tiempo completo planta'
                 html += '</label>'
                 html += '</div>'
                 html += '<div class="form-check" id="vinculacionDiv2">'
-                html += '<input class="form-check-input" type="radio" name="vinculacion" id="vinculacion2">'
+                html += '<input class="form-check-input" type="radio" name="vinculacion" id="vinculacion2" value="false" required>'
                 html += '<label class="form-check-label" for="vinculacion2">'
                 html += 'Medio tiempo planta'
                 html += '</label>'
@@ -236,13 +238,13 @@ function assignment(data){
                 $('#divF').append(html)
                 html = '<h6 class="fw-bold pt-2" id="titleI">Pertenece a un grupo de investigación?</h6>'
                 html += '<div class="form-check pt-1" id="investigacionDiv">'
-                html += '<input class="form-check-input" type="radio" name="investigacion" id="investigacion1" checked>'
+                html += '<input class="form-check-input" type="radio" name="investigacion" id="investigacion1" value="true" onclick="addInvestigacion()" required>'
                 html += '<label class="form-check-label" for="investigacion1">'
                 html += 'Si'
                 html += '</label>'
                 html += '</div>'
                 html += '<div class="form-check" id="investigacionDiv2">'
-                html += '<input class="form-check-input" type="radio" name="investigacion" id="investigacion2">'
+                html += '<input class="form-check-input" type="radio" name="investigacion" id="investigacion2" value="false" onclick="minInvestigacion()" required>'
                 html += '<label class="form-check-label" for="investigacion2">'
                 html += 'No'
                 html += '</label>'
@@ -259,6 +261,8 @@ function assignment(data){
         $('#investigacionDiv2').remove();
         $('#titleV').remove();
         $('#titleI').remove();
+        $('#divInvestigacion1').remove()
+        $('#divInvestigacion2').remove()
     }
 
 }
@@ -280,6 +284,24 @@ function selectPrograma(){
         }
     });
 
+}
+
+function addInvestigacion(){
+    $('#divInvestigacion1').remove()
+    $('#divInvestigacion2').remove()
+    html = '<div class="col mb-2" id="divInvestigacion1">'
+    html += '<input type="text" class="form-control" name="nombreGrupo" placeholder="Nombre del Grupo de Investigación" required>'
+    html += '</div>'
+    $('#password').prepend(html)
+    html = '<div class="col mb-2" id="divInvestigacion2">'
+    html += '<input type="text" class="form-control" name="lineaInvestigacion" placeholder="Línea de Investigación" required>'
+    html += '</div>'
+    $('#c_password').prepend(html)
+}
+
+function minInvestigacion(){
+    $('#divInvestigacion1').remove()
+    $('#divInvestigacion2').remove()
 }
 
 function noFunction(){

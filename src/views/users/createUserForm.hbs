@@ -26,18 +26,18 @@
                         </select>
                     </div> 
                     <div class="col mb-2">
-                        <input type="number" class="form-control bg-light" name="identification" placeholder="No. de identificación" value="{{identification}}" required>
+                        <input type="number" class="form-control bg-light" name="identification" placeholder="No. de identificación" required>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col mb-0">
-                            <input type="text" class="form-control bg-light" name="name" placeholder="Nombres" value="{{name}}" required>
+                            <input type="text" class="form-control bg-light" name="name" placeholder="Nombres" required>
                     </div>
                     <div class="col mb-0">
-                        <input type="text" class="form-control bg-light" name="lastname" placeholder="Primer apellido" value="{{lastname}}" required>
+                        <input type="text" class="form-control bg-light" name="lastname" placeholder="Primer apellido" required>
                     </div>
                     <div class="col mb-0">
-                        <input type="text" class="form-control bg-light" name="sec_lastname" placeholder="Segundo apellido" value="{{sec_lastname}}" required>
+                        <input type="text" class="form-control bg-light" name="sec_lastname" placeholder="Segundo apellido" required>
                     </div>
                 </div>
                                                         
@@ -46,11 +46,11 @@
                 <h6 class="fw-bold mt-0 mb-1">Datos de localización</h6>                              
                 <div class="form-group row"> 
                     <div class="col-md-6 mb-2"> 
-                        <input type="number" class="form-control bg-light" name="phone" placeholder="Teléfono" value="{{phone}}">
+                        <input type="number" class="form-control bg-light" name="phone" placeholder="Teléfono">
                     </div>
                     <div class="col-md-6 mb-2"> 
                         <input type="text" class="form-control bg-light" name="address"
-                            placeholder="Dirección" value="{{address}}">
+                            placeholder="Dirección">
                     </div>
                     <div class="col-md-6 mb-0"> 
                         <select class="form-select mr-sm-2" name="departamento" id="departamentoSelect"
@@ -80,19 +80,18 @@
                         </select>
                     </div>
                     <div class="col-md-6 mb-2" id="divP">
-                        <input type="email" class="form-control bg-light" name="email" placeholder="Email" value="{{email}}" required>
+                        <input type="email" class="form-control bg-light" name="email" placeholder="Email" required>
                     </div>
                     <div class="col-md-6 mb-0" id="password">
                         <input type="password" class="form-control bg-light" name="password" placeholder="Contraseña" required>
                     </div>
-                    <div class="col-md-6 mb-0">
+                    <div class="col-md-6 mb-0" id="c_password">
                         <input type="password" class="form-control bg-light" name="confirm_password" placeholder="Confirmar contraseña" required>           
                     </div>                   
                 </div>
-                <hr>        
-
-                <div class="col-md-4 mx-auto">             
-                    <a type="button" class="btn btn-primary btn-block" onclick="checkInputs()">Agregar</a>
+                <hr>
+                <div class="col text-center">             
+                    <a type="button" class="btn btn-primary btn-block" style="border: none; background-color: rgb(140, 20, 27)" onclick="checkInputs()">Agregar</a>
                     <button class="d-none" id="realClick"></button>
                 </div>        
             </form>            

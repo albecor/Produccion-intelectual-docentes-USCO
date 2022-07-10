@@ -15,14 +15,21 @@ usersCtrl.signInForm = (req, res)=>{
     }
 };
 usersCtrl.signIn = passport.authenticate('local', {
-    successRedirect: "/users/home",
+    successRedirect: "/users/updateLogin",
     failureRedirect: "/users/signInError",
     failureFlash: true
 });
+
 usersCtrl.signInError = (req, res)=>{
     req.flash('error_msg', 'Usuario o contraseña invalida');
     res.redirect('signInForm')
 };
+
+usersCtrl.uptadeLogin = async (req,res) => {
+    await User.findByIdAndUpdate(req.user.id,{last_login_date:Date.now()});
+    res.redirect('/users/home')
+}
+
 usersCtrl.home = (req, res)=>{
     let Admin = Funcionario =  Docente = null;
     switch (req.user.role) {
@@ -50,13 +57,33 @@ usersCtrl.logout = (req, res)=>{
 usersCtrl.createUserForm = (req, res)=>{
     let json = require('../public/json/colombia.json');
     let Admin = true;
-    res.render('users/createUserForm', { Admin, json })
+    const {name, lastname, sec_lastname } = req.user;
+    res.render('users/createUserForm', { Admin, json, name, lastname, sec_lastname })
 };
 usersCtrl.createUser = async (req, res)=>{
-    //console.log(req.body)
     var Admin = true;
     const errors = [];
-    const { identification_type, identification, name, lastname, sec_lastname, phone, address, city, department, role, email, password, confirm_password, } = req.body;
+    const { 
+        identification_type,
+        identification,
+        name,
+        lastname,
+        sec_lastname,
+        phone,
+        address,
+        city,
+        department,
+        role,
+        email,
+        password,
+        confirm_password,
+        facultad,
+        programa,
+        vinculacion,
+        investigacion,
+        nombreGrupo,
+        lineaInvestigacion
+    } = req.body;
 
     const userIdentification = await User.findOne({ identification }).lean();
     const userEmail = await User.findOne({ email }).lean();
@@ -80,10 +107,30 @@ usersCtrl.createUser = async (req, res)=>{
     // Errores
 
     if (errors.length > 0) {
-        res.render('users/createUserForm', { errors, identification_type, identification, name, lastname, sec_lastname, phone, address, city, department, role, email, Admin});
+        req.flash("errors", errors);
+        res.redirect("/users/createUserForm");
     }else {
-        const data = { identification_type, identification, name, lastname, sec_lastname, phone, address, city, department, role, email, password };
-        const newUser = new User(data);
+        const newUser = new User({
+            identification_type,
+            identification,
+            name,
+            lastname,
+            sec_lastname,
+            phone,
+            address,
+            city,
+            department,
+            role,
+            email,
+            password,
+            confirm_password,
+            facultad,
+            programa,
+            vinculacion,
+            investigacion,
+            nombreGrupo,
+            lineaInvestigacion
+        });
         newUser.password = await newUser.encryptPassword(password);
         await newUser.save();
         req.flash('success_msg', 'Usuario agregado');
@@ -96,11 +143,9 @@ usersCtrl.createUser = async (req, res)=>{
 //El primer usuario administrador se crea ingresando directamente la dirección http://localhost:3000/users/createAdminForm
 //La idea es que esta dirección quede escondida para el público.
 usersCtrl.createAdminForm = async (req, res)=>{
-    //console.log('hola create admin')
     let json = require('../public/json/colombia.json');
     const user = await User.findOne({role: "Admin"}).lean();
     if(!user){
-        //console.log('hola create admin otra vez')
         res.render('users/createAdminForm',{json})
     }else{
         req.flash('error_msg', 'Ya existe un administrador');

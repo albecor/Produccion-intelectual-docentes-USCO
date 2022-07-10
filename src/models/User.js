@@ -26,7 +26,6 @@ const UserSchema = Schema({
     role: {
         type: String,   
         required: true,
-        default: "Docente",
         enum: ["Admin", "Funcionario", "Docente"]
     },
 
@@ -41,6 +40,16 @@ const UserSchema = Schema({
     },
 
     facultad: {type:String},
+
+    programa: {type:String},
+
+    vinculacion : {type:Boolean},
+
+    investigacion: {type:Boolean},
+
+    nombreGrupo: {type:String},
+    
+    lineaInvestigacion: {type:String},
 
 ////////////////////////////////////////////
     last_login_date: {
