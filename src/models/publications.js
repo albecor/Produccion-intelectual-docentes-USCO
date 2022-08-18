@@ -14,6 +14,10 @@ const PublicationSchema = Schema({
         default: false,
     },
 
+    puntaje: {
+        type: Number
+    },
+
     name: {type: String},
 
     datePublication: {type: Date},

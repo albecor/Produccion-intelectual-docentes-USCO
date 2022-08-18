@@ -49,20 +49,170 @@ function municipiosList(data){
 };
 
 function PublicationsList(data){
-    $('#typeSelect').children().remove();
+    $('#name').attr('placeholder','Nombre de la Producción Académica')
+    $('#modalidad').removeClass('col-md-3')
+    $('#modalidad').removeClass('col')
+    $('#modalidad').addClass('col')
+    $('#categoria').remove();
+    $('#tipo').remove();
+    $('#row_2').remove();
+    $('#row_3').remove();
+    $('#row_4').remove();
+    $('#row_5').remove();
+    $('#row_6').remove();
+    $('#row_7').remove();
+    $('#row_8').remove();
+    $('#row_9').remove();
     var selectId = data.attributes[2].value;
     var index = $('#' + selectId)[0].selectedIndex - 1
     $.ajax({
         type: "get",
-        url: "../../json/types_publications.json",
+        url: "../../json/modalidades.json",
         data: {},
         success: function (response) {
-            var types = response[index].types
-            var html = '';
-            for (var i = 0; i < types.length; i++) {
-                html += '<option value="' + types[i] + '">' + types[i] +'</option>';
+            let articulo = 'Artículo de Revista';
+            let libroInvestigacion = 'Libro derivado de Investigación'
+            let libroEnsayo = 'Libro de Ensayo';
+            let libroTexto = 'Libro de Texto';
+            let capitulo = 'Capítulo de libro';
+            let patentes = 'Patentes';
+            let ponencia = 'Ponencia'
+            let {tipo,categoria} = response[index]
+            let modalidad = response[index].name;
+            let select_categoria = 'Categoría'
+            let select_tipo = 'Tipo'
+            switch (modalidad) {
+                case 'Artículo de Revista':
+                    select_categoria = 'Categoría de la revista en Minciencias al momento de la publicación'
+                    select_tipo = 'Tipo de Artículo'
+                    $('#name').attr('placeholder','Nombre del Artículo')
+                    break;
+                case 'Producción de vídeos, cinematográficas o fonográficas':
+                    select_categoria = 'Finalidad'
+                    select_tipo = 'Impacto'
+                    break;
             }
-            $('#subclase').append(html)
+            if(tipo){
+                let html = '<div class="col mb-2" id="tipo">'
+                html += '<select class="form-select mr-sm-2" name="tipo" id="select_tipo" required>'
+                html += '<option selected disabled value="">-- '+select_tipo+' --</option>'
+                for (let i in tipo) {
+                    html += '<option value="' + tipo[i] + '">' + tipo[i] +'</option>';
+                }
+                html += '</select>'
+                html += '</div>'
+                $('#modalidad').after(html)
+            }
+            if(modalidad == articulo){
+                html = '<div class="form-group row" id="row_2">'
+                html += '<div class="col mb-2" id="nombre_revista">'
+                html += '<input id="name" type="text" class="form-control" name="nombre_revista" placeholder="Nombre de la Revista" required>'
+                html += '</div>'
+                html += '</div>'
+                html += '<div class="form-group row" id="row_3">'
+                html += '<div class="col mb-2" id="url">'
+                html += '<input id="URL" type="url" class="form-control" name="URL" placeholder="Dirección URL" required>'
+                html += '</div>'
+                html += '<div class="col mb-2" id="file">'
+                html += '<input type="file" class="form-control mr-sm-2 p-1" id="uploadFile" name="upFile" required>'
+                html += '</div>'
+                html += '</div>'
+                html += '<div class="row g-3 align-items-center mb-2" id="row_4">'
+                html += '<div class="col-auto">'
+                html += '<label for="meses" class="col-form-label">Tiempo requerido para la publicación del artículo en la revista</label>'
+                html += '</div>'
+                html += '<div class="col-1">'
+                html += '<input type="number" name="meses" class="form-control">'
+                html += '</div>'
+                html += '<div class="col-auto">'
+                html += '<span class="form-text">'
+                html += 'Cantidad en meses.'
+                html += '</span>'
+                html += '</div>'
+                html += '</div>'
+                html += '<div class="row g-3 align-items-center mb-2" id="row_5">'
+                html += '<div class="col-3">'
+                html += '<input type="text" class="form-control" name="ISSN" placeholder="ISSN" required>'
+                html += '</div>'
+                html += '</div>'
+                html += '<div class="row g-3 align-items-center mb-2" id="row_6">'
+                html += '<div class="col-auto">'
+                html += '<label for="check" class="col-form-label">Para la publicación del artículo, se invirtieron recursos económicos de la Universidad</label>'
+                html += '</div>'
+                html += '<div class="form-check form-check-inline ms-3 col-1">'
+                html += '<input class="form-check-input" type="radio" name="recursos" value="true" required>'
+                html += '<label class="form-check-label mx-0" for="inlineRadio1">SI</label>'
+                html += '</div>'
+                html += '<div class="form-check form-check-inline col-1">'
+                html += '<input class="form-check-input" type="radio" name="recursos" value="false" required>'
+                html += '<label class="form-check-label mx-0" for="inlineRadio2">NO</label>'
+                html += '</div>'
+                html += '</div>'
+                $('#row_1').after(html)
+                
+            }
+            if(categoria){
+                html = '<div class="col" id="categoria">'
+                html += '<select class="form-select mr-sm-2" name="categoria" id="select_categoria" required>'
+                html += '<option selected disabled value="">'+select_categoria+'</option>'
+                for (let i in categoria) {
+                    html += '<option value="' + categoria[i] + '">' + categoria[i] +'</option>';
+                }
+                html += '</select>'
+                html += '</div>'
+                if(modalidad == articulo){
+                    $('#nombre_revista').after(html)
+                }else{
+                    $('#tipo').after(html)
+                }
+            }
+            if(modalidad == libroEnsayo || modalidad == libroTexto || modalidad == capitulo || modalidad == libroInvestigacion){
+                html = '<div class="col mb-2" id="row_2">'
+                html += '<input id="URL" type="url" class="form-control" name="URL" placeholder="Dirección URL Editorial" required>'
+                html += '</div>'
+                $('#modalidad').after(html)
+                html = '<div class="form-group row mb-2" id="row_3">'
+                html += '<div class="col">'
+                html += '<input type="text" class="form-control" name="ISBN" placeholder="ISBN" required>'
+                html += '</div>'
+                html += '<div class="col" id="nombre_editorial">'
+                html += '<input type="text" class="form-control" name="nombre_editorial" placeholder="Editorial" required>'
+                html += '</div>'
+                html += '</div>'
+                $('#row_1').after(html)
+            }
+            if(modalidad == articulo || modalidad == libroInvestigacion || modalidad == patentes || modalidad == ponencia){
+                html = '<div class="form-group row" id="row_7">'
+                html += '<div class="col">'
+                html += '<label for="name" id="name_label">Nombre del proyecto de Invesigación del cual se genera el material, sí aplica</label>'
+                html += '<input type="text" class="form-control" name="name_proyecto_investigacion" placeholder="" required>'
+                html += '</div>'
+                html += '</div>'
+                $('#hr').before(html)
+            }
+            if($('#file').length==0){
+                html = '<div class="form-group row" id="row_8">'
+                html = '<div class="col-md-5 mb-2" id="file">'
+                html += '<label for="upFile" id="name_label">Archivo para Revisión</label>'
+                html += '<input type="file" class="form-control mr-sm-2 p-1" id="uploadFile" name="upFile" required>'
+                html += '</div>'
+                html += '</div>'
+                $('#hr').before(html)
+            }
+            html = '<div class="row g-3 align-items-center mb-2" id="row_9">'
+            html += '<div class="col-auto">'
+            html += '<label for="check" class="col-form-label">El material presentado fue tenido en cuenta para cambio de categoría en el escalafón docente:</label>'
+            html += '</div>'
+            html += '<div class="form-check form-check-inline ms-3 col-1">'
+            html += '<input class="form-check-input" type="radio" name="cambio_categoria" id="inlineRadio1" value="true" required>'
+            html += '<label class="form-check-label mx-0" for="inlineRadio1">SI</label>'
+            html += '</div>'
+            html += '<div class="form-check form-check-inline col-1">'
+            html += '<input class="form-check-input" type="radio" name="cambio_categoria" id="inlineRadio2" value="false" required>'
+            html += '<label class="form-check-label mx-0" for="inlineRadio2">NO</label>'
+            html += '</div>'
+            html += '</div>'
+            $('#hr').before(html)
         }
     });
 }

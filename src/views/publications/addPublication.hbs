@@ -7,64 +7,35 @@
             <form action="/publications/add" enctype="multipart/form-data" class= "justify-content-center" id="realForm" onkeydown="return event.key != 'Enter';" method="POST">                         
                 <div class="form-group row">
                     <div class="col mb-2">
-                        <label for="name">Título</label>
+                        <label for="name" id="name_label">Nombre</label>
                         <input id="name" type="text" class="form-control" name="name" placeholder="Nombre de la Producción Académica"
                             required>
                     </div>
                     <div class="col mb-2">
-                        <label for="url">URL</label>
-                        <input id="URL" type="url" class="form-control" name="URL" placeholder="URL del título para revisión" 
-                            required>
-                    </div>
-                    <div class="col mb-2">
                         <label for="date">Fecha de Publicación</label>
-                        <input id="datePublication" type="date" class="form-control" name="datePublication"
-                                placeholder="Fecha de publicación" required>
+                        <input id="datePublication" type="date" class="form-control" name="datePublication" required>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col mb-2">                     
-                        <select class="form-select mr-sm-2" name="clase" id="clase"
+                <div class="form-group row" id="row_1">
+                    <div class="col-md-3 mb-2" id="modalidad">                     
+                        <select class="form-select mr-sm-2" name="clase" id="select_modalidad"
                             onchange="if (this.selectedIndex) PublicationsList(this);" required>
-                            <option selected disabled value="">-- Clase --</option>
+                            <option selected disabled value="">-- Modalidad Académica --</option>
                             {{#json}}
                             <option value="{{this}}">{{this}}</option>
                             {{/json}}
                         </select>
-                    </div> 
-                    <div class="col mb-2">
-                        <select class="form-select mr-sm-2" name="subclase" id="subclase" required>
-                            <option selected disabled value="">-- Subclase --</option>
-                        </select>
-                    </div>
-                    <div class="col mb-2">
-                        <select class="form-select mr-sm-2" name="caracter" id="caracter" required>
-                            <option selected disabled value="">-- Carácter --</option>
-                            <option value="1">Científico</option>
-                            <option value="2">Técnico</option>
-                            <option value="3">Humanístico</option>
-                            <option value="4">Artístico</option>
-                            <option value="5">Pedagógico</option>
-                        </select>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col mb-2">
-                        <textarea class="form-control" name="description" id="description" placeholder="Descripción de la Solicitud" required></textarea>
-                    </div>
-                    <div class="col mb-2">
-                        <input type="file" class="form-control mr-sm-2 p-1" id="uploadFile" name="upFile" required>
-                    </div>
-                </div>
-                <hr>
+                <hr id="hr">
                 <div class="col-md-2 mx-auto">                  
                     <a type="button" class="btn btn-block btn-primary" id="sizeLimitButton" style="color: white;" onclick="sizeLimit()">Crear</a>
-                </div>        
+                </div>
             </form>        
         </div>
     </div>    
 </div>
 <br>
 <form action="/publications/myPublications" method="get">
-    <button type="submit" id="submitButton" style="display: none;"></button>
+    <button class="d-none" type="submit" id="submitButton"></button>
 </form>

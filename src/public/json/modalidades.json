@@ -1,0 +1,102 @@
+[  
+    {
+        "name":"Artículo de Revista",
+        "tipo":[  
+            "Investigación",
+            "Comunicación corta",
+            "Revisión",
+            "Reflexión",
+            "Reporte de caso"
+        ],
+        "categoria": [
+            "A1",
+            "A2",
+            "B",
+            "C"
+        ]
+    },
+    { 
+        "name":"Producción de vídeos, cinematográficas o fonográficas",
+        "tipo":[  
+            "Internacional",
+            "Nacional"
+        ],
+        "categoria": [
+            "Didáctico",
+            "Documental"
+        ]
+    },
+    {
+        "name":"Libro derivado de Investigación"
+    },
+    {
+        "name":"Libro de Texto"
+    },
+    {
+        "name":"Libro de Ensayo"
+    },
+    {
+        "name":"Premio",
+        "tipo":[  
+            "Nacional",
+            "Internacional"
+        ]
+    },
+    {
+        "name":"Patentes"
+    },
+    {
+        "name":"Traducciones"
+    },
+    {  
+        "id":8,
+        "name":"Obras artísticas",
+        "tipo":[  
+            "Obras de creación original artística",
+            "Obras de creación complementaria o de apoyo",
+            "Interpretación"
+        ],
+        "categoria":[
+            "Impacto Nacional",
+            "Impacto Internacional"
+        ]
+    },
+    { 
+        "name":"Producción técnica",
+        "tipo":[  
+            "Innovación",
+            "Adaptación"
+        ]
+    },
+    {
+        "name":"Producción de software",
+        "tipo":[  
+            "Software con un único Autor",
+            "Software con 2-3 Autores",
+            "Software con 4-5 Autores",
+            "Software con 6 o más Autores"
+        ]
+    },
+    {
+        "name":"Ponencia",
+        "tipo":[
+            "Nacional",
+            "Internacional"
+        ]
+    },
+    {
+        "name":"Publicaciones Impresas Universitarias"
+    },
+    {
+        "name":"Estudios Postdoctorales"
+    },
+    {
+        "name":"Reseñas Críticas"
+    },
+    {
+        "name":"Direcciones de Tesis"
+    },
+    {
+        "name":"Capítulo de Libro"
+    }
+]

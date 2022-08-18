@@ -11,7 +11,12 @@ const moment = require('moment');
 
 publicationsCtrl.renderAddPublication = (req, res) => {
     let Docente = true;
-    let json = require('../public/json/p_academica.json');
+    let modalidades = require('../public/json/modalidades.json');
+    let json = [];
+    modalidades.map((i)=>{
+        add = i.name
+        json.push(add)
+    })
     res.render('publications/addPublication',{json,Docente})
 };
 
