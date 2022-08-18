@@ -63,6 +63,7 @@ function PublicationsList(data){
     $('#row_7').remove();
     $('#row_8').remove();
     $('#row_9').remove();
+    $('#row_10').remove();
     var selectId = data.attributes[2].value;
     var index = $('#' + selectId)[0].selectedIndex - 1
     $.ajax({
@@ -74,7 +75,7 @@ function PublicationsList(data){
             let libroInvestigacion = 'Libro derivado de Investigación'
             let libroEnsayo = 'Libro de Ensayo';
             let libroTexto = 'Libro de Texto';
-            let capitulo = 'Capítulo de libro';
+            let capitulo = 'Capítulo de Libro';
             let patentes = 'Patentes';
             let ponencia = 'Ponencia'
             let {tipo,categoria} = response[index]
@@ -122,7 +123,7 @@ function PublicationsList(data){
                 html += '<label for="meses" class="col-form-label">Tiempo requerido para la publicación del artículo en la revista</label>'
                 html += '</div>'
                 html += '<div class="col-1">'
-                html += '<input type="number" name="meses" class="form-control">'
+                html += '<input type="number" name="meses" class="form-control" required>'
                 html += '</div>'
                 html += '<div class="col-auto">'
                 html += '<span class="form-text">'
@@ -131,11 +132,17 @@ function PublicationsList(data){
                 html += '</div>'
                 html += '</div>'
                 html += '<div class="row g-3 align-items-center mb-2" id="row_5">'
+                html += '<div class="col-5 mb-2">'
+                html += '<label for="dateRevista">Fecha de recepción o sumisión del artículo a la revista</label>'
+                html += '<input id="dateRevista" type="date" class="form-control w-50" name="dateRevista" required>'
+                html += '</div>'
+                html += '</div>'
+                html += '<div class="row g-3 align-items-center mb-2" id="row_6">'
                 html += '<div class="col-3">'
                 html += '<input type="text" class="form-control" name="ISSN" placeholder="ISSN" required>'
                 html += '</div>'
                 html += '</div>'
-                html += '<div class="row g-3 align-items-center mb-2" id="row_6">'
+                html += '<div class="row g-3 align-items-center mb-2" id="row_7">'
                 html += '<div class="col-auto">'
                 html += '<label for="check" class="col-form-label">Para la publicación del artículo, se invirtieron recursos económicos de la Universidad</label>'
                 html += '</div>'
@@ -182,7 +189,7 @@ function PublicationsList(data){
                 $('#row_1').after(html)
             }
             if(modalidad == articulo || modalidad == libroInvestigacion || modalidad == patentes || modalidad == ponencia){
-                html = '<div class="form-group row" id="row_7">'
+                html = '<div class="form-group row" id="row_8">'
                 html += '<div class="col">'
                 html += '<label for="name" id="name_label">Nombre del proyecto de Invesigación del cual se genera el material, sí aplica</label>'
                 html += '<input type="text" class="form-control" name="name_proyecto_investigacion" placeholder="" required>'
@@ -191,7 +198,7 @@ function PublicationsList(data){
                 $('#hr').before(html)
             }
             if($('#file').length==0){
-                html = '<div class="form-group row" id="row_8">'
+                html = '<div class="form-group row" id="row_9">'
                 html = '<div class="col-md-5 mb-2" id="file">'
                 html += '<label for="upFile" id="name_label">Archivo para Revisión</label>'
                 html += '<input type="file" class="form-control mr-sm-2 p-1" id="uploadFile" name="upFile" required>'
@@ -199,7 +206,7 @@ function PublicationsList(data){
                 html += '</div>'
                 $('#hr').before(html)
             }
-            html = '<div class="row g-3 align-items-center mb-2" id="row_9">'
+            html = '<div class="row g-3 align-items-center mb-2" id="row_10">'
             html += '<div class="col-auto">'
             html += '<label for="check" class="col-form-label">El material presentado fue tenido en cuenta para cambio de categoría en el escalafón docente:</label>'
             html += '</div>'
