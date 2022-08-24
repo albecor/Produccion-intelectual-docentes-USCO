@@ -62,6 +62,7 @@ function PublicationsList(data){
     $('#row_6').remove();
     $('#row_7').remove();
     $('#row_8').remove();
+    $('#file').remove();
     $('#row_9').remove();
     $('#row_10').remove();
     var selectId = data.attributes[2].value;
@@ -197,15 +198,6 @@ function PublicationsList(data){
                 html += '</div>'
                 $('#hr').before(html)
             }
-            if($('#file').length==0){
-                html = '<div class="form-group row" id="row_9">'
-                html = '<div class="col-md-5 mb-2" id="file">'
-                html += '<label for="upFile" id="name_label">Archivo para Revisión</label>'
-                html += '<input type="file" class="form-control mr-sm-2 p-1" id="uploadFile" name="upFile" required>'
-                html += '</div>'
-                html += '</div>'
-                $('#hr').before(html)
-            }
             html = '<div class="row g-3 align-items-center mb-2" id="row_10">'
             html += '<div class="col-auto">'
             html += '<label for="check" class="col-form-label">El material presentado fue tenido en cuenta para cambio de categoría en el escalafón docente:</label>'
@@ -220,8 +212,71 @@ function PublicationsList(data){
             html += '</div>'
             html += '</div>'
             $('#hr').before(html)
+            let count = 10+1;
+            html = '<div class="row mb-2" id="autores">'
+            html += '<input type="number" id="counter" class="d-none" value="">'
+            html += '<label for="numero_autores">Número de Autores</label>'
+            html += '<div class="col-1">'
+            html += '<select class="form-select" name="numero_autores" id="numero_aut" onchange="addAutores()">'
+            html += '<option value="" disabled>Selecciona el número de Autores</option>'
+            for (let i = 1; i < count; i++) {
+                html += '<option value="'+i+'">'+i+'</option>'
+            }
+            html += '</select>'
+            html += '</div>'
+            html += '</div>'
+            $('#hr').before(html)
+            if(modalidad != articulo){
+                html = '<div class="form-group row" id="row_9">'
+                html = '<div class="col-md-5 mb-2" id="file">'
+                html += '<label for="upFile" id="name_label">Archivo para Revisión</label>'
+                html += '<input type="file" class="form-control mr-sm-2 p-1" id="uploadFile" name="upFile" required>'
+                html += '</div>'
+                html += '</div>'
+                $('#hr').before(html)
+            }
         }
     });
+}
+
+function addAutores(){
+    var index = $("#numero_aut")[0].selectedIndex
+    let html = '';
+    let counter = parseInt($('#counter').val())
+    for(let i = 2; i < counter + 1; i++){
+        $('#div_autor_'+i).remove();
+    }
+    $('#counter').attr('value',index)
+    for (let i = 2; i < index + 1; i++) {
+        i = (i).toString()
+        html += '<div class="row form-group mb-2" id="div_autor_'+i+'">'
+        html += '<div class="col">'
+        html += '<input type="text" class="form-control" name="Aut_'+i+'" placeholder="Nombre del Autor '+i+'" required>'
+        html += '</div>'
+        html += '<div class="col">'
+        html += '<select class="form-select mr-sm-2" name="identification_type_'+i+'" required>'
+        html += '<option value="" selected>--- Elija un tipo de identificación ---</option>'
+        html += '<option value="Cedula">Cédula</option>'
+        html += '<option value="Cedula_extrangeria">Cédula de extrangeria</option>'
+        html += '<option value="Pasaporte">Pasaporte</option>'
+        html += '<option value="Tarjeta_identidad">Tarjeta de identidad</option>'
+        html += '<option value="Registro_civil">Registri civil</option>'
+        html += '<option value="Carnet_diplomatico">Carné diplomático</option>'
+        html += '<option value="Salvoconducto">Salvoconducto</option>'
+        html += '<option value="Perm_especial_permanencia">Perrmiso especial de permanencia</option>'
+        html += '<option value="Documento_extrangero">Documento extrangero</option>'
+        html += '<option value="Sin_identificacion">Sin identificación</option>'
+        html += '</select>'
+        html += '</div>'
+        html += '<div class="col">'
+        html += '<input type="text" class="form-control" name="identification_'+i+'" placeholder="Número de identificación" required>'
+        html += '</div>'
+        html += '</div>'
+    }
+    $('#autores').after(html)
+}
+function insertAutores(){
+
 }
 
 async function sizeLimit(){

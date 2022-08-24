@@ -69,13 +69,7 @@
         ]
     },
     {
-        "name":"Producción de software",
-        "tipo":[  
-            "Software con un único Autor",
-            "Software con 2-3 Autores",
-            "Software con 4-5 Autores",
-            "Software con 6 o más Autores"
-        ]
+        "name":"Producción de software"
     },
     {
         "name":"Ponencia",
