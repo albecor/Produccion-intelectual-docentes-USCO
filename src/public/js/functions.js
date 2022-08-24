@@ -49,22 +49,7 @@ function municipiosList(data){
 };
 
 function PublicationsList(data){
-    $('#name').attr('placeholder','Nombre de la Producción Académica')
-    $('#modalidad').removeClass('col-md-3')
-    $('#modalidad').removeClass('col')
-    $('#modalidad').addClass('col')
-    $('#categoria').remove();
-    $('#tipo').remove();
-    $('#row_2').remove();
-    $('#row_3').remove();
-    $('#row_4').remove();
-    $('#row_5').remove();
-    $('#row_6').remove();
-    $('#row_7').remove();
-    $('#row_8').remove();
-    $('#file').remove();
-    $('#row_9').remove();
-    $('#row_10').remove();
+    resetRows()
     var selectId = data.attributes[2].value;
     var index = $('#' + selectId)[0].selectedIndex - 1
     $.ajax({
@@ -212,20 +197,7 @@ function PublicationsList(data){
             html += '</div>'
             html += '</div>'
             $('#hr').before(html)
-            let count = 10+1;
-            html = '<div class="row mb-2" id="autores">'
-            html += '<input type="number" id="counter" class="d-none" value="">'
-            html += '<label for="numero_autores">Número de Autores</label>'
-            html += '<div class="col-1">'
-            html += '<select class="form-select" name="numero_autores" id="numero_aut" onchange="addAutores()">'
-            html += '<option value="" disabled>Selecciona el número de Autores</option>'
-            for (let i = 1; i < count; i++) {
-                html += '<option value="'+i+'">'+i+'</option>'
-            }
-            html += '</select>'
-            html += '</div>'
-            html += '</div>'
-            $('#hr').before(html)
+            insertAutores()
             if(modalidad != articulo){
                 html = '<div class="form-group row" id="row_9">'
                 html = '<div class="col-md-5 mb-2" id="file">'
@@ -275,8 +247,46 @@ function addAutores(){
     }
     $('#autores').after(html)
 }
-function insertAutores(){
 
+function insertAutores(){
+    let count = 10+1;
+    html = '<div class="row mb-2" id="autores">'
+    html += '<input type="number" id="counter" class="d-none" value="">'
+    html += '<label for="numero_autores">Número de Autores</label>'
+    html += '<div class="col-1">'
+    html += '<select class="form-select" name="numero_autores" id="numero_aut" onchange="addAutores()">'
+    html += '<option value="" disabled>Selecciona el número de Autores</option>'
+    for (let i = 1; i < count; i++) {
+        html += '<option value="'+i+'">'+i+'</option>'
+    }
+    html += '</select>'
+    html += '</div>'
+    html += '</div>'
+    $('#hr').before(html)
+}
+
+function resetRows(){
+    let counter = parseInt($('#counter').val())
+    for(let i = 2; i < counter + 1; i++){
+        $('#div_autor_'+i).remove();
+    }
+    $('#autores').remove();
+    $('#name').attr('placeholder','Nombre de la Producción Académica')
+    $('#modalidad').removeClass('col-md-3')
+    $('#modalidad').removeClass('col')
+    $('#modalidad').addClass('col')
+    $('#categoria').remove();
+    $('#tipo').remove();
+    $('#row_2').remove();
+    $('#row_3').remove();
+    $('#row_4').remove();
+    $('#row_5').remove();
+    $('#row_6').remove();
+    $('#row_7').remove();
+    $('#row_8').remove();
+    $('#file').remove();
+    $('#row_9').remove();
+    $('#row_10').remove();
 }
 
 async function sizeLimit(){
