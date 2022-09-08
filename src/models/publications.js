@@ -2,36 +2,66 @@ const {Schema, model} = require('mongoose');
 
 const PublicationSchema = Schema({
 
-    id_Docente: Schema.Types.ObjectId,
-
-    approved: {
-        type: Boolean,
-        default: false,
+    name: {
+        type: String,
+        required: true
     },
 
-    check: {
-        type: Boolean,
-        default: false,
+    modalidad: {
+        type: String,
+        required: true
     },
 
-    puntaje: {
+    categoria: {
+        type: String
+    },
+
+    tipo: {
+        type: String
+    },
+
+    nombre_revista:{
+        type: String
+    },
+
+    tiempo_revista:{
         type: Number
     },
 
-    name: {type: String},
+    fecha_recepcion_revista:{
+        type: Date
+    },
 
-    datePublication: {type: Date},
+    fecha_publicacion: {
+        type: Date
+    },
 
-    description: {type: String},
+    ISSN:{              //ó ISBN
+        type:String
+    },
+
+    recursos_U:{
+        type:Boolean
+    },
+
+    nombre_proyecto_investigacion:{
+        type: String
+    },
+
+    editorial:{
+        type:String
+    },
+
+    URL: {
+        type: String
+    },
+
+    cambio_categoria: {
+        type: Boolean
+    },
+
+//Datos del Archivo
     
-    URL: {type: String},
-
-    clase:{type: String},
-
-    subclase:{type: String},
-
-    caracter:{type: String},
-
     filename: {type: String},
 
     path: {type: String},
@@ -42,6 +72,37 @@ const PublicationSchema = Schema({
 
     size: {type: Number},
 
+
+//Revisiones
+
+    id_Docente: Schema.Types.ObjectId,
+
+    revision_funcionario: {
+        type: Boolean,
+        default: false,
+    },
+
+    observacion:{
+        type: String
+    },
+
+    revisado_cap:{
+        type: Boolean
+    },
+
+    aprobado_cap: {
+        type: Boolean,
+        default: false,
+    },
+
+    tipo_puntos:{
+        type: Boolean   //true = Bonificación por productividad académica
+                        //false = Reconocimiento de puntos salariales
+    },
+
+    puntaje: {
+        type: Number
+    }
 ////////////////////////////////////////////
 },{
     timestamps: true

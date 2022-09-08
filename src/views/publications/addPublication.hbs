@@ -13,12 +13,12 @@
                     </div>
                     <div class="col mb-2">
                         <label for="date">Fecha de Publicación</label>
-                        <input id="datePublication" type="date" class="form-control" name="datePublication" required>
+                        <input id="datePublication" type="date" class="form-control" name="fecha_publicacion" required>
                     </div>
                 </div>
                 <div class="form-group row" id="row_1">
                     <div class="col-md-3 mb-2" id="modalidad">                     
-                        <select class="form-select mr-sm-2" name="clase" id="select_modalidad"
+                        <select class="form-select mr-sm-2" name="modalidad" id="select_modalidad"
                             onchange="if (this.selectedIndex) PublicationsList(this);" required>
                             <option selected disabled value="">-- Modalidad Académica --</option>
                             {{#json}}

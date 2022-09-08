@@ -22,7 +22,7 @@ publicationsCtrl.renderAddPublication = (req, res) => {
 
 const storage = multer.diskStorage({
     destination: (req,file, cb)=>{
-        filePath = path.join(__dirname , '../public/img/uploads')
+        filePath = path.join(__dirname , '../public/uploads')
         cb(null,filePath)
     },
     filename: (req, file, cb, filename) => {
@@ -47,35 +47,50 @@ publicationsCtrl.sizeVerification = async (req,res,next) => {
 
 publicationsCtrl.AddPublication = async (req, res, next) => {
     let {
-        originalname,
-        mimetype,
+        name,
+        datePublication,
+        modalidad,
+        categoria,
+        tipo,
+        nombre_revista,
+        tiempo_revista,
+        fecha_recepcion_revista,
+        fecha_publicacion,
+        ISSN,
+        recursos_U,
+        nombre_proyecto_investigacion,
+        editorial,
+        URL,
+        cambio_categoria,
         filename,
         path,
-        size,
-        name,
-        URL,
-        datePublication,
-        clase,
-        subclase,
-        caracter,
-        description
+        originalname,
+        mimetype,
+        size
     } = req.body;
     let id_Docente = req.user.id;
-    caracter = caracterToView(caracter);
     const newPublication = new Publication({
         id_Docente,
         name,
         datePublication,
-        description,
+        modalidad,
+        categoria,
+        tipo,
+        nombre_revista,
+        tiempo_revista,
+        fecha_recepcion_revista,
+        fecha_publicacion,
+        ISSN,
+        recursos_U,
+        nombre_proyecto_investigacion,
+        editorial,
         URL,
-        clase,
-        subclase,
-        caracter,
+        cambio_categoria,
         filename,
         path,
         originalname,
         mimetype,
-        size,
+        size
     });
     await newPublication.save();
     res.send(true)
@@ -109,19 +124,35 @@ publicationsCtrl.renderMyPublications = async (req, res) => {
     res.render('publications/myPublications',{publications,Docente:true})
 };
 
+publicationsCtrl.timeVerification = async (req,res) => {
+    let {id} = req.query;
+    let {createdAt} = await Publication.findById(id)
+    let date = new Date()
+    date = (date-createdAt)/60000
+    let allow = true;
+    if(date > 5){
+        allow = false
+    }
+    res.send({allow})
+}
+
 publicationsCtrl.deleteMyPublication = async (req,res) => {
     let {path,createdAt} = await Publication.findById(req.params.id)
-    console.log("createdAt: ",createdAt)
-    /*
-    fs.unlink(path, async (err) =>{
-        if (err) {
-            console.error(err);
-        } else {
-            await Publication.findByIdAndDelete(req.params.id)
-            res.redirect('/publications/myPublications')
-        }
-    });
-    */
+    let date = new Date()
+    date = (date-createdAt)/60000
+    if(date > 5){
+        req.flash('error_msg', 'El tiempo límite para eliminar es de 5min, ese tiempo ya expiró');
+        res.redirect('/publications/myPublications')
+    }else{
+        fs.unlink(path, async (err) =>{
+            if (err) {
+                console.error(err);
+            } else {
+                await Publication.findByIdAndDelete(req.params.id)
+                res.redirect('/publications/myPublications')
+            }
+        });
+    }
 }
 
 //Funcionario
@@ -202,26 +233,6 @@ publicationsCtrl.renderSearchPublication = async (req, res) => {
     res.render('publications/reviewed',{publications,Funcionario,Admin})
 };
 
-function caracterToView(data){
-    switch (data) {
-        case '1':
-            return 'Científico';
-            break;
-        case '2':
-            return 'Técnico';
-            break;
-        case '3':
-            return 'Humanístico';
-            break;
-        case '4':
-            return 'Artístico';
-            break;
-        case '5':
-            return 'Pedagógico';
-            break;
-    }
-}
-
 publicationsCtrl.renderRequest = async (req, res) => {
     let {id} = req.params
     let {id_Docente,name,datePublication,description,clase,subclase,caracter,createdAt} = await Publication.findById(id).lean()
@@ -237,7 +248,7 @@ publicationsCtrl.renderRequest = async (req, res) => {
 publicationsCtrl.dowloadFile = async (req, res) => {
     let id = req.params.id;
     let {filename,originalname} = await Publication.findById(id).lean();
-    res.download(path.join(__dirname , '../public/img/uploads/'+filename),originalname)
+    res.download(path.join(__dirname , '../public/uploads/'+filename),originalname)
 }
 
 module.exports = publicationsCtrl;

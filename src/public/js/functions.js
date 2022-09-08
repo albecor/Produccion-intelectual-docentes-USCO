@@ -223,10 +223,10 @@ function addAutores(){
         i = (i).toString()
         html += '<div class="row form-group mb-2" id="div_autor_'+i+'">'
         html += '<div class="col">'
-        html += '<input type="text" class="form-control" name="Aut_'+i+'" placeholder="Nombre del Autor '+i+'" required>'
+        html += '<input type="text" class="form-control" name="autor_name_'+i+'" placeholder="Nombre del Autor '+i+'" required>'
         html += '</div>'
         html += '<div class="col">'
-        html += '<select class="form-select mr-sm-2" name="identification_type_'+i+'" required>'
+        html += '<select class="form-select mr-sm-2" name="autor_id_type_'+i+'" required>'
         html += '<option value="" selected>--- Elija un tipo de identificación ---</option>'
         html += '<option value="Cedula">Cédula</option>'
         html += '<option value="Cedula_extrangeria">Cédula de extrangeria</option>'
@@ -241,7 +241,7 @@ function addAutores(){
         html += '</select>'
         html += '</div>'
         html += '<div class="col">'
-        html += '<input type="text" class="form-control" name="identification_'+i+'" placeholder="Número de identificación" required>'
+        html += '<input type="text" class="form-control" name="autor_id_'+i+'" placeholder="Número de identificación" required>'
         html += '</div>'
         html += '</div>'
     }
@@ -249,7 +249,7 @@ function addAutores(){
 }
 
 function insertAutores(){
-    let count = 10+1;
+    let count = 20+1;
     html = '<div class="row mb-2" id="autores">'
     html += '<input type="number" id="counter" class="d-none" value="">'
     html += '<label for="numero_autores">Número de Autores</label>'
@@ -313,26 +313,13 @@ async function sizeLimit(){
             contentType: false,
             success: async function(r){
                 if(r){
-                    dataR = {
-                        originalname:   r.originalname,
-                        mimetype:       r.mimetype,
-                        filename:       r.filename,
-                        path:           r.path,   
-                        size:           r.size,
-                        name:           $('#name').val(),
-                        URL:            $('#URL').val(),
-                        datePublication:$('#datePublication').val(),
-                        clase:          $('#clase').val(),
-                        subclase:       $('#subclase').val(),
-                        caracter:       $('#caracter').val(),
-                        description:    $('#description').val()
-                    }
+                    let form = $('#realForm').serializeJSON();
+                    $.extend(form,r)
                     await $.ajax({
                         type: "POST",
                         url: "/publications/add",
-                        data: dataR,
+                        data: form,
                         success: () =>{
-                            console.log("succes")
                             $('#submitButton').click()
                         }
                     })
@@ -354,36 +341,45 @@ async function sizeLimit(){
                     confirmButtonText: 'Aceptar',
                     confirmButtonColor: '#8c141b'
                 });
-                console.log("some error", e);
+                console.log("error: ", e);
             }
         });
     }
 }
 
-function comprobarEliminar(data){
-    var selectId = data.attributes[0].value;
-    var color = data.attributes[3].value;
-    Swal.fire({
-        title: 'Estás seguro de Eliminar esta Solicitud?',
-        showCancelButton: true,
-        confirmButtonText: 'Eliminar',
-        confirmButtonColor: '#'+color,
-        cancelButtonText: 'Cancelar'
-      }).then((result) => {
-        if (result.isConfirmed) {
-            $('#deleteButton'+selectId).click()
+async function comprobarEliminar(data){
+    var index = data.attributes[0].value;
+    var id = data.attributes[1].value;
+    await $.ajax({
+        type: "get",
+        url: "/publications/time",
+        data: {
+            id
+        },
+        success: (r) =>{
+            if(r.allow){
+                Swal.fire({
+                    title: 'Estás seguro de Eliminar esta Solicitud?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Eliminar',
+                    confirmButtonColor: '#8c141b',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#deleteButton'+index).click()
+                    }
+                })
+            }else{
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'El tiempo límite para eliminar es de 5min, ese tiempo ya expiró',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#8c141b'
+                });
+            }
         }
-      })
-}
-
-function noEliminar(){
-    Swal.fire({
-        title: 'Error!',
-        text: 'El tiempo límite para eliminar es de 5min, ese tiempo ya expiró',
-        icon: 'error',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#8c141b'
-    });
+    })
 }
 
 function confirmation2(){

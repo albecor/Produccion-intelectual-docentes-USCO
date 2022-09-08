@@ -5,11 +5,15 @@ const Upload = multer()
 
 const {isAuthenticated, isAdmin, isDocente, isFuncionario} = require('../helpers/auth');
 const {
+    //Docente
     renderAddPublication,
     AddPublication,
     sizeVerification,
     renderMyPublications,
     deleteMyPublication,
+    timeVerification,
+
+    //Funcionario
     renderAudit,
     renderReviewed,
     renderSearchPublication,
@@ -27,6 +31,11 @@ router.post('/publications/verification',isAuthenticated, isDocente, sizeVerific
 router.get('/publications/myPublications',isAuthenticated, isDocente, renderMyPublications);
 
 router.delete('/publications/delete/:id',isAuthenticated, isDocente, deleteMyPublication);
+
+router.get('/publications/time',isAuthenticated, isDocente, timeVerification);
+
+
+//Docente
 
 router.get('/publications/audit',isAuthenticated, isFuncionario, renderAudit);
 
