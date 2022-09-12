@@ -87,7 +87,8 @@ const PublicationSchema = Schema({
     },
 
     revisado_cap:{
-        type: Boolean
+        type: Boolean,
+        default: false,
     },
 
     aprobado_cap: {
@@ -109,4 +110,4 @@ const PublicationSchema = Schema({
 });
 
 
-module.exports = model('publication', PublicationSchema, 'publications');
+module.exports = model('publication', PublicationSchema);

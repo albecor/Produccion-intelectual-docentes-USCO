@@ -63,7 +63,7 @@ function PublicationsList(data){
             let libroTexto = 'Libro de Texto';
             let capitulo = 'Capítulo de Libro';
             let patentes = 'Patentes';
-            let ponencia = 'Ponencia'
+            let ponencia = 'Ponencia';
             let {tipo,categoria} = response[index]
             let modalidad = response[index].name;
             let select_categoria = 'Categoría'
@@ -89,6 +89,8 @@ function PublicationsList(data){
                 html += '</select>'
                 html += '</div>'
                 $('#modalidad').after(html)
+            }else{
+                $('#modalidad').addClass('col-md-3')
             }
             if(modalidad == articulo){
                 html = '<div class="form-group row" id="row_2">'
@@ -109,7 +111,7 @@ function PublicationsList(data){
                 html += '<label for="meses" class="col-form-label">Tiempo requerido para la publicación del artículo en la revista</label>'
                 html += '</div>'
                 html += '<div class="col-1">'
-                html += '<input type="number" name="meses" class="form-control" required>'
+                html += '<input type="number" name="tiempo_revista" class="form-control" required>'
                 html += '</div>'
                 html += '<div class="col-auto">'
                 html += '<span class="form-text">'
@@ -120,7 +122,7 @@ function PublicationsList(data){
                 html += '<div class="row g-3 align-items-center mb-2" id="row_5">'
                 html += '<div class="col-5 mb-2">'
                 html += '<label for="dateRevista">Fecha de recepción o sumisión del artículo a la revista</label>'
-                html += '<input id="dateRevista" type="date" class="form-control w-50" name="dateRevista" required>'
+                html += '<input id="dateRevista" type="date" class="form-control w-50" name="fecha_recepcion_revista" required>'
                 html += '</div>'
                 html += '</div>'
                 html += '<div class="row g-3 align-items-center mb-2" id="row_6">'
@@ -133,11 +135,11 @@ function PublicationsList(data){
                 html += '<label for="check" class="col-form-label">Para la publicación del artículo, se invirtieron recursos económicos de la Universidad</label>'
                 html += '</div>'
                 html += '<div class="form-check form-check-inline ms-3 col-1">'
-                html += '<input class="form-check-input" type="radio" name="recursos" value="true" required>'
+                html += '<input class="form-check-input" type="radio" name="recursos_U" value="true" required>'
                 html += '<label class="form-check-label mx-0" for="inlineRadio1">SI</label>'
                 html += '</div>'
                 html += '<div class="form-check form-check-inline col-1">'
-                html += '<input class="form-check-input" type="radio" name="recursos" value="false" required>'
+                html += '<input class="form-check-input" type="radio" name="recursos_U" value="false" required>'
                 html += '<label class="form-check-label mx-0" for="inlineRadio2">NO</label>'
                 html += '</div>'
                 html += '</div>'
@@ -164,12 +166,14 @@ function PublicationsList(data){
                 html += '<input id="URL" type="url" class="form-control" name="URL" placeholder="Dirección URL Editorial" required>'
                 html += '</div>'
                 $('#modalidad').after(html)
+                $('#modalidad').removeClass('col-md-3','col')
+                $('#modalidad').addClass('col')
                 html = '<div class="form-group row mb-2" id="row_3">'
                 html += '<div class="col">'
-                html += '<input type="text" class="form-control" name="ISBN" placeholder="ISBN" required>'
+                html += '<input type="text" class="form-control" name="ISSN" placeholder="ISBN" required>'
                 html += '</div>'
-                html += '<div class="col" id="nombre_editorial">'
-                html += '<input type="text" class="form-control" name="nombre_editorial" placeholder="Editorial" required>'
+                html += '<div class="col" id="editorial">'
+                html += '<input type="text" class="form-control" name="editorial" placeholder="Editorial" required>'
                 html += '</div>'
                 html += '</div>'
                 $('#row_1').after(html)
@@ -178,7 +182,7 @@ function PublicationsList(data){
                 html = '<div class="form-group row" id="row_8">'
                 html += '<div class="col">'
                 html += '<label for="name" id="name_label">Nombre del proyecto de Invesigación del cual se genera el material, sí aplica</label>'
-                html += '<input type="text" class="form-control" name="name_proyecto_investigacion" placeholder="" required>'
+                html += '<input type="text" class="form-control" name="nombre_proyecto_investigacion" placeholder="" required>'
                 html += '</div>'
                 html += '</div>'
                 $('#hr').before(html)
@@ -205,7 +209,7 @@ function PublicationsList(data){
                 html += '<input type="file" class="form-control mr-sm-2 p-1" id="uploadFile" name="upFile" required>'
                 html += '</div>'
                 html += '</div>'
-                $('#hr').before(html)
+                $('#autores').before(html)
             }
         }
     });
@@ -228,16 +232,15 @@ function addAutores(){
         html += '<div class="col">'
         html += '<select class="form-select mr-sm-2" name="autor_id_type_'+i+'" required>'
         html += '<option value="" selected>--- Elija un tipo de identificación ---</option>'
-        html += '<option value="Cedula">Cédula</option>'
-        html += '<option value="Cedula_extrangeria">Cédula de extrangeria</option>'
+        html += '<option value="Cédula">Cédula</option>'
+        html += '<option value="Cédula extrangeria">Cédula de extrangeria</option>'
         html += '<option value="Pasaporte">Pasaporte</option>'
-        html += '<option value="Tarjeta_identidad">Tarjeta de identidad</option>'
-        html += '<option value="Registro_civil">Registri civil</option>'
-        html += '<option value="Carnet_diplomatico">Carné diplomático</option>'
+        html += '<option value="Tarjeta de identidad">Tarjeta de identidad</option>'
+        html += '<option value="Registro civil">Registri civil</option>'
+        html += '<option value="Carnet diplomático">Carné diplomático</option>'
         html += '<option value="Salvoconducto">Salvoconducto</option>'
-        html += '<option value="Perm_especial_permanencia">Perrmiso especial de permanencia</option>'
-        html += '<option value="Documento_extrangero">Documento extrangero</option>'
-        html += '<option value="Sin_identificacion">Sin identificación</option>'
+        html += '<option value="Permiso especial de permanencia">Perrmiso especial de permanencia</option>'
+        html += '<option value="Documento extrangero">Documento extrangero</option>'
         html += '</select>'
         html += '</div>'
         html += '<div class="col">'
@@ -272,8 +275,7 @@ function resetRows(){
     }
     $('#autores').remove();
     $('#name').attr('placeholder','Nombre de la Producción Académica')
-    $('#modalidad').removeClass('col-md-3')
-    $('#modalidad').removeClass('col')
+    $('#modalidad').removeClass('col-md-3','col')
     $('#modalidad').addClass('col')
     $('#categoria').remove();
     $('#tipo').remove();
@@ -303,47 +305,59 @@ async function sizeLimit(){
             })
     })()
     if (start) {
-        var formData = new FormData();
-        formData.append('upFile', $('input[type=file]')[0].files[0]);
-        await $.ajax({
-            type: "POST",
-            url: "/publications/verification",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: async function(r){
-                if(r){
-                    let form = $('#realForm').serializeJSON();
-                    $.extend(form,r)
-                    await $.ajax({
-                        type: "POST",
-                        url: "/publications/add",
-                        data: form,
-                        success: () =>{
-                            $('#submitButton').click()
+        Swal.fire({
+            title: 'Acepta los siguientes términos?',
+            text: "En mi calidad de docente de la Universidad Surcolombiana de Neiva Huila, me obligo a hacer envío del presente formulario debidamente diligenciado, con los soportes correspondientes. Me abstengo de enviar información que no sea real y/o que no esté debidamente soportada por los documentos idóneos para este efecto. En caso de no tener certeza acerca de la veracidad de la información enviada al Comité de Asignación de Puntaje - CAP, o de no tener seguridad en cuanto a los soportes idóneos para sustentar estos datos, me abstendré de realizar el registro.\nEn estos términos declaro mi responsabilidad sobre el manejo que daré a la información personal y académica a enviar al CAP",
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'No estoy de acuerdo',
+            confirmButtonColor: '#8c141b',
+            confirmButtonText: 'Si, estoy de acuerdo',
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+                var formData = new FormData();
+                formData.append('upFile', $('input[type=file]')[0].files[0]);
+                await $.ajax({
+                    type: "POST",
+                    url: "/publications/verification",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: async function(r){
+                        if(r){
+                            let form = $('#realForm').serializeJSON();
+                            $.extend(r,form)
+                            await $.ajax({
+                                type: "POST",
+                                url: "/publications/add",
+                                data: r,
+                                success: () =>{
+                                    $('#submitButton').click()
+                                }
+                            })
+                        }else{
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'El tamaño debe ser menor a 5MB',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar',
+                                confirmButtonColor: '#8c141b'
+                            });
                         }
-                    })
-                }else{
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'El tamaño debe ser menor a 5MB',
-                        icon: 'error',
-                        confirmButtonText: 'Aceptar',
-                        confirmButtonColor: '#8c141b'
-                    });
-                }
-            },
-            error: function (e) {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'El tamaño debe ser menor a 5MB',
-                    icon: 'error',
-                    confirmButtonText: 'Aceptar',
-                    confirmButtonColor: '#8c141b'
-                });
-                console.log("error: ", e);
+                    },
+                    error: function (e) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'El tamaño debe ser menor a 5MB',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar',
+                            confirmButtonColor: '#8c141b'
+                        });
+                        console.log("error: ", e);
+                    }
+                });              
             }
-        });
+          })
     }
 }
 
@@ -380,26 +394,6 @@ async function comprobarEliminar(data){
             }
         }
     })
-}
-
-function confirmation2(){
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire(
-            'Deleted!',
-            'Your file has been deleted.',
-            'success'
-          )
-        }
-      })
 }
 
 function assignment(data){

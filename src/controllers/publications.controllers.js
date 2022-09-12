@@ -2,11 +2,14 @@ const publicationsCtrl = {};
 
 const Publication = require('../models/publications')
 const User = require('../models/User')
+const Autor = require('../models/autor')
 const path = require('path');
 const multer = require('multer');
 const uuid = require('uuid/v4');
 const fs = require('fs');
 const moment = require('moment');
+var {Types} = require('mongoose');
+let {ObjectId} = Types
 
 
 publicationsCtrl.renderAddPublication = (req, res) => {
@@ -30,12 +33,13 @@ const storage = multer.diskStorage({
     }
 })
 
-const uploadFile = multer({
-    storage,
-    limits: {fileSize: 1000000 * 5}
-}).single('upFile');
 
 publicationsCtrl.sizeVerification = async (req,res,next) => {
+    const uploadFile = multer({
+        storage,
+        //limits: {fileSize: 1000000 * 5}
+    }).single('upFile');
+
     uploadFile(req, res, async (err) => {
         if (err) {
             return res.send(false)
@@ -66,10 +70,13 @@ publicationsCtrl.AddPublication = async (req, res, next) => {
         path,
         originalname,
         mimetype,
-        size
+        size,
+        numero_autores
     } = req.body;
     let id_Docente = req.user.id;
+    var _id = ObjectId();
     const newPublication = new Publication({
+        _id,
         id_Docente,
         name,
         datePublication,
@@ -93,6 +100,22 @@ publicationsCtrl.AddPublication = async (req, res, next) => {
         size
     });
     await newPublication.save();
+    numero_autores = parseInt(numero_autores)
+    if(numero_autores > 1){
+        for (let i = 0; i < numero_autores-1; i++) {
+            add = i + 2;
+            nombre = req.body['autor_name_'+add]
+            id_type = req.body['autor_id_type_'+add]
+            numero_id = req.body['autor_id_'+add]
+            let newAutor = new Autor({
+                id_publication: _id,
+                nombre,
+                id_type,
+                numero_id
+            })
+            await newAutor.save();
+        }
+    }
     res.send(true)
 };
 
@@ -130,7 +153,7 @@ publicationsCtrl.timeVerification = async (req,res) => {
     let date = new Date()
     date = (date-createdAt)/60000
     let allow = true;
-    if(date > 5){
+    if(date > 5  ){
         allow = false
     }
     res.send({allow})
@@ -140,7 +163,7 @@ publicationsCtrl.deleteMyPublication = async (req,res) => {
     let {path,createdAt} = await Publication.findById(req.params.id)
     let date = new Date()
     date = (date-createdAt)/60000
-    if(date > 5){
+    if(date > 5 ){
         req.flash('error_msg', 'El tiempo límite para eliminar es de 5min, ese tiempo ya expiró');
         res.redirect('/publications/myPublications')
     }else{
@@ -148,6 +171,13 @@ publicationsCtrl.deleteMyPublication = async (req,res) => {
             if (err) {
                 console.error(err);
             } else {
+                let autores = await Autor.find({id_publication:req.params.id})
+                if(autores.length>0){
+                    autores.map(async (aut)=>{
+                        await Autor.findByIdAndDelete(aut._id)
+                    })
+
+                }
                 await Publication.findByIdAndDelete(req.params.id)
                 res.redirect('/publications/myPublications')
             }
