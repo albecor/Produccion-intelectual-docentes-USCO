@@ -23,18 +23,18 @@ publicationsCtrl.renderAddPublication = (req, res) => {
     res.render('publications/addPublication',{json,Docente})
 };
 
-const storage = multer.diskStorage({
-    destination: (req,file, cb)=>{
-        filePath = path.join(__dirname , '../public/uploads')
-        cb(null,filePath)
-    },
-    filename: (req, file, cb, filename) => {
-        cb(null, uuid() + path.extname(file.originalname));
-    }
-})
 
 
 publicationsCtrl.sizeVerification = async (req,res,next) => {
+    const storage = multer.diskStorage({
+        destination: (req,file, cb)=>{
+            filePath = path.join(__dirname , '../public/uploads')
+            cb(null,filePath)
+        },
+        filename: (req, file, cb, filename) => {
+            cb(null, uuid() + path.extname(file.originalname));
+        }
+    })
     const uploadFile = multer({
         storage,
         //limits: {fileSize: 1000000 * 5}
@@ -75,6 +75,7 @@ publicationsCtrl.AddPublication = async (req, res, next) => {
     } = req.body;
     let id_Docente = req.user.id;
     var _id = ObjectId();
+    let estado =  'Pendiente de Validación';
     const newPublication = new Publication({
         _id,
         id_Docente,
@@ -97,7 +98,8 @@ publicationsCtrl.AddPublication = async (req, res, next) => {
         path,
         originalname,
         mimetype,
-        size
+        size,
+        estado
     });
     await newPublication.save();
     numero_autores = parseInt(numero_autores)
@@ -123,25 +125,9 @@ publicationsCtrl.renderMyPublications = async (req, res) => {
     let {id} = req.user;
     let publications = await Publication.find({id_Docente:id}).sort({createdAt:-1}).lean();
     for (let i in publications) {
-        let fecha_i = new Date(publications[i].datePublication);
-        let yy = fecha_i.getFullYear();
-        yy = yy.toString();
-        let mm = fecha_i.getUTCMonth() + 1;
-        mm = mm.toString();
-        let dd = fecha_i.getUTCDate();
-        dd = dd.toString();
-        publications[i]['fecha_i'] = dd+'/'+mm+'/'+yy;
+        publications[i]['createdAt'] = moment(publications[i].createdAt).utc().format('DD/MM/YYYY');
+        publications[i]['fecha_publicacion'] = moment(publications[i].fecha_publicacion).utc().format('DD/MM/YYYY');
         publications[i]['index']=((publications.length-parseInt(i)).toString()).padStart(3,0);
-        if(publications[i].approved){
-            publications[i]['approved']='Si';
-        }else{
-            publications[i]['approved']="No";
-        };
-        if(publications[i].check){
-            publications[i]['check']='Si';
-        }else{
-            publications[i]['check']="No";
-        };
     };
 
     res.render('publications/myPublications',{publications,Docente:true})
@@ -187,26 +173,38 @@ publicationsCtrl.deleteMyPublication = async (req,res) => {
 
 //Funcionario
 
-publicationsCtrl.renderAudit = async (req, res) => {
-    let publications = await Publication.find({reviewed:false}).lean();
+publicationsCtrl.renderAuditFn = async (req, res) => {
+    let publications = await Publication.find({estado:'Pendiente de Validación'}).lean().sort({createdAt:1});
     for (let i in publications) {
         let id = publications[i].id_Docente;
         if(id){
-            let {name, lastname, sec_lastname} = await User.findById(id).lean();
+            let {name, lastname, sec_lastname, facultad, programa} = await User.findById(id).lean();
             publications[i]['docente']=name+' '+' '+lastname+' '+sec_lastname;
+            publications[i]['facultad']=facultad;
+            publications[i]['programa']=programa;
         }
-        let fecha_i = new Date(publications[i].datePublication);
-        let yy = fecha_i.getFullYear();
-        yy = yy.toString();
-        let mm = fecha_i.getUTCMonth()+ 1;
-        mm = (mm.toString()).padStart(2,0);
-        let dd = fecha_i.getUTCDate();
-        dd = (dd.toString()).padStart(2,0);
-        publications[i]['fecha_i'] = dd+'/'+mm+'/'+yy;
+        publications[i]['createdAt'] = moment(publications[i].createdAt).utc().format('DD/MM/YYYY');
         publications[i]['index']=parseInt(i)+1;
     };
 
-    res.render('publications/audit',{publications,Funcionario:true})
+    res.render('publications/AuditFn',{publications,Funcionario:true})
+};
+
+publicationsCtrl.renderAuditCAP = async (req, res) => {
+    
+
+    res.render('publications/AuditCAP',{Funcionario:true})
+};
+
+publicationsCtrl.renderAuditFnId = async (req, res) => {
+    let {id} = req.params;
+    let publication = await Publication.findById(id).lean()
+    publication['createdAt'] = moment(publication.createdAt).utc().format('DD/MM/YYYY');
+    publication['fecha_publicacion'] = moment(publication.fecha_publicacion).utc().format('DD/MM/YYYY');
+    let docente = await User.findById(publication.id_Docente).lean()
+    let autores = await Autor.find({id_publication:id}).lean()
+    console.log(docente)
+    res.render('publications/FnOne',{publication,docente,autores,Funcionario:true})
 };
 
 publicationsCtrl.renderReviewed = async (req, res) => {
@@ -276,7 +274,7 @@ publicationsCtrl.renderRequest = async (req, res) => {
 }
 
 publicationsCtrl.dowloadFile = async (req, res) => {
-    let id = req.params.id;
+    let {id} = req.params;
     let {filename,originalname} = await Publication.findById(id).lean();
     res.download(path.join(__dirname , '../public/uploads/'+filename),originalname)
 }

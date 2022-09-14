@@ -1,0 +1,55 @@
+<div class="container">
+<div> 
+  <hr>
+  <h2> <p class="font-italic inline">Solicitudes</p></h2>  
+  <hr>
+</div>
+{{#if publications}}
+  <table class="table table-light table-bordered table-hover" id="primeraRevision">
+    <thead class="table-secondary">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Docente</th>
+        <th scope="col">Facultad</th>
+        <th scope="col">Programa</th>
+        <th scope="col">Nombre de Publicación</th>
+        <th scope="col">URL</th>
+        <th scope="col">Fecha de Solicitud</th>
+        <th scope="col">Descargar</th>
+        <th scope="col">Revisar</th>
+      </tr>
+    </thead>
+    <tbody>   
+      {{#publications}} 
+        <tr>
+            <th scope="row">{{index}}</th>
+            <td>{{docente}}</td>
+            <td>{{facultad}}</td>
+            <td>{{programa}}</td>
+            <td>{{name}}</td>
+            <td class="text-center">
+              <a href="{{URL}}" target="_blank"><i class="fas fa-globe"></i></a>
+            </td>
+            <td class="text-center">{{createdAt}}</td>
+            <td class="text-center">
+              <a href="/file/download/{{_id}}" title="Descargar"><i class="fas fa-download"></i></a>
+            </td>
+            <!--<td class="text-center">
+              <a href="/publications/request/{{_id}}" target="_blank" title="Ver" ><i class="fas fa-eye" style="color: black;"></i></a>
+            </td>-->
+            <td class="text-center">
+              <a href="/publications/audit/fn/{{_id}}" target="_blank" title="Ver" ><i class="fas fa-file" style="color: black;"></i></a>
+            </td>
+        </tr>
+      {{/publications}}     
+    </tbody>
+  </table>
+{{else}}
+  <br>
+  <br>
+  <br>
+  <div>
+    <h4>No se encontraron solicitudes</h4>
+  </div>
+{{/if}}
+</div>

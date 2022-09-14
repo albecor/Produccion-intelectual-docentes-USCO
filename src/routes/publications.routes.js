@@ -14,13 +14,17 @@ const {
     timeVerification,
 
     //Funcionario
-    renderAudit,
+    renderAuditFn,
+    renderAuditFnId,
+    renderAuditCAP,
     renderReviewed,
     renderSearchPublication,
     renderCreateReport,
     renderRequest,
     dowloadFile,
 } = require('../controllers/publications.controllers');
+
+//Docente
 
 router.get('/publications/add',isAuthenticated, isDocente, renderAddPublication);
 
@@ -35,15 +39,20 @@ router.delete('/publications/delete/:id',isAuthenticated, isDocente, deleteMyPub
 router.get('/publications/time',isAuthenticated, isDocente, timeVerification);
 
 
-//Docente
+//Funcionario
 
-router.get('/publications/audit',isAuthenticated, isFuncionario, renderAudit);
+router.get('/publications/audit/fn',isAuthenticated, isFuncionario, renderAuditFn);
+
+router.get('/publications/audit/fn/:id', isAuthenticated, isFuncionario, renderAuditFnId);
+
+router.get('/publications/audit/cap',isAuthenticated, isFuncionario, renderAuditCAP);
 
 router.get('/publications/reviewed',isAuthenticated, isFuncionario, renderReviewed);
 
 router.get('/publications/search',isAuthenticated, isFuncionario, renderSearchPublication);
 
 router.get('/publications/request/:id', isAuthenticated, isFuncionario, renderRequest);
+
 
 router.get('/file/download/:id', isAuthenticated, dowloadFile);
 

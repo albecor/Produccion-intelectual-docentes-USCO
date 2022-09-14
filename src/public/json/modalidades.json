@@ -91,6 +91,11 @@
         "name":"Direcciones de Tesis"
     },
     {
-        "name":"Capítulo de Libro"
+        "name":"Capítulo de Libro",
+        "tipo":[
+            "Investigación",
+            "Texto",
+            "Ensayo"
+        ]
     }
 ]

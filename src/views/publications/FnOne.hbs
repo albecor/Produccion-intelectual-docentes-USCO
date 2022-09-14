@@ -1,0 +1,74 @@
+<div class="col-md-12 mx-auto mt-0">
+    <div class="card ">
+        <div class="card-header text-center">
+            <h1 class="h4 text-black font-weight-bold">Solicitud de Reconocimiento</h1>
+        </div>
+        <div class="card-body">
+            <form action="/publications/add" enctype="multipart/form-data" class= "justify-content-center" id="realForm" onkeydown="return event.key != 'Enter';" method="POST">                         
+                <div class="form-group row">
+                    <div class="col mb-2">
+                        <label for="name" id="name_label">Docente</label>
+                        <input type="text" class="form-control" value="{{docente.name}} {{docente.lastname}} {{docente.sec_lastname}}" disabled>
+                    </div>
+                    <div class="col mb-2">
+                        <label for="name" id="name_label">Identificación</label>
+                        <input type="text" class="form-control" value="{{docente.identification_type}} {{docente.identification}}" disabled>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col mb-2">
+                        <label for="name" id="name_label">Facultad</label>
+                        <input type="text" class="form-control" value="{{docente.facultad}}" disabled>
+                    </div>
+                    <div class="col mb-2">
+                        <label for="name" id="name_label">Programa</label>
+                        <input type="text" class="form-control" value="{{docente.programa}}" disabled>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col mb-2">
+                        <label for="name" id="name_label">Nombre</label>
+                        <input type="text" class="form-control" value="{{publication.name}}" disabled>
+                    </div>
+                    <div class="col mb-2">
+                        <label for="date">Fecha de Publicación</label>
+                        <input id="datePublication" type="text" class="form-control" value="{{publication.fecha_publicacion}}" disabled>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col mb-2">
+                        <label for="date">Modalidad</label>                     
+                        <input type="text" class="form-control" value="{{publication.modalidad}}" disabled>
+                    </div>
+                    <div class="col mb-2">
+                        <label for="date">Tipo, Finalidad o Impacto</label>                     
+                        <input type="text" class="form-control" value="{{publication.tipo}}" disabled>
+                    </div>
+                </div>
+                <hr id="hr">      
+                <div class="form-floating">
+                    <textarea class="form-control" id="floatingTextarea"></textarea>
+                    <label for="floatingTextarea">Observaciones</label>
+                </div>   
+                <div class="d-flex bd-highlight mb-3">
+                    <div class="me-auto p-2 bd-highlight">
+                        <a type="button" class="btn btn-block btn-primary" style="color: white; background-color: rgb(140, 20, 27); border: 0;;" onclick="noFunction()">Aceptar</a>                  
+                    </div>
+                    <div class="p-2 bd-highlight">
+                        <a type="button" class="btn btn-block btn-secondary" style="color: white; border: 0;;" onclick="noFunction()">Rechazar</a>
+                    </div>
+                </div>       
+            </form>        
+        </div>
+    </div>    
+</div>
+<br>
+<form action="/publications/myPublications" method="get">
+    <button class="d-none" type="submit" id="submitButton"></button>
+</form>
+
+{{#autores}}
+    {{nombre}}
+    {{id_type}}
+    {{numero_id}}
+{{/autores}}

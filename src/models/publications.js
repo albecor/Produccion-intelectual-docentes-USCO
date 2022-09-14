@@ -77,23 +77,13 @@ const PublicationSchema = Schema({
 
     id_Docente: Schema.Types.ObjectId,
 
-    revision_funcionario: {
-        type: Boolean,
-        default: false,
+    estado: {
+        type: String,
+        default: 'Pendiente por revisión',
     },
 
     observacion:{
         type: String
-    },
-
-    revisado_cap:{
-        type: Boolean,
-        default: false,
-    },
-
-    aprobado_cap: {
-        type: Boolean,
-        default: false,
     },
 
     tipo_puntos:{

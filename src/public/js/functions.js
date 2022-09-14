@@ -111,7 +111,7 @@ function PublicationsList(data){
                 html += '<label for="meses" class="col-form-label">Tiempo requerido para la publicación del artículo en la revista</label>'
                 html += '</div>'
                 html += '<div class="col-1">'
-                html += '<input type="number" name="tiempo_revista" class="form-control" required>'
+                html += '<input type="number" name="tiempo_revista" min="0" class="form-control" required>'
                 html += '</div>'
                 html += '<div class="col-auto">'
                 html += '<span class="form-text">'
@@ -178,11 +178,11 @@ function PublicationsList(data){
                 html += '</div>'
                 $('#row_1').after(html)
             }
-            if(modalidad == articulo || modalidad == libroInvestigacion || modalidad == patentes || modalidad == ponencia){
+            if(modalidad == articulo || modalidad == libroInvestigacion || modalidad == libroEnsayo || modalidad == libroTexto || modalidad == capitulo || modalidad == patentes || modalidad == ponencia){
                 html = '<div class="form-group row" id="row_8">'
                 html += '<div class="col">'
                 html += '<label for="name" id="name_label">Nombre del proyecto de Invesigación del cual se genera el material, sí aplica</label>'
-                html += '<input type="text" class="form-control" name="nombre_proyecto_investigacion" placeholder="" required>'
+                html += '<input type="text" class="form-control" name="nombre_proyecto_investigacion" placeholder="">'
                 html += '</div>'
                 html += '</div>'
                 $('#hr').before(html)
@@ -531,3 +531,64 @@ function reviewed(){
         confirmButtonColor: '#8c141B'
     })
 };
+
+//DataTables
+
+//MyPublications
+$(document).ready(function () {
+    $('#myPublications').DataTable({
+        language: {
+            url: '/json/es-CO.json'
+        },
+        ordering:  false,
+        "scrollCollapse": true,
+        "paging": false,
+    });
+});
+
+//Primera Revisión
+$(document).ready(function () {
+    $('#primeraRevision').DataTable({
+        language: {
+            url: '/json/es-CO.json'
+        },
+        ordering:  false,
+        "columnDefs": [
+            { "width": "2%",
+            "targets": 0,
+            "searchable": false,
+            "orderable": false,
+        }
+        ],
+        "scrollCollapse": true,
+        "paging": false,
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                title: 'Primera Revisión',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 4 ]
+                }
+            },
+            {
+                extend: 'print',
+                autoPrint: false,
+                text: 'Ver',
+                title: 'Primera Revisión',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 4 ]
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                //download: 'open',
+                title: 'Primera Revisión',
+                text: 'PDF',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 4 ]
+                }
+            }
+        ],
+    });
+});

@@ -15,7 +15,7 @@ const Autor = Schema({
     },
 
     numero_id: {
-        type: Number
+        type: String
     }
 
 },
