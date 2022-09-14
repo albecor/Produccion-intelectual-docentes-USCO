@@ -42,6 +42,7 @@ publicationsCtrl.sizeVerification = async (req,res,next) => {
 
     uploadFile(req, res, async (err) => {
         if (err) {
+            console.log(err)
             return res.send(false)
         }else{
             return await res.send(req.file)
