@@ -7,17 +7,7 @@ const Autor = Schema({
     nombre: {
         type: String,
         required: true
-    },
-
-    id_type: {
-        type: String,
-        required: true
-    },
-
-    numero_id: {
-        type: String
     }
-
 },
 {
     timestamps: true

@@ -1,0 +1,44 @@
+<div class="container">
+<div> 
+  <hr>
+  <h2> <p class="font-italic inline">ISSN</p></h2>  
+  <hr>
+</div>
+{{#if issn}}
+  <table class="table table-light table-bordered table-hover overflow-y: hidden" id="myPublications">
+    <thead class="table-secondary">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Título</th>
+        <th scope="col">ISSN Impreso</th>
+        <th scope="col">ISSN Electrónico</th>
+        <th scope="col">ISSN L</th>
+        <th scope="col">Instituciones Editoras</th>
+        <th scope="col">Categoría</th>
+        <th scope="col">Vigencia</th>
+      </tr>
+    </thead>
+    <tbody>   
+      {{#issn}} 
+        <tr>
+          <th>{{@index}}</th>
+          <td>{{titulo}}</td>
+          <td class="text-center">{{issn_impreso}}</td>
+          <td class="text-center">{{issn_electronico}}</td>
+          <td class="text-center">{{issn_L}}</td>
+          <td>{{institucion_editora}}</td>
+          <td>{{categoria}}</td>
+          <td class="text-center">{{vigencia}}</td>
+        </tr>
+      {{/issn}}     
+    </tbody>
+  </table>
+{{else}}
+  <br>
+  <br>
+  <br>
+  <div>
+    <h4>No se encontraron Revistas Indexadas para este año</h4>
+  </div>
+{{/if}}
+</div>

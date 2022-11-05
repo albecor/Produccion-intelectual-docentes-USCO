@@ -17,11 +17,16 @@ const {
     renderAuditFn,
     renderAuditFnId,
     renderAuditCAP,
+    checkISSN,
     renderReviewed,
     renderSearchPublication,
     renderCreateReport,
     renderRequest,
     dowloadFile,
+
+    renderLoadISSN,
+    renderISSN,
+    loadISSN
 } = require('../controllers/publications.controllers');
 
 //Docente
@@ -55,5 +60,11 @@ router.get('/publications/request/:id', isAuthenticated, isFuncionario, renderRe
 
 
 router.get('/file/download/:id', isAuthenticated, dowloadFile);
+
+router.get('/load/issn', isAuthenticated, isAdmin, renderLoadISSN)
+
+router.post('/load/issn', isAuthenticated, isAdmin, loadISSN)
+
+router.get('/view/issn', isAuthenticated, isAdmin, renderISSN)
 
 module.exports = router;

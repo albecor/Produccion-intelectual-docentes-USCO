@@ -3,62 +3,122 @@
         <div class="card-header text-center">
             <h1 class="h4 text-black font-weight-bold">Solicitud de Reconocimiento</h1>
         </div>
-        <div class="card-body">
-            <form action="/publications/add" enctype="multipart/form-data" class= "justify-content-center" id="realForm" onkeydown="return event.key != 'Enter';" method="POST">                         
-                <div class="form-group row">
-                    <div class="col mb-2">
-                        <label for="name" id="name_label">Docente</label>
-                        <input type="text" class="form-control" value="{{docente.name}} {{docente.lastname}} {{docente.sec_lastname}}" disabled>
-                    </div>
-                    <div class="col mb-2">
-                        <label for="name" id="name_label">Identificación</label>
-                        <input type="text" class="form-control" value="{{docente.identification_type}} {{docente.identification}}" disabled>
-                    </div>
+        <div class="card-body">                        
+            <div class="form-group row">
+                <div class="col mb-2">
+                    <label>Docente</label>
+                    <input type="text" class="form-control bg-light" value="{{docente.name}} {{docente.lastname}} {{docente.sec_lastname}}" disabled>
                 </div>
-                <div class="form-group row">
-                    <div class="col mb-2">
-                        <label for="name" id="name_label">Facultad</label>
-                        <input type="text" class="form-control" value="{{docente.facultad}}" disabled>
-                    </div>
-                    <div class="col mb-2">
-                        <label for="name" id="name_label">Programa</label>
-                        <input type="text" class="form-control" value="{{docente.programa}}" disabled>
-                    </div>
+                <div class="col mb-2">
+                    <label>Identificación</label>
+                    <input type="text" class="form-control bg-light" value="{{docente.identification_type}} {{docente.identification}}" disabled>
                 </div>
-                <div class="form-group row">
-                    <div class="col mb-2">
-                        <label for="name" id="name_label">Nombre</label>
-                        <input type="text" class="form-control" value="{{publication.name}}" disabled>
-                    </div>
-                    <div class="col mb-2">
-                        <label for="date">Fecha de Publicación</label>
-                        <input id="datePublication" type="text" class="form-control" value="{{publication.fecha_publicacion}}" disabled>
-                    </div>
+            </div>
+            <div class="form-group row">
+                <div class="col mb-2">
+                    <label>Facultad</label>
+                    <input type="text" class="form-control bg-light" value="{{docente.facultad}}" disabled>
                 </div>
-                <div class="form-group row">
-                    <div class="col mb-2">
-                        <label for="date">Modalidad</label>                     
-                        <input type="text" class="form-control" value="{{publication.modalidad}}" disabled>
-                    </div>
-                    <div class="col mb-2">
-                        <label for="date">Tipo, Finalidad o Impacto</label>                     
-                        <input type="text" class="form-control" value="{{publication.tipo}}" disabled>
-                    </div>
+                <div class="col mb-2">
+                    <label>Programa</label>
+                    <input type="text" class="form-control bg-light" value="{{docente.programa}}" disabled>
                 </div>
-                <hr id="hr">      
-                <div class="form-floating">
-                    <textarea class="form-control" id="floatingTextarea"></textarea>
-                    <label for="floatingTextarea">Observaciones</label>
-                </div>   
-                <div class="d-flex bd-highlight mb-3">
-                    <div class="me-auto p-2 bd-highlight">
-                        <a type="button" class="btn btn-block btn-primary" style="color: white; background-color: rgb(140, 20, 27); border: 0;;" onclick="noFunction()">Aceptar</a>                  
-                    </div>
-                    <div class="p-2 bd-highlight">
-                        <a type="button" class="btn btn-block btn-secondary" style="color: white; border: 0;;" onclick="noFunction()">Rechazar</a>
-                    </div>
-                </div>       
-            </form>        
+            </div>
+            <div class="form-group row">
+                <div class="col mb-2">
+                    <label>Título del Material</label>
+                    <input type="text" class="form-control bg-light" value="{{publication.name}}" disabled>
+                </div>
+                <div class="col mb-2">
+                    <label>Fecha de Publicación</label>
+                    <input type="text" class="form-control bg-light" value="{{publication.fecha_publicacion}}" disabled>
+                </div>
+            </div>
+            {{#if articulo}}
+            <div class="form-group row">
+                <div class="col mb-2">
+                    <label>Modalidad</label>                     
+                    <input type="text" class="form-control bg-light" value="{{publication.modalidad}}" disabled>
+                </div>
+                <div class="col mb-2">
+                    <label>Tipo de artículo</label>                     
+                    <input type="text" class="form-control bg-light" value="{{publication.tipo}}" disabled>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col mb-2">
+                    <label>Nombre de Revista</label>                     
+                    <input type="text" class="form-control bg-light" value="{{publication.nombre_revista}}" disabled>
+                </div>
+                <div class="col mb-2">
+                    <label>Categoría</label>                     
+                    <input type="text" class="form-control bg-light" value="{{publication.categoria}}" disabled>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col mb-2">
+                    <label>URL Revista</label>                     
+                    <a class="form-control bg-light" href="{{publication.URL}}">Click para ir al enlace <i class="fas fa-globe"></i></a>
+                </div>
+                <div class="col mb-2">
+                    <label>Tiempo Requerido para la publicación del artículo en la revista</label>                     
+                    <input type="text" class="form-control bg-light" value="{{publication.tiempo_revista}} Meses" disabled>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col mb-2">
+                    <label>Fecha de recepción o sumisión del artículo a la revista</label>                     
+                    <input type="text" class="form-control bg-light" value="{{publication.fecha_recepcion_revista}}" disabled>
+                </div>
+                <div class="col mb-2">
+                    <label>ISSN</label>                     
+                    <input type="text" class="form-control bg-light" value="{{publication.ISSN}}" disabled>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col mb-2">
+                    <label>Fecha de recepción o sumisión del artículo a la revista</label>                     
+                    <input type="text" class="form-control bg-light" value="{{publication.fecha_recepcion_revista}}" disabled>
+                </div>
+                <div class="col mb-2">
+                    <label>Se invirtieron recursos económicos de la Universidad</label>
+                    <input type="text" class="form-control bg-light" value="{{#if publication.recursos_U}}SI{{else}}NO{{/if}}" disabled>
+                </div>
+            </div>
+            {{#if publication.nombre_proyecto_investigacion}}
+            <div class="form-group row">
+                <div class="col mb-2">
+                    <label>Nombre del proyecto de Investigación del cual se genera el material</label>                     
+                    <input type="text" class="form-control bg-light" value="{{publication.nombre_proyecto_investigacion}}" disabled>
+                </div>
+            </div>
+            {{/if}}
+            {{/if}}
+            <div class="form-group row">
+                <div class="col mb-2">
+                    <label>El material presentado fue tenido en cuenta para cambio de categoría en el escalafón docente</label>
+                    <input type="text" class="form-control bg-light" value="{{#if publication.cambio_categoria}}SI{{else}}NO{{/if}}" disabled>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-2 mb-2">
+                    <label>Descargar Archivo</label>
+                    <a class="btn btn-block btn-success" type="button" href="/file/download/{{_id}}" title="Descargar"><i class="fas fa-download"></i> Descargar</a>
+                </div>
+            </div>
+            <hr id="hr">      
+            <div class="form-floating">
+                <textarea class="form-control bg-light" id="floatingTextarea"></textarea>
+                <label for="floatingTextarea">Observaciones</label>
+            </div>   
+            <div class="d-flex bd-highlight mb-3">
+                <div class="me-auto p-2 bd-highlight">
+                    <a type="button" class="btn btn-block btn-primary" style="color: white; background-color: rgb(140, 20, 27); border: 0;;" onclick="noFunction()">Aceptar</a>                  
+                </div>
+                <div class="p-2 bd-highlight">
+                    <a type="button" class="btn btn-block btn-secondary" style="color: white; border: 0;;" onclick="noFunction()">Rechazar</a>
+                </div>
+            </div>
         </div>
     </div>    
 </div>
@@ -66,9 +126,3 @@
 <form action="/publications/myPublications" method="get">
     <button class="d-none" type="submit" id="submitButton"></button>
 </form>
-
-{{#autores}}
-    {{nombre}}
-    {{id_type}}
-    {{numero_id}}
-{{/autores}}

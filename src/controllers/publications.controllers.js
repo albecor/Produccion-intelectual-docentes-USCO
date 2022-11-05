@@ -3,12 +3,14 @@ const publicationsCtrl = {};
 const Publication = require('../models/publications')
 const User = require('../models/User')
 const Autor = require('../models/autor')
+const ISSN = require('../models/ISSN')
 const path = require('path');
 const multer = require('multer');
 const uuid = require('uuid/v4');
 const fs = require('fs');
 const moment = require('moment');
 var {Types} = require('mongoose');
+const { query } = require('express');
 let {ObjectId} = Types
 
 
@@ -23,9 +25,7 @@ publicationsCtrl.renderAddPublication = (req, res) => {
     res.render('publications/addPublication',{json,Docente})
 };
 
-
-
-publicationsCtrl.sizeVerification = async (req,res,next) => {
+publicationsCtrl.sizeVerification = async (req,res) => {
     const storage = multer.diskStorage({
         destination: (req,file, cb)=>{
             filePath = path.join(__dirname , '../public/uploads')
@@ -50,7 +50,7 @@ publicationsCtrl.sizeVerification = async (req,res,next) => {
     })
 }
 
-publicationsCtrl.AddPublication = async (req, res, next) => {
+publicationsCtrl.AddPublication = async (req, res) => {
     let {
         name,
         datePublication,
@@ -197,15 +197,58 @@ publicationsCtrl.renderAuditCAP = async (req, res) => {
     res.render('publications/AuditCAP',{Funcionario:true})
 };
 
+publicationsCtrl.checkISSN = async (req, res) => {
+    res.redirect('/')
+}
+
 publicationsCtrl.renderAuditFnId = async (req, res) => {
     let {id} = req.params;
+    let articulo = false, videos = false, libroITE = false, premio = false, PTec = false, obra = false, ponencia = false, capitulo = false, elsePA = false;
     let publication = await Publication.findById(id).lean()
+    switch (publication.modalidad) {
+        case 'Artículo de Revista':
+            articulo = true;
+            break;
+        case 'Producción de vídeos, cinematográficas o fonográficas':
+            videos = true;
+            break;
+        case 'Libro derivado de Investigación':
+            libroITE = true;
+            break;
+        case 'Libro de Texto':
+            libroITE = true;
+            break;
+        case 'Libro de Ensayo':
+            libroITE = true;
+            break;
+        case 'Premio':
+            premio = true
+            break;
+        case 'Producción técnica':
+            PTec = true;
+            break;
+        case 'Obras artísticas':
+            obra = true;
+            break;
+        case 'Ponencia':
+            ponencia = true;
+            break;
+        case 'Capítulo de Libro':
+            capitulo = true;
+            break;
+        default:
+            elsePA = true
+            break;
+    }
     publication['createdAt'] = moment(publication.createdAt).utc().format('DD/MM/YYYY');
     publication['fecha_publicacion'] = moment(publication.fecha_publicacion).utc().format('DD/MM/YYYY');
+    publication['fecha_recepcion_revista'] = moment(publication.fecha_recepcion_revista).utc().format('DD/MM/YYYY');
     let docente = await User.findById(publication.id_Docente).lean()
     let autores = await Autor.find({id_publication:id}).lean()
-    console.log(docente)
-    res.render('publications/FnOne',{publication,docente,autores,Funcionario:true})
+    res.render('publications/FnOne',{
+        publication,docente,autores,Funcionario:true,
+        articulo, videos, libroITE, premio, PTec, obra, ponencia, capitulo, elsePA
+    })
 };
 
 publicationsCtrl.renderReviewed = async (req, res) => {
@@ -278,6 +321,96 @@ publicationsCtrl.dowloadFile = async (req, res) => {
     let {id} = req.params;
     let {filename,originalname} = await Publication.findById(id).lean();
     res.download(path.join(__dirname , '../public/uploads/'+filename),originalname)
+}
+
+publicationsCtrl.renderLoadISSN = async (req,res) => {
+    res.render('publications/loadissn', {Admin:true})
+}
+
+publicationsCtrl.renderISSN = async (req,res) => {
+    
+    let issn = await ISSN.find().lean()
+    //let issn = await ISSN.find({ $or: [ { issn_impreso: query1 }, { issn_electronico: query1 }, {issn_L:query1} ] }).lean()
+    res.render('publications/issn', {
+        issn,Admin:true
+    })
+}
+
+publicationsCtrl.loadISSN = async (req,res) => {
+    const mongoose = require('mongoose');
+    let storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            filePath = path.join(__dirname , '../public/xlsx')
+            cb(null, filePath)
+        },
+        filename: function (req, file, cb) {
+            cb(null, 'issn.xlsx')
+        }
+    })
+    
+    let upload = multer({ storage }).single("file")
+    upload(req, res, async (err) => {
+        if(err){
+            console.log(err)
+        }else{
+        let {vigencia} = req.body
+        let verificationISSN = await ISSN.findOne({vigencia})
+        console.log(verificationISSN)
+        if(verificationISSN){
+            req.flash('error_msg', 'Ya existen revistas indexadas para este año');
+            res.redirect('/load/issn')
+        }else{
+            var XLSX = require('xlsx');
+            const path = require('path');
+            dirWB = path.dirname(__dirname)
+            fileWB = path.join(dirWB + '/public/xlsx/issn.xlsx');
+            var workbook = XLSX.readFile(fileWB);
+            var sheet_name_list = workbook.SheetNames;
+            var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+            let data = [];
+            xlData.map((doc,i,a)=>{
+                let lengthDOC = Object.keys(doc).length
+                let issn_impreso = doc['ISSN IMPRESO']
+                if(!issn_impreso)issn_impreso= 'No posee'
+                let issn_electronico = doc['ISSN ELECTRÓNICO']
+                if(!issn_electronico)issn_electronico= 'No posee'
+                let issn_L = doc['ISSN L']
+                if(!issn_L)issn_L= 'No posee'
+                let add = {
+                    titulo: doc['TíTULO'],
+                    issn_impreso,
+                    issn_electronico,
+                    issn_L,
+                    institucion_editora: doc['INSTITUCIONES EDITORAS'],
+                    categoria: doc['CATEGORÍA'],
+                    vigencia
+                }
+                data.push(add)
+            })
+            ISSN.insertMany(data, function(error, docs) {
+                if(error){
+                    console.log(error)
+                    req.flash('error_msg', 'Error en la validación de datos');
+                    res.redirect('/load/issn')
+                }else{
+                    res.redirect('/view/issn');
+                }
+            });
+        }
+        }
+    });
+    /*
+    
+    fs.unlink(path, async (err) =>{
+        if (err) {
+            console.error(err);
+        } else {
+            await Publication.findByIdAndDelete(req.params.id)
+            res.redirect('/publications/myPublications')
+        }
+    });
+    */
+    
 }
 
 module.exports = publicationsCtrl;
