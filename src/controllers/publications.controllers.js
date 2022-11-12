@@ -197,10 +197,6 @@ publicationsCtrl.renderAuditCAP = async (req, res) => {
     res.render('publications/AuditCAP',{Funcionario:true})
 };
 
-publicationsCtrl.checkISSN = async (req, res) => {
-    res.redirect('/')
-}
-
 publicationsCtrl.renderAuditFnId = async (req, res) => {
     let {id} = req.params;
     let articulo = false, videos = false, libroITE = false, premio = false, PTec = false, obra = false, ponencia = false, capitulo = false, elsePA = false;
@@ -328,9 +324,7 @@ publicationsCtrl.renderLoadISSN = async (req,res) => {
 }
 
 publicationsCtrl.renderISSN = async (req,res) => {
-    
-    let issn = await ISSN.find().lean()
-    //let issn = await ISSN.find({ $or: [ { issn_impreso: query1 }, { issn_electronico: query1 }, {issn_L:query1} ] }).lean()
+    let issn = await ISSN.find().sort({vigencia:-1}).lean()
     res.render('publications/issn', {
         issn,Admin:true
     })
@@ -354,63 +348,57 @@ publicationsCtrl.loadISSN = async (req,res) => {
             console.log(err)
         }else{
         let {vigencia} = req.body
-        let verificationISSN = await ISSN.findOne({vigencia})
-        console.log(verificationISSN)
-        if(verificationISSN){
-            req.flash('error_msg', 'Ya existen revistas indexadas para este año');
-            res.redirect('/load/issn')
-        }else{
-            var XLSX = require('xlsx');
-            const path = require('path');
-            dirWB = path.dirname(__dirname)
-            fileWB = path.join(dirWB + '/public/xlsx/issn.xlsx');
-            var workbook = XLSX.readFile(fileWB);
-            var sheet_name_list = workbook.SheetNames;
-            var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
-            let data = [];
-            xlData.map((doc,i,a)=>{
-                let lengthDOC = Object.keys(doc).length
-                let issn_impreso = doc['ISSN IMPRESO']
-                if(!issn_impreso)issn_impreso= 'No posee'
-                let issn_electronico = doc['ISSN ELECTRÓNICO']
-                if(!issn_electronico)issn_electronico= 'No posee'
-                let issn_L = doc['ISSN L']
-                if(!issn_L)issn_L= 'No posee'
-                let add = {
-                    titulo: doc['TíTULO'],
+        var XLSX = require('xlsx');
+        const path = require('path');
+        dirWB = path.dirname(__dirname)
+        fileWB = path.join(dirWB + '/public/xlsx/issn.xlsx');
+        var workbook = XLSX.readFile(fileWB);
+        var sheet_name_list = workbook.SheetNames;
+        var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+        let data = [];
+        xlData.map(async(doc,i,a)=>{
+            let lengthDOC = Object.keys(doc).length
+            let issn_impreso = doc['ISSN IMPRESO']
+            if(!issn_impreso)issn_impreso = '---'
+            let issn_electronico = doc['ISSN ELECTRÓNICO']
+            if(!issn_electronico)issn_electronico = '---'
+            let issn_L = doc['ISSN L']
+            if(!issn_L)issn_L = '---'
+            let titulo = doc['TÍTULO']
+            let institucion_editora = doc['INSTITUCIONES EDITORAS']
+            if(!institucion_editora)institucion_editora = '---'
+            let categoria = doc['CATEGORÍA']
+            let issn = await ISSN.findOne({ vigencia, $or: [ { issn_impreso }, { issn_electronico }, {issn_L} ] }).lean()
+            if(!issn){
+                let newISSN = new ISSN({
+                    titulo,
                     issn_impreso,
                     issn_electronico,
                     issn_L,
-                    institucion_editora: doc['INSTITUCIONES EDITORAS'],
-                    categoria: doc['CATEGORÍA'],
+                    institucion_editora,
+                    categoria,
                     vigencia
-                }
-                data.push(add)
-            })
-            ISSN.insertMany(data, function(error, docs) {
-                if(error){
-                    console.log(error)
-                    req.flash('error_msg', 'Error en la validación de datos');
-                    res.redirect('/load/issn')
-                }else{
-                    res.redirect('/view/issn');
-                }
-            });
-        }
+                })
+                newISSN.save((err)=>{
+                    if(err){
+                        console.log(err)
+                    }
+                })
+            }
+        })
+        res.redirect('/view/issn');
         }
     });
-    /*
-    
-    fs.unlink(path, async (err) =>{
-        if (err) {
-            console.error(err);
-        } else {
-            await Publication.findByIdAndDelete(req.params.id)
-            res.redirect('/publications/myPublications')
-        }
-    });
-    */
-    
+}
+
+publicationsCtrl.checkISSN = async (req, res) => {
+    let {id} = req.query;
+    let {ISSN:query,fecha_publicacion} = await Publication.findById(id).lean()
+    let vigencia = moment(fecha_publicacion).year()
+    let issn = await ISSN.findOne({ vigencia,$or: [ { issn_impreso: query }, { issn_electronico: query }, {issn_L:query} ] }).lean()
+    let validation = true;
+    if(!issn)validation = false;
+    res.send({validation})
 }
 
 module.exports = publicationsCtrl;

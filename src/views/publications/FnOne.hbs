@@ -58,7 +58,7 @@
             <div class="form-group row">
                 <div class="col mb-2">
                     <label>URL Revista</label>                     
-                    <a class="form-control bg-light" href="{{publication.URL}}">Click para ir al enlace <i class="fas fa-globe"></i></a>
+                    <a class="form-control bg-light" target="_blank" href="{{publication.URL}}">Click para ir al enlace <i class="fas fa-globe"></i></a>
                 </div>
                 <div class="col mb-2">
                     <label>Tiempo Requerido para la publicación del artículo en la revista</label>                     
@@ -70,9 +70,14 @@
                     <label>Fecha de recepción o sumisión del artículo a la revista</label>                     
                     <input type="text" class="form-control bg-light" value="{{publication.fecha_recepcion_revista}}" disabled>
                 </div>
-                <div class="col mb-2">
-                    <label>ISSN</label>                     
-                    <input type="text" class="form-control bg-light" value="{{publication.ISSN}}" disabled>
+                <div class="col mb-2 align-items-beetween">
+                    <label>ISSN</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-light" value="{{publication.ISSN}}" id="inpt_ISSN" disabled>
+                        <span class="input-group-text" id="span_ISSN">
+                            <a issn="{{publication._id}}" type="button" title="Validar ISSN" onclick="checkISSN(this)"><i class="fas fa-eye" style="color: black;"></i></a>
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="form-group row">

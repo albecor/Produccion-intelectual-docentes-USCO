@@ -18,8 +18,7 @@ const ISSN = Schema({
     },
 
     institucion_editora:{
-        type: String,
-        required: true
+        type: String
     },
     categoria:{
         type:String,

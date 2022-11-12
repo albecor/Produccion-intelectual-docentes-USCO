@@ -55,7 +55,7 @@ app.use((req, res, next) => {
 app.use(require('./routes/index.routes'));
 app.use(require('./routes/users.routes'));
 app.use(require('./routes/publications.routes'));
-
+app.use(require('./routes/reports.routes'));
 
 //Static files
 app.use(express.static(path.join(__dirname, 'public'))); //Indica a express donde esta la carpeta pública

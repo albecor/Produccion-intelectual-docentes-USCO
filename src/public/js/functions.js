@@ -532,6 +532,42 @@ function reviewed(){
     })
 };
 
+function checkISSN(data){
+    var id = data.attributes[0].value;
+    $.ajax({
+        type: "get",
+        url: "/issn/check",
+        data: {id},
+        success: function(r){
+            if(r.validation){
+                Swal.fire({
+                    text: 'Existe ISSN',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#8c141b'
+                });
+            }else{
+                Swal.fire({
+                    text: 'No se encuentra este ISSN para el año de publicación',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#8c141b'
+                });
+            }
+        },
+        error: function (e) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Algo salió mal, contacta al desarrollador',
+                icon: 'error',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#8c141b'
+            });
+            console.log("error: ", e);
+        }
+    });
+}
+
 //DataTables
 
 //MyPublications
@@ -590,5 +626,16 @@ $(document).ready(function () {
                 }
             }
         ],
+    });
+});
+
+//ISSN
+$(document).ready(function () {
+    $('#ISSN').DataTable({
+        language: {
+            url: '/json/es-CO.json'
+        },
+        ordering:  false,
+        "scrollCollapse": true
     });
 });

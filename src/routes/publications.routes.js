@@ -58,6 +58,8 @@ router.get('/publications/search',isAuthenticated, isFuncionario, renderSearchPu
 
 router.get('/publications/request/:id', isAuthenticated, isFuncionario, renderRequest);
 
+router.get('/issn/check', isAuthenticated, isFuncionario, checkISSN)
+
 
 router.get('/file/download/:id', isAuthenticated, dowloadFile);
 
