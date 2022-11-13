@@ -1,1 +1,65 @@
-Revision CAP
+<div class="col-md-12 mx-auto mt-0">
+    <div class="card ">
+        <div class="card-header text-center">
+            <h1 class="h4 text-black font-weight-bold">Revisión CAP</h1>
+        </div>
+        <div class="card-body">
+            <form action="/publications/reviewed/cap" method="POST" id="FormValidate">
+                <div class="form-group row">
+                    <div class="col mb-2">
+                        <label>Docente</label>
+                        <input type="text" class="form-control bg-light" value="{{docente.name}} {{docente.lastname}} {{docente.sec_lastname}}" disabled>
+                    </div>
+                    <div class="col mb-2">
+                        <label>Identificación</label>
+                        <input type="text" class="form-control bg-light" value="{{docente.identification_type}} {{docente.identification}}" disabled>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col mb-2">
+                        <label>Facultad</label>
+                        <input type="text" class="form-control bg-light" value="{{docente.facultad}}" disabled>
+                    </div>
+                    <div class="col mb-2">
+                        <label>Programa</label>
+                        <input type="text" class="form-control bg-light" value="{{docente.programa}}" disabled>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col mb-2">
+                        <label>Título del Material</label>
+                        <input type="text" class="form-control bg-light" value="{{publication.name}}" disabled>
+                    </div>
+                    <div class="col mb-2">
+                        <label>Fecha de Publicación</label>
+                        <input type="text" class="form-control bg-light" value="{{publication.fecha_publicacion}}" disabled>
+                    </div>
+                </div>
+                <hr id="hr">
+                <input type="text" class="d-none" name="id" value="{{publication._id}}" required>
+                <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" value="true" name="aceptado" id="otorgar" onclick="otorgarPuntos()" required>
+                <label class="form-check-label" for="defaultCheck1">
+                    Otorgar puntos
+                </label>
+                </div>
+                <div class="form-check form-check-inline mb-2" id="denegar">
+                <input class="form-check-input" type="radio" value="false" name="aceptado" onclick="denegarPuntos()" required>
+                <label class="form-check-label" for="defaultCheck2">
+                    Denegado
+                </label>
+                </div>
+                <div class="form-floating mt-3">
+                    <textarea class="form-control bg-light" id="fTA" name="conceptoCAP" required></textarea>
+                    <label for="fTA">Concepto CAP</label>
+                </div>
+                <div class="d-flex bd-highlight mb-3">
+                    <div class="me-auto p-2 bd-highlight">
+                        <a val="true" type="button" class="btn btn-block btn-primary" style="color: white; background-color: rgb(140, 20, 27); border: 0;;" onclick="checkInputs()">Finalizar</a>                  
+                    </div>
+                    <button class="d-none" type="submit" id="realClick"></button>
+                </div>
+            </form>                      
+        </div>
+    </div>    
+</div>

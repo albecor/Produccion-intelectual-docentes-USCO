@@ -576,6 +576,29 @@ function accept(data){
     $('#submitButton').click()
 }
 
+function otorgarPuntos(){
+    $('#rowOtorgados').remove()
+    let html = '<div class="row" id="rowOtorgados">'
+    html += '<div class="col-4">'
+    html += '<label>Tipo de Puntaje</label>'
+    html += '<select class="form-select" name="tipo_puntaje" aria-label="Default select example" required>'
+    html += '<option value="" disabled selected>---</option>'
+    html += '<option value="1">Bonificación por productividad académica</option>'
+    html += '<option value="2">Reconocimiento de puntos salariales</option>'
+    html += '</select>'
+    html += '</div>'
+    html += '<div class="col-2 mb-2">'
+    html += '<label>Puntaje otorgado</label>'
+    html += '<input type="number" min="0" class="form-control w-50" value="" name="puntaje" required>'
+    html += '</div>'
+    html += '</div>'
+    $('#denegar').after(html)
+}
+
+function denegarPuntos(){
+    $('#rowOtorgados').remove()
+}
+
 //DataTables
 
 //MyPublications

@@ -87,7 +87,11 @@ const PublicationSchema = Schema({
         type: String
     },
 
-    tipo_puntos:{
+    conceptoCAP:{
+        type: String
+    },
+
+    tipo_puntaje:{
         type: Boolean   //true = Bonificación por productividad académica
                         //false = Reconocimiento de puntos salariales
     },

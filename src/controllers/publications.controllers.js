@@ -259,6 +259,37 @@ publicationsCtrl.renderAuditCAPId = async (req, res) => {
     })
 };
 
+publicationsCtrl.revisionCAP = async (req, res) => {
+    let {id,aceptado,tipo_puntaje,puntaje,conceptoCAP} = req.body;
+    if(aceptado=='true'){
+        if(tipo_puntaje == '1'){
+            tipo_puntaje = true
+        }else{
+            tipo_puntaje = false
+        }
+        await Publication.findByIdAndUpdate(id,{estado:'Aprobado',conceptoCAP,tipo_puntaje,puntaje})
+        res.redirect('/publications/reviewed/cap')
+    }else{
+        await Publication.findByIdAndUpdate(id,{estado:'No aprobado por CAP', conceptoCAP})
+        res.redirect('/publications/rechazadas')
+    }
+}
+
+publicationsCtrl.renderReviewedCAP = async (req, res) => {
+    let publications = await Publication.find({estado:'Aprobado'}).lean();
+    for (let i in publications) {
+        let id = publications[i].id_Docente;
+        if(id){
+            let {name, lastname, sec_lastname} = await User.findById(id).lean();
+            publications[i]['docente']=name+' '+' '+lastname+' '+sec_lastname;
+        }
+        publications[i]['fecha_i'] = moment(publications[i].fechaPublicacion).utc().format('DD/MM/YYYY');
+        publications[i]['index']=parseInt(i)+1;
+    };
+
+    res.render('publications/reviewedCAP',{publications,Funcionario:true})
+};
+
 publicationsCtrl.renderReviewed = async (req, res) => {
     let publications = await Publication.find({estado:'Revisado'}).lean();
     for (let i in publications) {
@@ -448,7 +479,7 @@ publicationsCtrl.primeraRevision = async (req, res) =>{
 }
 
 publicationsCtrl.renderRechazadas = async (req, res) => {
-    let publications = await Publication.find({estado:'Rechazado'}).lean().sort({createdAt:1});
+    let publications = await Publication.find({$or: [{estado:'Rechazado'}, {estado:'No aprobado por CAP'}]}).lean().sort({createdAt:1});
     for (let i in publications) {
         let id = publications[i].id_Docente;
         if(id){

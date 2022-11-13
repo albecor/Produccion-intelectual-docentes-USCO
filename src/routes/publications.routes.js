@@ -18,6 +18,8 @@ const {
     renderAuditFnId,
     renderAuditCAP,
     renderAuditCAPId,
+    revisionCAP,
+    renderReviewedCAP,
     checkISSN,
     renderReviewed,
     primeraRevision,
@@ -56,6 +58,10 @@ router.get('/publications/audit/fn/:id', isAuthenticated, isFuncionario, renderA
 router.get('/publications/audit/cap',isAuthenticated, isFuncionario, renderAuditCAP);
 
 router.get('/publications/audit/cap/:id',isAuthenticated, isFuncionario, renderAuditCAPId);
+
+router.post('/publications/reviewed/cap',isAuthenticated, isFuncionario, revisionCAP);
+
+router.get('/publications/reviewed/cap',isAuthenticated, isFuncionario, renderReviewedCAP);
 
 router.get('/publications/reviewed/fn',isAuthenticated, isFuncionario, renderReviewed);
 
