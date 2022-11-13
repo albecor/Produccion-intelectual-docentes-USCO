@@ -17,12 +17,15 @@ const {
     renderAuditFn,
     renderAuditFnId,
     renderAuditCAP,
+    renderAuditCAPId,
     checkISSN,
     renderReviewed,
+    primeraRevision,
     renderSearchPublication,
     renderCreateReport,
     renderRequest,
     dowloadFile,
+    renderRechazadas,
 
     renderLoadISSN,
     renderISSN,
@@ -52,13 +55,21 @@ router.get('/publications/audit/fn/:id', isAuthenticated, isFuncionario, renderA
 
 router.get('/publications/audit/cap',isAuthenticated, isFuncionario, renderAuditCAP);
 
-router.get('/publications/reviewed',isAuthenticated, isFuncionario, renderReviewed);
+router.get('/publications/audit/cap/:id',isAuthenticated, isFuncionario, renderAuditCAPId);
+
+router.get('/publications/reviewed/fn',isAuthenticated, isFuncionario, renderReviewed);
 
 router.get('/publications/search',isAuthenticated, isFuncionario, renderSearchPublication);
 
 router.get('/publications/request/:id', isAuthenticated, isFuncionario, renderRequest);
 
 router.get('/issn/check', isAuthenticated, isFuncionario, checkISSN)
+
+router.post('/publications/reviewed',isAuthenticated, isFuncionario, primeraRevision);
+
+
+
+router.get('/publications/rechazadas',isAuthenticated, isFuncionario, renderRechazadas);
 
 
 router.get('/file/download/:id', isAuthenticated, dowloadFile);

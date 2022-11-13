@@ -1,7 +1,7 @@
 <div class="container">
 <div> 
   <hr>
-  <h2> <p class="font-italic inline">Solicitudes Revisadas</p></h2>  
+  <h2> <p class="font-italic inline">Solicitudes Rechazadas</p></h2>  
   <hr>
 </div>
 {{#if publications}}
@@ -13,7 +13,7 @@
         <th scope="col">Nombre</th>
         <th scope="col">Modalidad</th>
         <th scope="col">URL</th>
-        <th scope="col">Fecha de Publicación</th>
+        <th scope="col">Fecha</th>
         <th scope="col">Estado</th>
       </tr>
     </thead>
@@ -27,7 +27,7 @@
             <td>
               <a href="{{URL}}" target="_blank"><i class="fas fa-globe"></i></a>
             </td>
-            <td>{{fecha_i}}</td>
+            <td>{{fecha_publicacion}}</td>
             <td>{{estado}}</td>
             
         </tr>

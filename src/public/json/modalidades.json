@@ -27,13 +27,12 @@
         ]
     },
     {
-        "name":"Libro derivado de Investigación"
-    },
-    {
-        "name":"Libro de Texto"
-    },
-    {
-        "name":"Libro de Ensayo"
+        "name":"Libro",
+        "tipo":[
+            "Investigación",
+            "Texto",
+            "Ensayo"
+        ]
     },
     {
         "name":"Premio",

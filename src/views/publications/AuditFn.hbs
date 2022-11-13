@@ -1,7 +1,7 @@
 <div class="container">
 <div> 
   <hr>
-  <h2> <p class="font-italic inline">Solicitudes</p></h2>  
+  <h2> <p class="font-italic inline">Solicitudes sin Revisar</p></h2>  
   <hr>
 </div>
 {{#if publications}}
@@ -34,11 +34,8 @@
             <td class="text-center">
               <a href="/file/download/{{_id}}" title="Descargar"><i class="fas fa-download"></i></a>
             </td>
-            <!--<td class="text-center">
-              <a href="/publications/request/{{_id}}" target="_blank" title="Ver" ><i class="fas fa-eye" style="color: black;"></i></a>
-            </td>-->
             <td class="text-center">
-              <a href="/publications/audit/fn/{{_id}}" target="_blank" title="Ver" ><i class="fas fa-file" style="color: black;"></i></a>
+              <a href="/publications/audit/fn/{{_id}}" title="Ver" ><i class="fas fa-file" style="color: black;"></i></a>
             </td>
         </tr>
       {{/publications}}     

@@ -5,34 +5,36 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Solicitud de asignación de puntaje salarial</title>
+  <title>Solicitud de asignación de puntaje</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="/css/report-style.css">
-  <!-- jQuery -->
-  <script src="/js/jQuery.min.js"></script>
 </head>
 
-<body>
+<body class="m-1 p-1">
   <button class="btn btn-block btn-primary noPrint" style="background-color: rgb(140, 20, 27);
   border: none;" onclick="window.print();">Guardar</button>
-  <div class="main">
+  <div class="main mt-0">
     <div class="header">
       <img class="header-image" 
         src="/img/universidad-surcolombiana-acreditacion.png">
     </div>
-    <div class="main-content">
-      <h1>Solicitud de asignación de puntaje salarial</h1>
-      <span>{{fecha}}</span>
-      <span>Neiva - Huila</span>
+    <div class="main-content m-0 p-0">
+      <h1>Solicitud de asignación de puntaje</h1>
+      <!--<span>{{fecha}}</span>-->
+      <!--<span>Neiva - Huila</span>-->
       <p>
-        El docente {{docente.name}} {{docente.lastname}} {{docente.sec_lastname}} ascrito a la {{facultad}}
-        de la universidad Surcolombiana identificado con {{identification_type}}
-        No {{identification}} solicita una asignación
+        El docente {{docente.name}} {{docente.lastname}} {{docente.sec_lastname}} adscrito a la {{facultad}}
+        de la universidad Surcolombiana identificado con {{docente.identification_type}}
+        No {{docente.identification}} solicita una asignación
         de puntaje salarial.
       </p>
       <div class="apply">
-        <div class="w-100">
+        <div class="w-1-50">
+          <div class="label">Título de la Publicación</div>
+          <div class="value">{{publication.name}}</div>
+        </div>
+        <div class="w-2-50">
           <div class="label">Autor</div>
           <div class="value">{{docente.name}} {{docente.lastname}} {{docente.sec_lastname}}</div>
         </div>
@@ -44,43 +46,191 @@
           <div class="label">Numero de documento</div>
           <div class="value">{{docente.identification}}</div>
         </div>
-        <div class="w-100">
+        <div class="w-1-50">
           <div class="label">Facultad</div>
           <div class="value">{{docente.facultad}}</div>
         </div>
-        <div class="w-100">
-          <div class="label">Título de la publicación</div>
-          <div class="value">{{name}}</div>
+        <div class="w-2-50">
+          <div class="label">Programa</div>
+          <div class="value">{{docente.programa}}</div>
         </div>
+        {{#if articulo}}
         <div class="w-1-50">
-          <div class="label">Fecha de la publicación</div>
-          <div class="value">{{fechaPublicacion}}</div>
+          <div class="label">Modalidad</div>
+          <div class="value">{{publication.modalidad}}</div>
         </div>
         <div class="w-2-50">
-          <div class="label">Fecha de solicitud</div>
-          <div class="value">{{fechaSolicitud}}</div>
+          <div class="label">Tipo de artículo</div>
+          <div class="value">{{publication.tipo}}</div>
+        </div>
+        <div class="w-1-50">
+          <div class="label">Nombre de Revista</div>
+          <div class="value">{{publication.nombre_revista}}</div>
+        </div>
+        <div class="w-2-50">
+          <div class="label">Categoría</div>
+          <div class="value">{{publication.categoria}}</div>
+        </div>
+        <div class="w-1-50">
+          <div class="label">URL Revista</div>
+          <div class="value"><a href="{{publication.URL}}">{{publication.URL}}</a></div>
+        </div>
+        <div class="w-2-50">
+          <div class="label">Tiempo Requerido para publicación en la revista</div>
+          <div class="value">{{publication.tiempo_revista}} meses</div>
+        </div>
+        <div class="w-1-50">
+          <div class="label">Fecha de recepción del artículo a la revista</div>
+          <div class="value">{{publication.fecha_recepcion_revista}}</div>
+        </div>
+        <div class="w-2-50">
+          <div class="label">ISSN</div>
+          <div class="value">{{publication.ISSN}}</div>
+        </div>
+        <div class="w-1-50">
+          <div class="label">Se invirtieron recursos económicos de la Universidad</div>
+          <div class="value">{{#if publication.recursos_U}}SI{{else}}NO{{/if}}</div>
+        </div>
+        <div class="w-2-50">
+          <div class="label" style="font-size: 0.96rem;">Proyecto de Investigación del cual se genera el material</div>
+          <div class="value">
+            {{publication.nombre_proyecto_investigacion}}
+          </div>
+        </div>
+        {{/if}}
+        {{#if videos}}
+        <div class="w-1-50">
+          <div class="label">Modalidad</div>
+          <div class="value">{{publication.modalidad}}</div>
+        </div>
+        <div class="w-2-50">
+          <div class="label">Impacto</div>
+          <div class="value">{{publication.tipo}}</div>
         </div>
         <div class="w-100">
-          <div class="label">Clase</div>
-          <div class="value">{{clase}}</div>
+          <div class="label">Finalidad</div>
+          <div class="value">{{publication.categoria}}</div>
+        </div>
+        {{/if}}
+        {{#if libro}}
+        <div class="w-1-50">
+          <div class="label">Modalidad</div>
+          <div class="value">{{publication.modalidad}}</div>
+        </div>
+        <div class="w-2-50">
+          <div class="label">Tipo</div>
+          <div class="value">{{publication.tipo}}</div>
+        </div>
+        <div class="w-1-50">
+          <div class="label">URL Editorial</div>
+          <div class="value"><a href="{{publication.URL}}">{{publication.URL}}</a></div>
+        </div>
+        <div class="w-2-50">
+          <div class="label">ISBN</div>
+          <div class="value">{{publication.ISSN}}</div>
+        </div>
+        <div class="w-1-50">
+          <div class="label">Editorial</div>
+          <div class="value">{{publication.editorial}}</div>
+        </div>
+        <div class="w-2-50">
+          <div class="label" style="font-size: 0.96rem;">Proyecto de Investigación del cual se genera el material</div>
+          <div class="value">{{publication.nombre_proyecto_investigacion}}</div>
+        </div>
+        {{/if}}
+        {{#if premio}}
+        <div class="w-1-50">
+          <div class="label">Modalidad</div>
+          <div class="value">{{publication.modalidad}}</div>
+        </div>
+        <div class="w-2-50">
+          <div class="label">Convocatoria</div>
+          <div class="value">{{publication.tipo}}</div>
+        </div>
+        {{/if}}
+        {{#if PTec}}
+        <div class="w-1-50">
+          <div class="label">Modalidad</div>
+          <div class="value">{{publication.modalidad}}</div>
+        </div>
+        <div class="w-2-50">
+          <div class="label">Tipo</div>
+          <div class="value">{{publication.tipo}}</div>
+        </div>
+        {{/if}}
+        {{#if obra}}
+        <div class="w-1-50">
+          <div class="label">Modalidad</div>
+          <div class="value">{{publication.modalidad}}</div>
+        </div>
+        <div class="w-2-50">
+          <div class="label">Tipo</div>
+          <div class="value">{{publication.tipo}}</div>
         </div>
         <div class="w-100">
-          <div class="label">Subclase</div>
-          <div class="value">{{subclase}}</div>
+          <div class="label">Impacto</div>
+          <div class="value">{{publication.categoria}}</div>
+        </div>
+        {{/if}}
+        {{#if ponencia}}
+        <div class="w-1-50">
+          <div class="label">Modalidad</div>
+          <div class="value">{{publication.modalidad}}</div>
+        </div>
+        <div class="w-2-50">
+          <div class="label">Tipo</div>
+          <div class="value">{{publication.tipo}}</div>
+        </div>
+        {{/if}}
+        {{#if capitulo}}
+        <div class="w-1-50">
+          <div class="label">Modalidad</div>
+          <div class="value">{{publication.modalidad}}</div>
+        </div>
+        <div class="w-2-50">
+          <div class="label">Tipo</div>
+          <div class="value">{{publication.tipo}}</div>
+        </div>
+        <div class="w-1-50">
+          <div class="label">URL Editorial</div>
+          <div class="value"><a href="{{publication.URL}}">{{publication.URL}}</a></div>
+        </div>
+        <div class="w-2-50">
+          <div class="label">ISBN</div>
+          <div class="value">{{publication.ISSN}}</div>
+        </div>
+        <div class="w-1-50">
+          <div class="label">Editorial</div>
+          <div class="value">{{publication.editorial}}</div>
+        </div>
+        <div class="w-2-50">
+          <div class="label" style="font-size: 0.96rem;">Proyecto de Investigación del cual se genera el material</div>
+          <div class="value">{{publication.nombre_proyecto_investigacion}}</div>
+        </div>
+        {{/if}}
+        <div class="w-100">
+          <div class="label">El material presentado fue tenido en cuenta para cambio de categoría en el escalafón docente</div>
+          <div class="value">{{#if publication.cambio_categoria}}SI{{else}}NO{{/if}}</div>
         </div>
         <div class="w-100">
-          <div class="label">Caracter</div>
-          <div class="value">{{caracter}}</div>
+          <div class="label">Observaciones</div>
+          <div class="value">
+            {{#if publication.observacion}}
+            {{publication.observacion}}
+            {{else}}
+            N/A
+            {{/if}}
+          </div>
         </div>
       </div>
     </div>
-    <div class="footer">
-        <div>
+    <div class="footer text-center">
+        <div class="col">
           <p>Sede Central / Av Pastrana Borrero - Cra. 1</p>
           <p>Sede Administrativa / Cra. 5 No. 23 - 40</p>
           <p>www.usco.edu.co / Neiva - Huila</p>
         </div>
-        <div>
+        <div class="col">
           <p>PBX: 875 4753</p>
           <p>PBX: 875 3686</p>
           <p>Linea Gratuita Nacional: 018000 968722</p>

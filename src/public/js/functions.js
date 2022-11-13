@@ -58,9 +58,7 @@ function PublicationsList(data){
         data: {},
         success: function (response) {
             let articulo = 'Artículo de Revista';
-            let libroInvestigacion = 'Libro derivado de Investigación'
-            let libroEnsayo = 'Libro de Ensayo';
-            let libroTexto = 'Libro de Texto';
+            let libro = 'Libro';
             let capitulo = 'Capítulo de Libro';
             let patentes = 'Patentes';
             let ponencia = 'Ponencia';
@@ -161,11 +159,8 @@ function PublicationsList(data){
                     $('#tipo').after(html)
                 }
             }
-            if(modalidad == libroEnsayo || modalidad == libroTexto || modalidad == capitulo || modalidad == libroInvestigacion){
-                html = '<div class="col mb-2" id="row_2">'
-                html += '<input id="URL" type="url" class="form-control" name="URL" placeholder="Dirección URL Editorial" required>'
-                html += '</div>'
-                $('#modalidad').after(html)
+            if(modalidad == libro ||  modalidad == capitulo){
+                
                 $('#modalidad').removeClass('col-md-3','col')
                 $('#modalidad').addClass('col')
                 html = '<div class="form-group row mb-2" id="row_3">'
@@ -176,11 +171,16 @@ function PublicationsList(data){
                 html += '<input type="text" class="form-control" name="editorial" placeholder="Editorial" required>'
                 html += '</div>'
                 html += '</div>'
+                html += '<div class="form-group row mb-2" id="row_3">'
+                html += '<div class="col-6 mb-2" id="row_2">'
+                html += '<input id="URL" type="url" class="form-control" name="URL" placeholder="Dirección URL Editorial" required>'
+                html += '</div>'
+                html += '</div>'
                 $('#row_1').after(html)
             }
-            if(modalidad == articulo || modalidad == libroInvestigacion || modalidad == libroEnsayo || modalidad == libroTexto || modalidad == capitulo || modalidad == patentes || modalidad == ponencia){
+            if(modalidad == articulo || modalidad == libro || modalidad == capitulo || modalidad == patentes || modalidad == ponencia){
                 html = '<div class="form-group row" id="row_8">'
-                html += '<div class="col">'
+                html += '<div class="col-6">'
                 html += '<label for="name" id="name_label">Nombre del proyecto de Invesigación del cual se genera el material, sí aplica</label>'
                 html += '<input type="text" class="form-control" name="nombre_proyecto_investigacion" placeholder="">'
                 html += '</div>'
@@ -566,6 +566,14 @@ function checkISSN(data){
             console.log("error: ", e);
         }
     });
+}
+
+function accept(data){
+    let res = data.attributes[0].value;
+    if(res == 'false'){
+        $('#acceptInpt').val('false')
+    }
+    $('#submitButton').click()
 }
 
 //DataTables

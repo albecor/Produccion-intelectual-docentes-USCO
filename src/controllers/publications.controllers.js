@@ -76,7 +76,7 @@ publicationsCtrl.AddPublication = async (req, res) => {
     } = req.body;
     let id_Docente = req.user.id;
     var _id = ObjectId();
-    let estado =  'Pendiente de Validación';
+    let estado =  'Pendiente por revisión';
     const newPublication = new Publication({
         _id,
         id_Docente,
@@ -175,7 +175,7 @@ publicationsCtrl.deleteMyPublication = async (req,res) => {
 //Funcionario
 
 publicationsCtrl.renderAuditFn = async (req, res) => {
-    let publications = await Publication.find({estado:'Pendiente de Validación'}).lean().sort({createdAt:1});
+    let publications = await Publication.find({estado:'Pendiente por revisión'}).lean().sort({createdAt:1});
     for (let i in publications) {
         let id = publications[i].id_Docente;
         if(id){
@@ -191,15 +191,9 @@ publicationsCtrl.renderAuditFn = async (req, res) => {
     res.render('publications/AuditFn',{publications,Funcionario:true})
 };
 
-publicationsCtrl.renderAuditCAP = async (req, res) => {
-    
-
-    res.render('publications/AuditCAP',{Funcionario:true})
-};
-
 publicationsCtrl.renderAuditFnId = async (req, res) => {
     let {id} = req.params;
-    let articulo = false, videos = false, libroITE = false, premio = false, PTec = false, obra = false, ponencia = false, capitulo = false, elsePA = false;
+    let articulo = false, videos = false, libro = false, premio = false, PTec = false, obra = false, ponencia = false, capitulo = false;
     let publication = await Publication.findById(id).lean()
     switch (publication.modalidad) {
         case 'Artículo de Revista':
@@ -208,14 +202,8 @@ publicationsCtrl.renderAuditFnId = async (req, res) => {
         case 'Producción de vídeos, cinematográficas o fonográficas':
             videos = true;
             break;
-        case 'Libro derivado de Investigación':
-            libroITE = true;
-            break;
-        case 'Libro de Texto':
-            libroITE = true;
-            break;
-        case 'Libro de Ensayo':
-            libroITE = true;
+        case 'Libro':
+            libro = true;
             break;
         case 'Premio':
             premio = true
@@ -232,9 +220,6 @@ publicationsCtrl.renderAuditFnId = async (req, res) => {
         case 'Capítulo de Libro':
             capitulo = true;
             break;
-        default:
-            elsePA = true
-            break;
     }
     publication['createdAt'] = moment(publication.createdAt).utc().format('DD/MM/YYYY');
     publication['fecha_publicacion'] = moment(publication.fecha_publicacion).utc().format('DD/MM/YYYY');
@@ -243,26 +228,46 @@ publicationsCtrl.renderAuditFnId = async (req, res) => {
     let autores = await Autor.find({id_publication:id}).lean()
     res.render('publications/FnOne',{
         publication,docente,autores,Funcionario:true,
-        articulo, videos, libroITE, premio, PTec, obra, ponencia, capitulo, elsePA
+        articulo, videos, libro, premio, PTec, obra, ponencia, capitulo
     })
 };
 
-publicationsCtrl.renderReviewed = async (req, res) => {
-    let publications = await Publication.find({reviewed:true}).lean();
+publicationsCtrl.renderAuditCAP = async (req, res) => {
+    let publications = await Publication.find({estado:'Revisado'}).lean()
     for (let i in publications) {
         let id = publications[i].id_Docente;
         if(id){
             let {name, lastname, sec_lastname} = await User.findById(id).lean();
             publications[i]['docente']=name+' '+' '+lastname+' '+sec_lastname;
         }
-        let fecha_i = new Date(publications[i].datePublication);
-        let yy = fecha_i.getFullYear();
-        yy = yy.toString();
-        let mm = fecha_i.getUTCMonth() + 1;
-        mm = mm.toString();
-        let dd = fecha_i.getUTCDate();
-        dd = dd.toString();
-        publications[i]['fecha_i'] = dd+'/'+mm+'/'+yy;
+        publications[i]['fecha_i'] = moment(publications[i].fechaPublicacion).utc().format('DD/MM/YYYY');
+        publications[i]['index']=parseInt(i)+1;
+    };
+    res.render('publications/AuditCAP',{publications, Funcionario:true})
+};
+
+publicationsCtrl.renderAuditCAPId = async (req, res) => {
+    let {id} = req.params;
+    let publication = await Publication.findById(id).lean()
+    publication['createdAt'] = moment(publication.createdAt).utc().format('DD/MM/YYYY');
+    publication['fecha_publicacion'] = moment(publication.fecha_publicacion).utc().format('DD/MM/YYYY');
+    publication['fecha_recepcion_revista'] = moment(publication.fecha_recepcion_revista).utc().format('DD/MM/YYYY');
+    let docente = await User.findById(publication.id_Docente).lean()
+    let autores = await Autor.find({id_publication:id}).lean()
+    res.render('publications/CAPone',{
+        publication,docente,autores,Funcionario:true
+    })
+};
+
+publicationsCtrl.renderReviewed = async (req, res) => {
+    let publications = await Publication.find({estado:'Revisado'}).lean();
+    for (let i in publications) {
+        let id = publications[i].id_Docente;
+        if(id){
+            let {name, lastname, sec_lastname} = await User.findById(id).lean();
+            publications[i]['docente']=name+' '+' '+lastname+' '+sec_lastname;
+        }
+        publications[i]['fecha_i'] = moment(publications[i].fechaPublicacion).utc().format('DD/MM/YYYY');
         publications[i]['index']=parseInt(i)+1;
     };
 
@@ -303,12 +308,42 @@ publicationsCtrl.renderSearchPublication = async (req, res) => {
 
 publicationsCtrl.renderRequest = async (req, res) => {
     let {id} = req.params
-    let {id_Docente,name,datePublication,description,clase,subclase,caracter,createdAt} = await Publication.findById(id).lean()
-    fechaSolicitud = moment(createdAt).utc().format('DD/MM/YYYY');
-    fechaPublicacion = moment(datePublication).utc().format('DD/MM/YYYY');
-    let docente = await User.findById(id_Docente).lean();
+    let publication = await Publication.findById(id).lean()
+    let articulo = false, videos = false, libro = false, premio = false, PTec = false, obra = false, ponencia = false, capitulo = false;
+    switch (publication.modalidad) {
+        case 'Artículo de Revista':
+            articulo = true;
+            break;
+        case 'Producción de vídeos, cinematográficas o fonográficas':
+            videos = true;
+            break;
+        case 'Libro':
+            libro = true;
+            break;
+        case 'Premio':
+            premio = true
+            break;
+        case 'Producción técnica':
+            PTec = true;
+            break;
+        case 'Obras artísticas':
+            obra = true;
+            break;
+        case 'Ponencia':
+            ponencia = true;
+            break;
+        case 'Capítulo de Libro':
+            capitulo = true;
+            break;
+    }
+    publication['createdAt'] = moment(publication.createdAt).utc().format('DD/MM/YYYY');
+    publication['fecha_publicacion'] = moment(publication.fecha_publicacion).utc().format('DD/MM/YYYY');
+    publication['fecha_recepcion_revista'] = moment(publication.fecha_recepcion_revista).utc().format('DD/MM/YYYY');
+    let docente = await User.findById(publication.id_Docente).lean()
+    let autores = await Autor.find({id_publication:id}).lean()
     res.render('publications/request',{
-        docente,fechaSolicitud,fechaPublicacion,name,description,clase,subclase,caracter,
+        docente,publication,
+        articulo, videos, libro, premio, PTec, obra, ponencia, capitulo,
         doc:true,
     })
 }
@@ -400,5 +435,33 @@ publicationsCtrl.checkISSN = async (req, res) => {
     if(!issn)validation = false;
     res.send({validation})
 }
+
+publicationsCtrl.primeraRevision = async (req, res) =>{
+    let{observacion, accept, id_publication} = req.body;
+    if(accept == 'true'){
+        await Publication.findByIdAndUpdate(id_publication,{estado:'Revisado',observacion})
+        res.redirect('/publications/reviewed/fn')
+    }else{
+        await Publication.findByIdAndUpdate(id_publication,{estado:'Rechazado',observacion})
+        res.redirect('/publications/rechazadas')
+    }
+}
+
+publicationsCtrl.renderRechazadas = async (req, res) => {
+    let publications = await Publication.find({estado:'Rechazado'}).lean().sort({createdAt:1});
+    for (let i in publications) {
+        let id = publications[i].id_Docente;
+        if(id){
+            let {name, lastname, sec_lastname, facultad, programa} = await User.findById(id).lean();
+            publications[i]['docente']=name+' '+' '+lastname+' '+sec_lastname;
+            publications[i]['facultad']=facultad;
+            publications[i]['programa']=programa;
+        }
+        publications[i]['fecha_publicacion'] = moment(publications[i].fecha_publicacion).utc().format('DD/MM/YYYY');
+        publications[i]['index']=parseInt(i)+1;
+    };
+
+    res.render('publications/rechazadas',{publications,Funcionario:true})
+};
 
 module.exports = publicationsCtrl;

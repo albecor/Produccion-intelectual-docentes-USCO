@@ -36,12 +36,13 @@ body {
 }
 
 .header-image{
-  width: 80%;
+  width: 70%;
+  height: 100%;
 }
 
 .header{
   text-align: center;
-  height: 150px;
+  height: auto;
 }
 
 h1{
@@ -82,12 +83,11 @@ h1{
 }
 
 .footer{
-  text-align: center;
   width: 100%;
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin-top: 15px;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 10px;
 }
 
 .footer > div > p{
