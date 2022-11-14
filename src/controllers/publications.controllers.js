@@ -306,35 +306,9 @@ publicationsCtrl.renderReviewed = async (req, res) => {
 };
 
 publicationsCtrl.renderSearchPublication = async (req, res) => {
-    let Admin =  Funcionario = null;
-    let {role} = req.user;
-    switch (role) {
-        case 'Admin':
-            Admin = true;
-            break;
-        case 'Funcionario':
-            Funcionario = true;
-            break;
-    };
-    let publications = await Publication.find({reviewed:true}).lean();
-    for (let i in publications) {
-        let id = publications[i].id_Docente;
-        if(id){
-            let {name, lastname, sec_lastname} = await User.findById(id).lean();
-            publications[i]['docente']=name+' '+' '+lastname+' '+sec_lastname;
-        }
-        let fecha_i = new Date(publications[i].date);
-        let yy = fecha_i.getFullYear();
-        yy = yy.toString();
-        let mm = fecha_i.getUTCMonth() + 1;
-        mm = mm.toString();
-        let dd = fecha_i.getUTCDate();
-        dd = dd.toString();
-        publications[i]['fecha_i'] = dd+'/'+mm+'/'+yy;
-        publications[i]['index']=parseInt(i)+1;
-    };
+    let estados = ['Pendiente por revisión','Revisado', 'Rechazado','No aprobado por CAP','Aprobado'];
 
-    res.render('publications/reviewed',{publications,Funcionario,Admin})
+    res.render('publications/searchPublications',{estados,Funcionario})
 };
 
 publicationsCtrl.renderRequest = async (req, res) => {
