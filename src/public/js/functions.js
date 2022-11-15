@@ -599,6 +599,86 @@ function denegarPuntos(){
     $('#rowOtorgados').remove()
 }
 
+function searchPublications(){
+    var start = true;
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('#FormValidate')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                if (!form.checkValidity()) {
+                    start = false;
+                    form.classList.add('was-validated')
+                }
+            })
+    })()
+
+    if(start){
+        let formData = $('#FormValidate').serializeJSON();
+        let {estado_1,estado_2, estado_3, estado_4, estado_5, startDate,endDate} = formData;
+        if(!estado_1&&!estado_2&&!estado_3&&!estado_4&&!estado_5){
+            Swal.fire({
+                html: 'Debe seleccionar al menos una casilla en <b>Estado de las Solicitudes</>',
+                icon: 'error',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#8c141b'
+            });
+        }else{
+            $.ajax({
+                type: "post",
+                url: "/publications/search",
+                data: formData,
+                success: function(r){
+                    let {publications} = r;
+                    $('#myPublications').remove()
+                    html = '<table class="table table-light table-bordered table-hover overflow-y: hidden" id="myPublications">'
+                    html += '<thead class="table-secondary">'
+                    html += '<tr>'
+                    html += '<th scope="col">#</th>'
+                    html += '<th scope="col">Nombre</th>'
+                    html += '<th scope="col">Modalidad</th>'
+                    html += '<th scope="col">Fecha de Solicitud</th>'
+                    html += '<th scope="col">Fecha de Publicación</th>'
+                    html += '<th scope="col">Estado</th>'
+                    html += '</tr>'
+                    html += '</thead>'
+                    html += '<tbody>'
+                    publications.map((obj)=>{
+                        obj.createdAt = moment(obj.createdAt).utc().format('DD/MM/YYYY')
+                        obj.fecha_publicacion = moment(obj.fecha_publicacion).utc().format('DD/MM/YYYY')
+                    })
+                    for(let i in publications){
+                        let index = (parseInt(i)+1).toString().padStart(3,0)
+                        html += '<tr>'
+                        html += '<th scope="row">'+index+'</th>'
+                        html += '<td>'+publications[i].name+'</td>'
+                        html += '<td>'+publications[i].modalidad+'</td>'
+                        html += '<td>'+publications[i].createdAt+'</td>'
+                        html += '<td>'+publications[i].fecha_publicacion+'</td>'
+                        html += '<td>'+publications[i].estado+'</td>'
+                        html += '</tr>'
+                    }
+                    html += '</tbody>'
+                    html += '</table>'
+                    $('#hr').after(html)
+                },
+                error: function (e) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Se produjo un error en la búsqueda',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar',
+                        confirmButtonColor: '#8c141b'
+                    });
+                    console.log("error: ", e);
+                }
+            });
+        }
+
+        //$('#submitButton').click();
+    }
+}
+
 //DataTables
 
 //MyPublications

@@ -24,6 +24,7 @@ const {
     renderReviewed,
     primeraRevision,
     renderSearchPublication,
+    SearchPublication,
     renderCreateReport,
     renderRequest,
     dowloadFile,
@@ -66,6 +67,8 @@ router.get('/publications/reviewed/cap',isAuthenticated, isFuncionario, renderRe
 router.get('/publications/reviewed/fn',isAuthenticated, isFuncionario, renderReviewed);
 
 router.get('/publications/search',isAuthenticated, isFuncionario, renderSearchPublication);
+
+router.post('/publications/search',isAuthenticated, isFuncionario, SearchPublication);
 
 router.get('/publications/request/:id', isAuthenticated, isFuncionario, renderRequest);
 

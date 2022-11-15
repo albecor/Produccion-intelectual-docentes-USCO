@@ -311,6 +311,29 @@ publicationsCtrl.renderSearchPublication = async (req, res) => {
     res.render('publications/searchPublications',{estados,Funcionario})
 };
 
+publicationsCtrl.SearchPublication = async (req, res) => {
+    let {estado_1,estado_2, estado_3, estado_4, estado_5, startDate,endDate} = req.body;
+    startDate = new Date(startDate)
+    endDate = new Date(endDate)
+    if(!estado_1)estado_1 = '';
+    if(!estado_2)estado_2 = '';
+    if(!estado_3)estado_3 = '';
+    if(!estado_4)estado_4 = '';
+    if(!estado_5)estado_5 = '';
+    let publications = await Publication.find({
+        $or:[
+            {estado:estado_1},
+            {estado:estado_2},
+            {estado:estado_3},
+            {estado:estado_4},
+            {estado:estado_5}
+        ],
+        "fecha_publicacion": { $gte: startDate, $lte: endDate }
+    }).lean();
+    console.log(publications)
+    res.send({publications})
+}
+
 publicationsCtrl.renderRequest = async (req, res) => {
     let {id} = req.params
     let publication = await Publication.findById(id).lean()
