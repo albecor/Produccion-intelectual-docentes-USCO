@@ -306,9 +306,7 @@ publicationsCtrl.renderReviewed = async (req, res) => {
 };
 
 publicationsCtrl.renderSearchPublication = async (req, res) => {
-    let estados = ['Pendiente por revisión','Revisado', 'Rechazado','No aprobado por CAP','Aprobado'];
-
-    res.render('publications/searchPublications',{estados,Funcionario})
+    res.render('publications/searchPublications',{Funcionario})
 };
 
 publicationsCtrl.SearchPublication = async (req, res) => {
@@ -328,7 +326,7 @@ publicationsCtrl.SearchPublication = async (req, res) => {
             {estado:estado_4},
             {estado:estado_5}
         ],
-        "fecha_publicacion": { $gte: startDate, $lte: endDate }
+        "createdAt": { $gte: startDate, $lte: endDate }
     }).lean();
     console.log(publications)
     res.send({publications})
