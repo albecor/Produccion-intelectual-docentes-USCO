@@ -313,6 +313,8 @@ publicationsCtrl.SearchPublication = async (req, res) => {
     let {estado_1,estado_2, estado_3, estado_4, estado_5, startDate,endDate} = req.body;
     startDate = new Date(startDate)
     endDate = new Date(endDate)
+    endDate.setDate(endDate.getDate()+1);
+    endDate.setHours(18, 59, 59, 999)
     if(!estado_1)estado_1 = '';
     if(!estado_2)estado_2 = '';
     if(!estado_3)estado_3 = '';
@@ -328,7 +330,6 @@ publicationsCtrl.SearchPublication = async (req, res) => {
         ],
         "createdAt": { $gte: startDate, $lte: endDate }
     }).lean();
-    console.log(publications)
     res.send({publications})
 }
 
