@@ -522,9 +522,43 @@ publicationsCtrl.GenerarInforme = async (req,res) =>{
         await workbookw.xlsx.readFile(fileWB)
         .then(async function () {
             var worksheet1 = workbookw.getWorksheet(sheet_name_list[0]);
-
-
+            let publications = await Publication.find().lean()
+            for(let i in publications){
+                obj = publications[i]
+                index = parseInt(i)+1;
+                row = parseInt(i)+2;
+                rownombre = worksheet1.getRow(row);
+                let vigencia = parseInt(moment(obj.createdAt).utc().format('YYYY'));
+                docente = await User.findById(obj.id_Docente).lean()
+                let issn = await ISSN.findOne({ vigencia,$or: [ { issn_impreso: obj.issn }, { issn_electronico: obj.issn }, {issn_L:obj.issn} ] }).lean()
+                let autores = await Autor.find({id_publication:obj._id}).lean()
+                rownombre.getCell(1).value = index;
+                rownombre.getCell(2).value = moment(obj.createdAt).utc().format('DD/MM/YYYY');
+                rownombre.getCell(3).value = vigencia;
+                rownombre.getCell(4).value = docente.facultad;
+                rownombre.getCell(5).value = docente.programa;
+                rownombre.getCell(7).value = docente.identification;
+                rownombre.getCell(8).value = docente.name + ' ' + docente.lastname;
+                rownombre.getCell(9).value = obj.modalidad;
+                rownombre.getCell(10).value = obj.name;
+                //rownombre.getCell(11).value = traduccion;
+                rownombre.getCell(12).value = obj.nombre_revista;
+                rownombre.getCell(13).value = obj.editorial;
+                rownombre.getCell(14).value = moment(obj.fecha_publicacion).utc().format('DD/MM/YYYY');
+                rownombre.getCell(14).value = obj.ISSN;
+                rownombre.getCell(16).value = autores.length+1
+                let categoria;
+                console.log(obj.categoria)
+                if(obj.categoria != 'A1'&& obj.categoria != 'A2' && obj.categoria!= 'B' && obj.categoria != 'C'){
+                    categoria= 'N/A'
+                }else{
+                    categoria= obj.categoria;
+                }
+                rownombre.getCell(18).value = categoria;
+            }
             await workbookw.xlsx.writeFile(fileWB2)
+            
+            
         })
         .then(()=>{
             const fs = require("fs");
@@ -535,8 +569,9 @@ publicationsCtrl.GenerarInforme = async (req,res) =>{
             res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             res.setHeader('Content-Disposition', 'attachment; filename=Informe.xlsx');
             res.send(data);
+            })
         })
-        })
+        
     }
 }
 
