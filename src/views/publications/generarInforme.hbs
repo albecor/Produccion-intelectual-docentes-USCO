@@ -1,0 +1,32 @@
+<div class="col-md-12 mx-auto mt-0">
+    <div class="card ">
+        <div class="card-header text-center">
+            <h4 class="text-black font-weight-bold">Búsqueda de Solicitudes</h4>
+        </div>
+        <div class="card-body">
+            <form action="/generar/informe" method="post" class="justify-content-center" onkeydown="return event.key != 'Enter';" id="FormValidate">
+                <a type="button" switch_1="0" id="a_1" onclick="switch_generarInforme_1()" class="mb-2"><i id="icon_1" class="fas fa-greater-than"></i> <b id="b_1"> Estado y Modalidad</b></a>
+                <input type="number" class="d-none" name="switch_1" value="0" id="switch_1">
+                <div class="form-group row" id="row_1">
+                </div>
+                <hr id="hr_1">
+                <a type="button" switch_2="0" id="a_2" onclick="switch_generarInforme_2()" class="mb-2"><i id="icon_2" class="fas fa-greater-than"></i> <b id="b_2"> Año, Trimestre, Fecha</b></a>
+                <input type="number" class="d-none" name="switch_2" value="0" id="switch_2">
+                <div class="form-group row" id="row_2">
+                </div>
+                <hr id="hr_2">
+                <a type="button" onclick="switch_generarInforme_3()" class="mb-2"><i id="icon_3" class="fas fa-greater-than"></i> <b id="b_3"> Docente, Facultad, Programa</b></a>
+                <input type="number" class="d-none" name="switch_3" value="0" id="switch_3">
+                <div class="form-group row" id="row_3">
+                </div>
+                <div class="col d-flex justify-content-end mt-2 ps-5" id="buscarDocente">
+                </div>
+                <hr class="mt-3" id="hr_3">
+                <div class="col-md-2 mt-2 text-start">                  
+                    <button type="submit" class="btn btn-block btn-primary" style="color: white; background-color: rgb(140, 20, 27); border: 0;">Generar</button>
+                </div>
+                <hr id="hr">
+            </form>        
+        </div>
+    </div>    
+</div>

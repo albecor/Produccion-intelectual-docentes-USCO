@@ -167,3 +167,12 @@ a.article:hover {
         display: false;
     }
 }
+
+.custom-control-input:checked {
+    border-color: #8c141b;
+    background-color: #8c141b;
+}
+
+.custom-control-input:focus {
+    box-shadow: 0 0 0 1px #8b5050, 0 0 0 0.2rem rgba(211, 56, 56, 0.25)
+}

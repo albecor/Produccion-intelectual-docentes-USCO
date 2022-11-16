@@ -422,7 +422,7 @@ function assignment(data){
                     option += '<option value="' + r[i].facultad + '">' + r[i].facultad + '</option>'
                 }
                 html += '<div class="col pt-2" id="facultadDiv">';
-                html += '<select class="form-select" name="facultad" id="facultad" onchange="if (this.selectedIndex) selectPrograma(this);" required>';
+                html += '<select class="form-select" name="facultad" id="facultad" onchange="if (this.selectedIndex) selectFacultad(this);" required>';
                 html += '<option selected disabled value="">Seleccione una Facultad</option>';
                 html += option;
                 html += '</select>';
@@ -479,23 +479,98 @@ function assignment(data){
 
 }
 
-function selectPrograma(){
+async function selectFacultad(){
     let index = $("#facultad")[0].selectedIndex - 1;
     $('#programa').children().remove();
-    $.ajax({
-        type: "get",
-        url: "../../json/facultades.json",
-        data: {},
-        success: function (r) {
-            let {programas} = r[index];
-            let option='';
-            for (let i in programas) {
-                option = '<option id="programaOption'+i+'" value="' + programas[i] + '">' + programas[i] + '</option>'
-                $('#programa').append(option)
+    let switch_3 = $('#switch_3').val()
+    let value = $("#facultad option:selected").val();
+    if(value=='todos'){
+        $('#programa').children().remove();
+        option = '<option value="todos">Todos los programas</option>'
+        $('#programa').append(option)
+        docentes = '';
+        await $.ajax({
+            type: "get",
+            url: "/docentes/search",
+            data: {value},
+            success: (r) =>{
+                docentes = r.docentes;
+            },
+            error: (e) =>{
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Se produjo un error en la búsqueda de docentes para la facultad seleccionada',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#8c141b'
+                });
+                console.log("error: ", e);
             }
-        }
-    });
-
+        })
+        $('#select_docente').children().remove();
+        option = '<option value="todos">Todos los docentes</option>'
+        $('#select_docente').append(option)
+        docentes.map((obj)=>{
+            opt = '<option value="' + obj._id + '">' + obj.lastname +' '+ obj.name +'</option>'
+            $('#select_docente').append(opt)
+        })
+    }else{
+        $.ajax({
+            type: "get",
+            url: "../../json/facultades.json",
+            data: {},
+            success: async function (r) {
+                let {programas} = r[index];
+                let option='';
+                if(switch_3 == '1'){
+                    option = '<option value="todos">Todos los programas</option>'
+                    $('#programa').append(option)
+                }
+                if(switch_3 == '1'){
+                    await $.ajax({
+                        type: "get",
+                        url: "/docentes/search",
+                        data: {value},
+                        success: (r) =>{
+                            docentes = r.docentes;
+                        },
+                        error: (e) =>{
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Se produjo un error en la búsqueda de docentes para la facultad seleccionada',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar',
+                                confirmButtonColor: '#8c141b'
+                            });
+                            console.log("error: ", e);
+                        }
+                    })
+                    $('#select_docente').children().remove();
+                    option = '<option value="todos">Todos los docentes</option>'
+                    $('#select_docente').append(option)
+                    docentes.map((obj)=>{
+                        opt = '<option value="' + obj._id + '">' + obj.lastname +' '+ obj.name +'</option>'
+                        $('#select_docente').append(opt)
+                    })
+                }
+                for(let i in programas) {
+                    option = '<option id="programaOption'+i+'" value="' + programas[i] + '">' + programas[i] + '</option>'
+                    $('#programa').append(option)
+                }
+            },
+            error: (e)=>{
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Se produjo un error en la búsqueda de facultades',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#8c141b'
+                });
+                console.log("error: ", e);
+            }
+        });
+        //buscar todos los docentes por la facultad seleccionada
+    }
 }
 
 function addInvestigacion(){
@@ -661,6 +736,14 @@ function searchPublications(){
                     html += '</tbody>'
                     html += '</table>'
                     $('#hr').after(html)
+                    $('#myPublications').DataTable({
+                        language: {
+                            url: '/json/es-CO.json'
+                        },
+                        ordering:  false,
+                        "scrollCollapse": true,
+                        "paging": false,
+                    });
                 },
                 error: function (e) {
                     Swal.fire({
@@ -674,8 +757,213 @@ function searchPublications(){
                 }
             });
         }
+    }
+}
 
-        //$('#submitButton').click();
+async function switch_generarInforme_1(){
+    $('#row_1').children().remove();
+    let switchValue = $('#switch_1').val();
+    let html = '<i id="icon_1" class="fas fa-chevron-down"></i>'
+    if(switchValue=='0'){
+        $('#icon_1').remove()
+        $('#b_1').before(html)
+        html = '<div class="col-4">'
+        html += '<h6 class="fw-bold">Estado de las Solicitudes</h6>'
+        html += '<div class="form-check">'
+        html += '<input class="form-check-input custom-control-input" type="checkbox" name="estado_1" value="Pendiente por revisión">'
+        html += '<label class="form-check-label" for="inlineCheckbox1">Pendiente por revisión</label>'
+        html += '</div>'
+        html += '<div class="form-check">'
+        html += '<input class="form-check-input custom-control-input" style="" type="checkbox" name="estado_2" value="Revisado">'
+        html += '<label class="form-check-label" for="inlineCheckbox2">Revisado</label>'
+        html += '</div>'
+        html += '<div class="form-check">'
+        html += '<input class="form-check-input custom-control-input" type="checkbox" name="estado_3" value="Rechazado">'
+        html += '<label class="form-check-label" for="inlineCheckbox1">Rechazado</label>'
+        html += '</div>'
+        html += '<div class="form-check">'
+        html += '<input class="form-check-input custom-control-input" type="checkbox" name="estado_4" value="No aprobado por CAP">'
+        html += '<label class="form-check-label" for="inlineCheckbox2">No aprobado por CAP</label>'
+        html += '</div>'
+        html += '<div class="form-check">'
+        html += '<input class="form-check-input custom-control-input" type="checkbox" name="estado_5" value="Aprobado">'
+        html += '<label class="form-check-label" for="inlineCheckbox1">Aprobado</label>'
+        html += '</div>'
+        html += '</div>'
+        html += '<div class="col-4">'
+        html += '<h6 class="fw-bold">Modalidad Académica</h6>'
+        html += '<select class="form-select mr-sm-2" name="modalidad" id="select_modalidad">'
+        html += '<option selected disabled value=""> Selecciona una Modalidad </option>'
+        let modalidades;
+        await $.ajax({
+            type: "get",
+            url: "../../json/modalidades.json",
+            data: {},
+            success: function(r){
+                modalidades = r;
+            },
+            error: function (e) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Se produjo un error en la búsqueda de modalidades',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#8c141b'
+                });
+                console.log("error: ", e);
+            }
+        });
+        let option = modalidades.map((obj)=>{
+            let opt = '<option value="'+obj.name+'">'+obj.name+'</option>'
+            return opt;
+        })
+        html += option
+        html += '</select>'
+        html += '</div>'
+        $('#row_1').append(html)
+        $('#switch_1').val('1')
+    }else{
+        $('#row_1').children().remove();
+        $('#icon_1').remove()
+        html = '<i id="icon_1" class="fas fa-greater-than"></i>'
+        $('#b_1').before(html)
+        $('#switch_1').val('0')
+    }
+}
+
+function switch_generarInforme_2(){
+    $('#row_2').children().remove();
+    let switchValue = $('#switch_2').val();
+    let html = '<i id="icon_2" class="fas fa-chevron-down"></i>'
+    if(switchValue=='0'){
+        $('#icon_2').remove()
+        $('#b_2').before(html)
+        html = '<div class="col-3">'
+        html += '<label class="fw-bold" for="yyyy">Año</label>'
+        html += '<input type="number" min="0" class="form-control" name="yyyy" placeholder="Año">'
+        html += '</div>'
+        html += '<div class="col-3">'
+        html += '<label class="fw-bold" for="trimestre">Trimestre</label>'
+        html += '<select class="form-select mr-sm-2" name="trimestre" required>'
+        html += '<option selected disabled value=""> Trimestre </option>'
+        html += '<option value="1">1</option>'
+        html += '<option value="2">2</option>'
+        html += '<option value="3">3</option>'
+        html += '<option value="4">4</option>'
+        html += '</select>'
+        html += '</div>'
+        html += '<div class="col-3 mb-3" id="fecha_1">'
+        html += '<label class="fw-bold" for="startDate1">Fecha de Publicación (Inicio)</label>'
+        html += '<input class="form-control mb-2" type="date" name="startDate1">'
+        html += '<label class="fw-bold" for="endDate1">Fecha de Publicación (Fin)</label>'
+        html += '<input class="form-control" type="date" name="endDate1">'
+        html += '</div>'
+        html += '<div class="col-3 mb-2" id="fecha_2">'
+        html += '<label class="fw-bold" for="startDate2">Fecha de Solicitud (Inicio)</label>'
+        html += '<input class="form-control mb-2" type="date" name="startDate2">'
+        html += '<label class="fw-bold" for="endDate2">Fecha de Solicitud (Fin)</label>'
+        html += '<input class="form-control" type="date" name="endDate2">'
+        html += '</div>'
+        $('#row_2').append(html)
+        $('#switch_2').val('1')
+    }else{
+        $('#row_2').children().remove();
+        $('#icon_2').remove()
+        html = '<i id="icon_2" class="fas fa-greater-than"></i>'
+        $('#b_2').before(html)
+        $('#switch_2').val('0')
+    }
+}
+
+async function switch_generarInforme_3(){
+    $('#row_3').children().remove();
+    $('#buscarDocente').children().remove();
+    let switchValue = $('#switch_3').val();
+    let html = '<i id="icon_3" class="fas fa-chevron-down"></i>'
+    if(switchValue=='0'){
+        $('#icon_3').remove()
+        $('#b_3').before(html)
+        html = '<div class="col-4">'
+        html += '<select class="form-select mr-sm-2" name="facultad" id="facultad" onchange="selectFacultad();">'
+        html += '<option selected value="todos"> Todas las Facultades </option>'
+        let facultades;
+        await $.ajax({
+            type: "get",
+            url: "../../json/facultades.json",
+            data: {},
+            success: function(r){
+                facultades = r;
+            },
+            error: function (e) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Se produjo un error en la búsqueda de las facultades',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#8c141b'
+                });
+                console.log("error: ", e);
+            }
+        });
+        option = facultades.map((obj)=>{
+            let opt = '<option value="'+obj.facultad+'">'+obj.facultad+'</option>'
+            return opt;
+        })
+        html += option;
+        html += '</select>'
+        html += '</div>'
+        html += '<div class="col-4">'
+        html += '<select class="form-select mr-sm-2" id="programa" name="programa" id="select_programa">'
+        html += '<option value="todos"> Todos los Programas </option>'
+        html += '</select>'
+        html += '</div>'
+        html += '<div class="col-4">'
+        html += '<select class="form-select mr-sm-2" name="docente" id="select_docente">'
+        html += '<option selected value="todos"> Todos los docentes </option>'
+        let docentes;
+        await $.ajax({
+            type: "get",
+            url: "/docentes/search",
+            data: {},
+            success: function(r){
+                docentes = r.docentes;
+            },
+            error: function (e) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Se produjo un error en la búsqueda de los docentes',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#8c141b'
+                });
+                console.log("error: ", e);
+            }
+        });
+        option = docentes.map((obj)=>{
+            let opt = '<option value="'+obj._id+'">'+obj.lastname+' '+obj.name+'</option>'
+            return opt;
+        })
+        html += option;
+        html += '</select>'
+        html += '</div>'
+        $('#row_3').append(html)
+        html = '<div class="col-4">'
+        html += '<label for="name" class="ms-1 fw-bold" id="name_label">Buscar Docente por Cédula</label>'
+        html += '<div class="input-group">'
+        html += '<input id="cc" type="number" min="0" class="form-control" name="cc" placeholder="Cédula">'
+        html += '<span class="input-group-text">'
+        html += '<a type="button" title="Buscar" onclick="buscarDocente()"><i class="fas fa-search" style="color: black;"></i></a>'
+        html += '</span>'
+        html += '</div>'
+        html += '</div>'
+        $('#buscarDocente').append(html)
+        $('#switch_3').val('1');
+    }else{
+        $('#row_3').children().remove();
+        $('#icon_3').remove()
+        html = '<i id="icon_3" class="fas fa-greater-than"></i>'
+        $('#b_3').before(html)
+        $('#switch_3').val('0');
     }
 }
 

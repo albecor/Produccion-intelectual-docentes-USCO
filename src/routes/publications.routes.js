@@ -25,10 +25,12 @@ const {
     primeraRevision,
     renderSearchPublication,
     SearchPublication,
-    renderCreateReport,
     renderRequest,
     dowloadFile,
     renderRechazadas,
+    renderGenerarInforme,
+    searchDocentes,
+    GenerarInforme,
 
     renderLoadISSN,
     renderISSN,
@@ -76,9 +78,13 @@ router.get('/issn/check', isAuthenticated, isFuncionario, checkISSN)
 
 router.post('/publications/reviewed',isAuthenticated, isFuncionario, primeraRevision);
 
-
-
 router.get('/publications/rechazadas',isAuthenticated, isFuncionario, renderRechazadas);
+
+router.get('/generar/informe', isAuthenticated, isFuncionario, renderGenerarInforme);
+
+router.get('/docentes/search',isAuthenticated, isFuncionario, searchDocentes);
+
+router.post('/generar/informe', isAuthenticated, isFuncionario, GenerarInforme);
 
 
 router.get('/file/download/:id', isAuthenticated, dowloadFile);

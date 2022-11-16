@@ -491,4 +491,61 @@ publicationsCtrl.renderRechazadas = async (req, res) => {
     res.render('publications/rechazadas',{publications,Funcionario:true})
 };
 
+publicationsCtrl.renderGenerarInforme = (req,res) =>{
+    res.render('publications/generarInforme', {Funcionario:true})
+}
+
+publicationsCtrl.searchDocentes = async (req,res) =>{
+    let {value} = req.query;
+    let docentes = await User.find({role:'Docente'}).lean()
+    if(value && value != 'todos'){
+        docentes = await User.find({role:'Docente',facultad:value}).lean()
+    }
+    res.send({docentes})
+}
+
+publicationsCtrl.GenerarInforme = async (req,res) =>{
+    let {switch_1, switch_2, switch_3} = req.body;
+    switch_1 = switchToBoolean(switch_1)
+    switch_2 = switchToBoolean(switch_2)
+    switch_3 = switchToBoolean(switch_3)
+    if(!switch_1&&!switch_2&&!switch_3){
+        var XLSX = require('xlsx');
+        var Excel = require('exceljs');
+        const path = require('path');
+        var workbook = XLSX.readFile('src/public/xlsx/informe.xlsx');
+        var sheet_name_list = workbook.SheetNames;
+        dirWB = path.dirname(__dirname)
+        fileWB = path.join(dirWB + '/public/xlsx/informe.xlsx');
+        fileWB2 = path.join(dirWB + '/public/xlsx/informe2.xlsx');
+        var workbookw = new Excel.Workbook();
+        await workbookw.xlsx.readFile(fileWB)
+        .then(async function () {
+            var worksheet1 = workbookw.getWorksheet(sheet_name_list[0]);
+
+
+            await workbookw.xlsx.writeFile(fileWB2)
+        })
+        .then(()=>{
+            const fs = require("fs");
+            fs.readFile(fileWB2, (error, data) => {
+            if(error) {
+                throw error;
+            }
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            res.setHeader('Content-Disposition', 'attachment; filename=Informe.xlsx');
+            res.send(data);
+        })
+        })
+    }
+}
+
+function switchToBoolean(swtch){
+    if(swtch == '1'){
+        return true
+    }else{
+        return false
+    }
+}
+
 module.exports = publicationsCtrl;
