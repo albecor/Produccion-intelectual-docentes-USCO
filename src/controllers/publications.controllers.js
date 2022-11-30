@@ -12,6 +12,7 @@ const moment = require('moment');
 var {Types} = require('mongoose');
 const { query } = require('express');
 let {ObjectId} = Types
+const nodemailer = require("nodemailer");
 
 
 publicationsCtrl.renderAddPublication = (req, res) => {
@@ -28,7 +29,7 @@ publicationsCtrl.renderAddPublication = (req, res) => {
 publicationsCtrl.sizeVerification = async (req,res) => {
     const storage = multer.diskStorage({
         destination: (req,file, cb)=>{
-            filePath = path.join(__dirname , '../public/uploads')
+            filePath = path.join(__dirname , '../files')
             cb(null,filePath)
         },
         filename: (req, file, cb, filename) => {
@@ -108,13 +109,9 @@ publicationsCtrl.AddPublication = async (req, res) => {
         for (let i = 0; i < numero_autores-1; i++) {
             add = i + 2;
             nombre = req.body['autor_name_'+add]
-            id_type = req.body['autor_id_type_'+add]
-            numero_id = req.body['autor_id_'+add]
             let newAutor = new Autor({
                 id_publication: _id,
-                nombre,
-                id_type,
-                numero_id
+                nombre
             })
             await newAutor.save();
         }
@@ -129,6 +126,10 @@ publicationsCtrl.renderMyPublications = async (req, res) => {
         publications[i]['createdAt'] = moment(publications[i].createdAt).utc().format('DD/MM/YYYY');
         publications[i]['fecha_publicacion'] = moment(publications[i].fecha_publicacion).utc().format('DD/MM/YYYY');
         publications[i]['index']=((publications.length-parseInt(i)).toString()).padStart(3,0);
+        publications[i]['editar'] = false;
+        if(publications[i].estado=='Editar'){
+            publications[i]['editar'] = true;
+        }
     };
 
     res.render('publications/myPublications',{publications,Docente:true})
@@ -144,7 +145,7 @@ publicationsCtrl.timeVerification = async (req,res) => {
         allow = false
     }
     res.send({allow})
-}
+};
 
 publicationsCtrl.deleteMyPublication = async (req,res) => {
     let {path,createdAt} = await Publication.findById(req.params.id)
@@ -170,6 +171,161 @@ publicationsCtrl.deleteMyPublication = async (req,res) => {
             }
         });
     }
+};
+
+publicationsCtrl.renderEditarPublicacion = async (req, res) => {
+    let {id} = req.params;
+    let articulo = false, videos = false, libro = false, premio = false, PTec = false, obra = false, ponencia = false, capitulo = false;
+    let publication = await Publication.findById(id).lean()
+    switch (publication.modalidad) {
+        case 'Artículo de Revista':
+            articulo = true;
+            break;
+        case 'Producción de vídeos, cinematográficas o fonográficas':
+            videos = true;
+            break;
+        case 'Libro':
+            libro = true;
+            break;
+        case 'Premio':
+            premio = true
+            break;
+        case 'Producción técnica':
+            PTec = true;
+            break;
+        case 'Obras artísticas':
+            obra = true;
+            break;
+        case 'Ponencia':
+            ponencia = true;
+            break;
+        case 'Capítulo de Libro':
+            capitulo = true;
+            break;
+    }
+    publication['createdAt'] = moment(publication.createdAt).utc().format('DD/MM/YYYY');
+    publication['fecha_publicacion'] = moment(publication.fecha_publicacion).utc().format('YYYY-MM-DD');
+    publication['fecha_recepcion_revista'] = moment(publication.fecha_recepcion_revista).utc().format('YYYY-MM-DD');
+    let docente = await User.findById(publication.id_Docente).lean()
+    let autores = await Autor.find({id_publication:id}).lean()
+    let numero_autores = autores.length+1
+    autores.map((x,i)=>{
+        x['index'] = parseInt(i)+2
+    })
+    let modalidades = require('../public/json/modalidades.json');
+    let json = [];
+    modalidades.map((i)=>{
+        add = i.name
+        json.push(add)
+    })
+    const f = json.indexOf(publication.modalidad);
+    json.splice(f,1)
+    let modalidad = modalidades.find(x => x.name === publication.modalidad)
+    res.render('publications/editarPublicacion',{
+        publication,docente,autores,Docente:true,json,modalidad,numero_autores,
+        articulo, videos, libro, premio, PTec, obra, ponencia, capitulo
+    })
+};
+
+publicationsCtrl.editarPublicacion = async (req,res) => {
+    const storage = multer.diskStorage({
+        destination: (req,file, cb)=>{
+            filePath = path.join(__dirname , '../files')
+            console.log(filePath)
+            cb(null,filePath)
+        },
+        filename: (req, file, cb, filename) => {
+            cb(null, uuid() + path.extname(file.originalname));
+        }
+    })
+    const uploadFile = multer({
+        storage,
+        //limits: {fileSize: 1000000 * 5}
+    }).single('upFile');
+
+    uploadFile(req, res, async (err) => {
+        if (err) {
+            console.log(err)
+            //return res.send(false)
+        }else{
+            let {
+                id,
+                name,
+                datePublication,
+                modalidad,
+                categoria,
+                tipo,
+                nombre_revista,
+                tiempo_revista,
+                fecha_recepcion_revista,
+                fecha_publicacion,
+                ISSN,
+                recursos_U,
+                nombre_proyecto_investigacion,
+                editorial,
+                URL,
+                cambio_categoria,
+                numero_autores
+            } = req.body;
+            if(req.file != undefined){
+                let path_delete = (await Publication.findById(id)).path
+                fs.unlink(path_delete, (err) =>{
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+                let {
+                    filename,
+                    path,
+                    originalname,
+                    mimetype,
+                    size
+                } = req.file;
+                await Publication.findByIdAndUpdate(id,{
+                    filename,
+                    path,
+                    originalname,
+                    mimetype,
+                    size,
+                })
+            }
+            let id_Docente = req.user.id;
+            let estado =  'Pendiente por revisión';
+            await Publication.findByIdAndUpdate(id,{
+                id_Docente,
+                name,
+                datePublication,
+                modalidad,
+                categoria,
+                tipo,
+                nombre_revista,
+                tiempo_revista,
+                fecha_recepcion_revista,
+                fecha_publicacion,
+                ISSN,
+                recursos_U,
+                nombre_proyecto_investigacion,
+                editorial,
+                URL,
+                cambio_categoria,
+                estado
+            });
+            numero_autores = parseInt(numero_autores)
+            await Autor.deleteMany({id_publication: id})
+            if(numero_autores > 1){
+                for (let i = 0; i < numero_autores-1; i++) {
+                    add = i + 2;
+                    nombre = req.body['autor_name_'+add]
+                    let newAutor = new Autor({
+                        id_publication: id,
+                        nombre
+                    })
+                    await newAutor.save();
+                }
+            }
+            res.redirect('/publications/myPublications')
+        }
+    })
 }
 
 //Funcionario
@@ -232,6 +388,75 @@ publicationsCtrl.renderAuditFnId = async (req, res) => {
     })
 };
 
+publicationsCtrl.primeraRevision = async (req, res) =>{
+    let{observacion, accept, id_publication} = req.body;
+    let {name,id_Docente} = await Publication.findById(id_publication).lean()
+    let {email} = await User.findById(id_Docente).lean()
+    if(accept == 'aceptar'){
+        await Publication.findByIdAndUpdate(id_publication,{estado:'Revisado',observacion})
+    }else if(accept == 'editar'){
+        let contentHTML = `
+        <h4>Módulo CAP</h4>
+        <h4>Notificación de estado de su solicitud</h4>
+        <p><b>Con título:</b> ${name}</p>
+        <p>Luego de su revisión tiene como observación: </p>
+        <p>${observacion}</p>
+        <p><i>Revisa la sección de "Mis publicaciones" en el módulo CAP para editar</i></p>
+        <img>
+        `;
+        let transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            //port: 485,
+            secure: false,
+            auth: {
+                user: 'u2010295844@usco.edu.co',
+                pass: 'qjnkezubxrlvmqmv'
+            },
+            tls: {
+                rejectUnauthorized: false
+            }
+        });
+        await transporter.sendMail({
+            from: '"Módulo CAP"',
+            to: email,
+            subject: "Notificación de solicitud. Módulo CAP",
+            html: contentHTML,
+        });
+        await Publication.findByIdAndUpdate(id_publication,{estado:'Editar',observacion})
+    }else if(accept == 'rechazar'){
+        let contentHTML = `
+        <h4>Módulo CAP</h4>
+        <h4>Notificación de estado de su solicitud</h4>
+        <p><b>Con título:</b> ${name}</p>
+        <p>Luego de su revisión tiene como observación: </p>
+        <p>${observacion}</p>
+        <p><i>Su solicitud fue rechazada. Recomendamos crear una nueva solicitud</i></p>
+        `;
+        let transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            //port: 485,
+            secure: false,
+            auth: {
+                user: 'u2010295844@usco.edu.co',
+                pass: 'qjnkezubxrlvmqmv'
+            },
+            tls: {
+                rejectUnauthorized: false
+            }
+        });
+        await transporter.sendMail({
+            from: '"Módulo CAP"',
+            to: email,
+            subject: "Notificación de solicitud. Módulo CAP",
+            html: contentHTML,
+        });
+        await Publication.findByIdAndUpdate(id_publication,{estado:'Rechazado',observacion})
+    }
+    res.redirect('/publications/search')
+};
+
 publicationsCtrl.renderAuditCAP = async (req, res) => {
     let publications = await Publication.find({estado:'Revisado'}).lean()
     for (let i in publications) {
@@ -268,49 +493,19 @@ publicationsCtrl.revisionCAP = async (req, res) => {
             tipo_puntaje = false
         }
         await Publication.findByIdAndUpdate(id,{estado:'Aprobado',conceptoCAP,tipo_puntaje,puntaje})
-        res.redirect('/publications/reviewed/cap')
+        res.redirect('/publications/search')
     }else{
         await Publication.findByIdAndUpdate(id,{estado:'No aprobado por CAP', conceptoCAP})
-        res.redirect('/publications/rechazadas')
+        res.redirect('/publications/search')
     }
 }
 
-publicationsCtrl.renderReviewedCAP = async (req, res) => {
-    let publications = await Publication.find({estado:'Aprobado'}).lean();
-    for (let i in publications) {
-        let id = publications[i].id_Docente;
-        if(id){
-            let {name, lastname, sec_lastname} = await User.findById(id).lean();
-            publications[i]['docente']=name+' '+' '+lastname+' '+sec_lastname;
-        }
-        publications[i]['fecha_i'] = moment(publications[i].fechaPublicacion).utc().format('DD/MM/YYYY');
-        publications[i]['index']=parseInt(i)+1;
-    };
-
-    res.render('publications/reviewedCAP',{publications,Funcionario:true})
-};
-
-publicationsCtrl.renderReviewed = async (req, res) => {
-    let publications = await Publication.find({estado:'Revisado'}).lean();
-    for (let i in publications) {
-        let id = publications[i].id_Docente;
-        if(id){
-            let {name, lastname, sec_lastname} = await User.findById(id).lean();
-            publications[i]['docente']=name+' '+' '+lastname+' '+sec_lastname;
-        }
-        publications[i]['fecha_i'] = moment(publications[i].fechaPublicacion).utc().format('DD/MM/YYYY');
-        publications[i]['index']=parseInt(i)+1;
-    };
-
-    res.render('publications/reviewed',{publications,Funcionario:true})
-};
-
 publicationsCtrl.renderSearchPublication = async (req, res) => {
-    res.render('publications/searchPublications',{Funcionario})
+    res.render('publications/searchPublications',{Funcionario:true})
 };
 
 publicationsCtrl.SearchPublication = async (req, res) => {
-    let {estado_1,estado_2, estado_3, estado_4, estado_5, startDate,endDate} = req.body;
+    let {estado_1,estado_2, estado_3, estado_4, estado_5, estado_6, startDate,endDate} = req.body;
     startDate = new Date(startDate)
     endDate = new Date(endDate)
     endDate.setDate(endDate.getDate()+1);
@@ -320,13 +515,15 @@ publicationsCtrl.SearchPublication = async (req, res) => {
     if(!estado_3)estado_3 = '';
     if(!estado_4)estado_4 = '';
     if(!estado_5)estado_5 = '';
+    if(!estado_5)estado_6 = '';
     let publications = await Publication.find({
         $or:[
             {estado:estado_1},
             {estado:estado_2},
             {estado:estado_3},
             {estado:estado_4},
-            {estado:estado_5}
+            {estado:estado_5},
+            {estado:estado_6}
         ],
         "createdAt": { $gte: startDate, $lte: endDate }
     }).lean();
@@ -378,7 +575,7 @@ publicationsCtrl.renderRequest = async (req, res) => {
 publicationsCtrl.dowloadFile = async (req, res) => {
     let {id} = req.params;
     let {filename,originalname} = await Publication.findById(id).lean();
-    res.download(path.join(__dirname , '../public/uploads/'+filename),originalname)
+    res.download(path.join(__dirname , '../files/'+filename),originalname)
 }
 
 publicationsCtrl.renderLoadISSN = async (req,res) => {
@@ -463,17 +660,6 @@ publicationsCtrl.checkISSN = async (req, res) => {
     res.send({validation})
 }
 
-publicationsCtrl.primeraRevision = async (req, res) =>{
-    let{observacion, accept, id_publication} = req.body;
-    if(accept == 'true'){
-        await Publication.findByIdAndUpdate(id_publication,{estado:'Revisado',observacion})
-        res.redirect('/publications/reviewed/fn')
-    }else{
-        await Publication.findByIdAndUpdate(id_publication,{estado:'Rechazado',observacion})
-        res.redirect('/publications/rechazadas')
-    }
-}
-
 publicationsCtrl.renderRechazadas = async (req, res) => {
     let publications = await Publication.find({$or: [{estado:'Rechazado'}, {estado:'No aprobado por CAP'}]}).lean().sort({createdAt:1});
     for (let i in publications) {
@@ -502,6 +688,12 @@ publicationsCtrl.searchDocentes = async (req,res) =>{
         docentes = await User.find({role:'Docente',facultad:value}).lean()
     }
     res.send({docentes})
+}
+
+publicationsCtrl.searchDocenteCC = async (req,res)=>{
+    let {cc} = req.query;
+    let docente = await User.findOne({identification:cc,role:'Docente'}).lean()
+    res.send({docente})
 }
 
 publicationsCtrl.GenerarInforme = async (req,res) =>{

@@ -241,24 +241,27 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class="col-md-2 mb-2">
+                    <div class="col-md-2 ms-2 mb-2">
                         <label>Descargar Archivo</label>
-                        <a class="btn btn-block btn-success" type="button" href="/file/download/{{_id}}" title="Descargar"><i class="fas fa-download"></i> Descargar</a>
+                        <a class="btn btn-block btn-success" style="background-color: rgb(140, 20, 27); border: 0;" type="button" href="/file/download/{{publication._id}}" title="Descargar"><i class="fas fa-download"></i> Descargar</a>
                     </div>
                 </div>
                 <hr id="hr">      
                 <div class="form-floating">
-                    <textarea class="form-control bg-light" id="floatingTextarea" name="observacion"></textarea>
+                    <textarea class="form-control bg-light" style="height: 100px" id="floatingTextarea" name="observacion"></textarea>
                     <label for="floatingTextarea">Observaciones</label>
                 </div>   
-                <div class="d-flex bd-highlight mb-3">
-                    <div class="me-auto p-2 bd-highlight">
-                        <a val="true" type="button" class="btn btn-block btn-primary" style="color: white; background-color: rgb(140, 20, 27); border: 0;;" onclick="accept(this)">Aceptar</a>                  
+                <div class="d-flex justify-content-between mb-3">
+                    <div class=" p-2 bd-highlight">
+                        <a val="aceptar" type="button" class="btn btn-block btn-primary" style="color: white; background-color: rgb(140, 20, 27); border: 0;;" onclick="accept(this)">Aceptar</a>
                     </div>
                     <div class="p-2 bd-highlight">
-                        <a val="false" type="button" class="btn btn-block btn-secondary" style="color: white; border: 0;;" onclick="accept(this)">Rechazar</a>
+                        <a val="editar" type="button" class="btn btn-block btn-secondary" style="color: white; border: 0;;" onclick="accept(this)">Editar</a>
                     </div>
-                    <input type="text" class="form-control d-none" name="accept" id="acceptInpt" value="true">
+                    <div class="p-2 bd-highlight">
+                        <a val="rechazar" type="button" class="btn btn-block btn-secondary" style="color: white; border: 0;;" onclick="accept(this)">Rechazar</a>
+                    </div>
+                    <input type="text" class="form-control d-none" name="accept" id="acceptInpt" value="aceptar">
                     <input type="text" class="d-none" value="{{publication._id}}" name="id_publication">
                     <button class="d-none" type="submit" id="submitButton"></button>
                 </div>

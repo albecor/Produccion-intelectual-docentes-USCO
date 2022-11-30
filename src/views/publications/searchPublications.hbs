@@ -13,19 +13,23 @@
                             <label class="form-check-label" for="inlineCheckbox1">Pendiente por revisión</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input custom-control-input" type="checkbox" name="estado_2" value="Revisado">
+                            <input class="form-check-input custom-control-input" type="checkbox" name="estado_2" value="Editar">
+                            <label class="form-check-label" for="inlineCheckbox2">Editar</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input custom-control-input" type="checkbox" name="estado_3" value="Revisado">
                             <label class="form-check-label" for="inlineCheckbox2">Revisado</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input custom-control-input" type="checkbox" name="estado_3" value="Rechazado">
+                            <input class="form-check-input custom-control-input" type="checkbox" name="estado_4" value="Rechazado">
                             <label class="form-check-label" for="inlineCheckbox1">Rechazado</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input custom-control-input" type="checkbox" name="estado_4" value="No aprobado por CAP">
+                            <input class="form-check-input custom-control-input" type="checkbox" name="estado_5" value="No aprobado por CAP">
                             <label class="form-check-label" for="inlineCheckbox2">No aprobado por CAP</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input custom-control-input" type="checkbox" name="estado_5" value="Aprobado">
+                            <input class="form-check-input custom-control-input" type="checkbox" name="estado_6" value="Aprobado">
                             <label class="form-check-label" for="inlineCheckbox1">Aprobado</label>
                         </div>
                     </div>
@@ -38,11 +42,11 @@
                         <input class="form-control" type="date" name="endDate" required>
                     </div>
                 </div>
+                <hr id="hr">
                 <div class="col-md-2 mt-2 text-start">                  
                     <a type="button" class="btn btn-block btn-primary" style="color: white; background-color: rgb(140, 20, 27); border: 0;;" onclick="searchPublications()">Buscar</a>
                     <button type="submit" class="d-none" id="submitButton"></button>
                 </div>
-                <hr id="hr">
             </form>        
         </div>
     </div>    

@@ -28,7 +28,12 @@
           <td class="text-center"><a href="{{URL}}" target="_blank" title="URL"><i class="fa fa-globe" style="color: black;"></i></a></td>
           <td>{{createdAt}}</td>
           <td>{{fecha_publicacion}}</td>
-          <td>{{estado}}</td>
+          <td>{{#if editar}}
+            <a href="/publications/edit/{{_id}}" type="button" title="Editar" class="btn btn-primary pt-1" style="color:white; background-color: rgb(140, 20, 27); border: 0;">Editar</a>
+            {{else}}
+            {{estado}}
+            {{/if}}
+            </td>
           <td class="text-center">
             <a href="/file/download/{{_id}}" title="Descargar"><i class="fas fa-download"></i></a>
           </td>

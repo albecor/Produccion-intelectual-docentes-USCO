@@ -1,0 +1,167 @@
+<div class="col-md-12 mx-auto mt-0">
+    <div class="card ">
+        <div class="card-header text-center">
+            <h1 class="h4 text-black font-weight-bold">Solicitud de Reconocimiento</h1>
+        </div>
+        <div class="card-body">
+            <form action="/publications/edit" enctype="multipart/form-data" class= "justify-content-center" id="realForm" onkeydown="return event.key != 'Enter';" method="POST">                         
+                {{#if articulo}}
+                <div class="form-group row">
+                    <div class="col mb-2">
+                        <label for="name" id="name_label">Título del Artículo</label>
+                        <input id="name" type="text" class="form-control" name="name" placeholder="Nombre de la Producción Académica" value="{{publication.name}}" required>
+                    </div>
+                    <div class="col mb-2">
+                        <label for="date">Fecha de Publicación</label>
+                        <input id="datePublication" type="date" class="form-control" name="fecha_publicacion" value="{{publication.fecha_publicacion}}" required>
+                    </div>
+                </div>
+                <div class="form-group row" id="row_1">
+                    <div class="col mb-2" id="modalidad">                     
+                        <select class="form-select mr-sm-2" name="modalidad" id="select_modalidad"
+                            onchange="PublicationsList(this);" required>
+                            <option disabled value="">-- Modalidad --</option>
+                            <option value="{{publication.modalidad}}" selected>{{publication.modalidad}}</option>
+                            {{#json}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/json}}
+                        </select>
+                    </div>
+                    <div class="col mb-2" id="tipo">
+                        <select class="form-select mr-sm-2" name="tipo" id="select_tipo" required="">
+                            <option disabled value="">-- Tipo de Artículo --</option>
+                            <option value="{{publication.tipo}}">{{publication.tipo}}</option>
+                            {{#modalidad.tipo}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/modalidad.tipo}}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row" id="row_2">
+                    <div class="col mb-2" id="nombre_revista">
+                        <input id="name" type="text" class="form-control" name="nombre_revista" placeholder="Nombre de la Revista" value="{{publication.nombre_revista}}" required>
+                    </div>
+                    <div class="col" id="categoria">
+                        <select class="form-select mr-sm-2" name="categoria" id="select_categoria" required>
+                            <option disabled value="">Categoría de la revista en Minciencias al momento de la publicación</option>
+                            <option value="{{publication.categoria}}" selected>{{publication.categoria}}</option>
+                            {{#modalidad.categoria}}
+                                <option value="{{this}}">{{this}}</option>
+                            {{/modalidad.categoria}}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row" id="row_3">
+                    <div class="col mb-2" id="url">
+                        <input id="URL" type="url" class="form-control" name="URL" placeholder="Dirección URL" value="{{publication.URL}}" required>
+                    </div>
+                    <div class="col mb-2" id="file">
+                        <input type="file" class="form-control mr-sm-2 p-1" id="uploadFile" name="upFile">
+                    </div>
+                </div>
+                <div class="row g-3 align-items-center mb-2" id="row_4">
+                    <div class="col-auto">
+                        <label for="meses" class="col-form-label">Tiempo requerido para la publicación del artículo en la revista</label>
+                    </div>
+                    <div class="col-1">
+                        <input type="number" name="tiempo_revista" min="0" class="form-control" value="{{publication.tiempo_revista}}" required>
+                    </div>
+                    <div class="col-auto">
+                        <span class="form-text">Cantidad en meses.</span>
+                    </div>
+                </div>
+                <div class="row g-3 align-items-center mb-2" id="row_5">
+                    <div class="col-5 mb-2">
+                        <label for="dateRevista">Fecha de recepción o sumisión del artículo a la revista</label>
+                        <input id="dateRevista" type="date" class="form-control w-50" name="fecha_recepcion_revista" value="{{publication.fecha_recepcion_revista}}" required>
+                    </div>
+                </div>
+                <div class="row g-3 align-items-center mb-2" id="row_6">
+                    <div class="col-3">
+                        <input type="text" class="form-control" name="ISSN" placeholder="ISSN" value="{{publication.ISSN}}" required>
+                    </div>
+                </div>
+                {{/if}}
+                <div class="row g-3 align-items-center mb-2" id="row_7">
+                    <div class="col-auto">
+                        <label for="check" class="col-form-label">Para la publicación del artículo, se invirtieron recursos económicos de la Universidad</label>
+                    </div>
+                    <div class="form-check form-check-inline ms-3 col-1">
+                        <input class="form-check-input" type="radio" name="recursos_U" value="true" {{#if publication.recursos_U}} checked {{/if}} required>
+                        <label class="form-check-label mx-0" for="inlineRadio1">SI</label>
+                    </div>
+                    <div class="form-check form-check-inline col-1">
+                        <input class="form-check-input" type="radio" name="recursos_U" value="false" {{#if publication.recursos_U}}{{else}}checked{{/if}} required>
+                        <label class="form-check-label mx-0" for="inlineRadio2">NO</label>
+                    </div>
+                </div>
+                <div class="form-group row" id="row_8">
+                    <div class="col-6">
+                        <label for="name" id="name_label">Nombre del proyecto de Invesigación del cual se genera el material, sí aplica</label>
+                        <input type="text" class="form-control" name="nombre_proyecto_investigacion" value="{{publication.nombre_proyecto_investigacion}}">
+                    </div>
+                </div>
+                <div class="row g-3 align-items-center mb-2" id="row_10">
+                    <div class="col-auto">
+                        <label for="check" class="col-form-label">El material presentado fue tenido en cuenta para cambio de categoría en el escalafón docente:</label>
+                    </div>
+                    <div class="form-check form-check-inline ms-3 col-1">
+                        <input class="form-check-input" type="radio" name="cambio_categoria" id="inlineRadio1" value="true" {{#if publication.cambio_categoria}} checked {{/if}} required>
+                        <label class="form-check-label mx-0" for="inlineRadio1">SI</label>
+                    </div>
+                    <div class="form-check form-check-inline col-1">
+                        <input class="form-check-input" type="radio" name="cambio_categoria" id="inlineRadio2" value="false" {{#if publication.cambio_categoria}}{{else}}checked{{/if}} required>
+                        <label class="form-check-label mx-0" for="inlineRadio2">NO</label>
+                    </div>
+                </div>
+                <div class="row mb-2" id="autores">
+                    <input type="number" id="counter" class="d-none" value="{{numero_autores}}">
+                    <label for="numero_autores">Número de Autores</label>
+                    <div class="col-1">
+                        <select class="form-select" name="numero_autores" id="numero_aut" onchange="addAutores()">
+                            <option value="" disabled="">Selecciona el número de Autores</option>
+                            <option value="{{numero_autores}}">{{numero_autores}}</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                        </select>
+                    </div>
+                </div>
+                {{#autores}}
+                <div class="row form-group mb-2" id="div_autor_{{index}}">
+                    <div class="col-4">
+                        <input type="text" class="form-control" name="autor_name_{{index}}" placeholder="Nombre del Autor {{index}}" value="{{nombre}}" required>
+                    </div>
+                </div>
+                {{/autores}}
+                <hr id="hr">
+                <input type="hidden" name="id" value="{{publication._id}}">
+                <div class="col-md-2 text-start">
+                    <button type="submit" class="btn btn-block btn-primary" style="color: white; background-color: rgb(140, 20, 27); border: 0;">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>    
+</div>
+<br>
+
+<script>
+    //PublicationsList()
+</script>

@@ -12,6 +12,8 @@ const {
     renderMyPublications,
     deleteMyPublication,
     timeVerification,
+    renderEditarPublicacion,
+    editarPublicacion,
 
     //Funcionario
     renderAuditFn,
@@ -19,17 +21,15 @@ const {
     renderAuditCAP,
     renderAuditCAPId,
     revisionCAP,
-    renderReviewedCAP,
     checkISSN,
-    renderReviewed,
     primeraRevision,
     renderSearchPublication,
     SearchPublication,
     renderRequest,
     dowloadFile,
-    renderRechazadas,
     renderGenerarInforme,
     searchDocentes,
+    searchDocenteCC,
     GenerarInforme,
 
     renderLoadISSN,
@@ -51,6 +51,10 @@ router.delete('/publications/delete/:id',isAuthenticated, isDocente, deleteMyPub
 
 router.get('/publications/time',isAuthenticated, isDocente, timeVerification);
 
+router.get('/publications/edit/:id', isAuthenticated, isDocente, renderEditarPublicacion);
+
+router.post('/publications/edit', isAuthenticated, isDocente, editarPublicacion);
+
 
 //Funcionario
 
@@ -64,10 +68,6 @@ router.get('/publications/audit/cap/:id',isAuthenticated, isFuncionario, renderA
 
 router.post('/publications/reviewed/cap',isAuthenticated, isFuncionario, revisionCAP);
 
-router.get('/publications/reviewed/cap',isAuthenticated, isFuncionario, renderReviewedCAP);
-
-router.get('/publications/reviewed/fn',isAuthenticated, isFuncionario, renderReviewed);
-
 router.get('/publications/search',isAuthenticated, isFuncionario, renderSearchPublication);
 
 router.post('/publications/search',isAuthenticated, isFuncionario, SearchPublication);
@@ -78,11 +78,11 @@ router.get('/issn/check', isAuthenticated, isFuncionario, checkISSN)
 
 router.post('/publications/reviewed',isAuthenticated, isFuncionario, primeraRevision);
 
-router.get('/publications/rechazadas',isAuthenticated, isFuncionario, renderRechazadas);
-
 router.get('/generar/informe', isAuthenticated, isFuncionario, renderGenerarInforme);
 
 router.get('/docentes/search',isAuthenticated, isFuncionario, searchDocentes);
+
+router.get('/docentes/search/cc',isAuthenticated, isFuncionario, searchDocenteCC);
 
 router.post('/generar/informe', isAuthenticated, isFuncionario, GenerarInforme);
 

@@ -2,7 +2,7 @@ const usersCtrl = {};
 
 const User = require('../models/User')
 const passport = require('passport');
-
+const short = require('short-uuid');
 
 /////Tareas comunes para todos los usuarios///////////////////////////////////////
 
@@ -355,13 +355,7 @@ usersCtrl.forgotPassword = async (req, res)=>{
     if(user != null){
         //console.log(user);
         const {name, lastname, sec_lastname} = user;
-        var passwd = '';
-        var characters = 'ABCDEFGHIJ#KLM!NO$PQR%ST&UVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for ( var i = 0; i < 10; i++ ) {
-           passwd += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        //console.log(passwd)
+        var passwd = short.generate();
 
         password = await user.encryptPassword(passwd);
         const id = user._id;
@@ -369,8 +363,8 @@ usersCtrl.forgotPassword = async (req, res)=>{
         const message = "Su contraseña ha sido cambiada."
 
         contentHTML = `
-        <h1>PSA - sistema de información</h1>
-        <h4>Sistema hospitalario del Huila</h4>
+        <h1>Módulo CAP</h1>
+        <h4>Producción intelectual de docentes</h4>
         <ul>
             <li>Usuario: ${name } ${lastname } ${sec_lastname }</li>
             <li>Email: ${email}</li>
@@ -380,11 +374,11 @@ usersCtrl.forgotPassword = async (req, res)=>{
 
         let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
-            port: 587,
+            port: 485,
             secure: false,
             auth: {
-                user: 'gtst@usco.edu.co',
-                pass: 'pnckgyqntqlzjzagfffffff'
+                user: 'u2010295844@usco.edu.co',
+                pass: 'qjnkezubxrlvmqmv'
             },
             tls: {
                 rejectUnauthorized: false

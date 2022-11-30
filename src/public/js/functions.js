@@ -48,10 +48,9 @@ function municipiosList(data){
     });
 };
 
-function PublicationsList(data){
+function PublicationsList(){
     resetRows()
-    var selectId = data.attributes[2].value;
-    var index = $('#' + selectId)[0].selectedIndex - 1
+    let modalidad_seleccionada = $('#select_modalidad option:selected' ).text()
     $.ajax({
         type: "get",
         url: "../../json/modalidades.json",
@@ -62,6 +61,7 @@ function PublicationsList(data){
             let capitulo = 'Capítulo de Libro';
             let patentes = 'Patentes';
             let ponencia = 'Ponencia';
+            let index = response.findIndex(x => x.name === modalidad_seleccionada);
             let {tipo,categoria} = response[index]
             let modalidad = response[index].name;
             let select_categoria = 'Categoría'
@@ -216,7 +216,7 @@ function PublicationsList(data){
 }
 
 function addAutores(){
-    var index = $("#numero_aut")[0].selectedIndex
+    var index = parseInt($("#numero_aut").val())
     let html = '';
     let counter = parseInt($('#counter').val())
     for(let i = 2; i < counter + 1; i++){
@@ -226,9 +226,10 @@ function addAutores(){
     for (let i = 2; i < index + 1; i++) {
         i = (i).toString()
         html += '<div class="row form-group mb-2" id="div_autor_'+i+'">'
-        html += '<div class="col">'
+        html += '<div class="col-4">'
         html += '<input type="text" class="form-control" name="autor_name_'+i+'" placeholder="Nombre del Autor '+i+'" required>'
         html += '</div>'
+        /*
         html += '<div class="col">'
         html += '<select class="form-select mr-sm-2" name="autor_id_type_'+i+'" required>'
         html += '<option value="" selected>--- Elija un tipo de identificación ---</option>'
@@ -246,6 +247,7 @@ function addAutores(){
         html += '<div class="col">'
         html += '<input type="text" class="form-control" name="autor_id_'+i+'" placeholder="Número de identificación" required>'
         html += '</div>'
+        */
         html += '</div>'
     }
     $('#autores').after(html)
@@ -645,8 +647,14 @@ function checkISSN(data){
 
 function accept(data){
     let res = data.attributes[0].value;
-    if(res == 'false'){
-        $('#acceptInpt').val('false')
+    if(res == 'aceptar'){
+        $('#acceptInpt').val('aceptar')
+    }
+    if(res == 'editar'){
+        $('#acceptInpt').val('editar')
+    }
+    if(res == 'rechazar'){
+        $('#acceptInpt').val('rechazar')
     }
     $('#submitButton').click()
 }
@@ -690,8 +698,8 @@ function searchPublications(){
 
     if(start){
         let formData = $('#FormValidate').serializeJSON();
-        let {estado_1,estado_2, estado_3, estado_4, estado_5, startDate,endDate} = formData;
-        if(!estado_1&&!estado_2&&!estado_3&&!estado_4&&!estado_5){
+        let {estado_1,estado_2, estado_3, estado_4, estado_5, estado_6} = formData;
+        if(!estado_1&&!estado_2&&!estado_3&&!estado_4&&!estado_5&&!estado_6){
             Swal.fire({
                 html: 'Debe seleccionar al menos una casilla en <b>Estado de las Solicitudes</>',
                 icon: 'error',
@@ -706,6 +714,7 @@ function searchPublications(){
                 success: function(r){
                     let {publications} = r;
                     $('#myPublications').remove()
+                    $('#myPublications_wrapper').remove()
                     html = '<table class="table table-light table-bordered table-hover overflow-y: hidden" id="myPublications">'
                     html += '<thead class="table-secondary">'
                     html += '<tr>'
@@ -844,7 +853,7 @@ function switch_generarInforme_2(){
         html += '</div>'
         html += '<div class="col-3">'
         html += '<label class="fw-bold" for="trimestre">Trimestre</label>'
-        html += '<select class="form-select mr-sm-2" name="trimestre" required>'
+        html += '<select class="form-select mr-sm-2" name="trimestre">'
         html += '<option selected disabled value=""> Trimestre </option>'
         html += '<option value="1">1</option>'
         html += '<option value="2">2</option>'
@@ -854,7 +863,7 @@ function switch_generarInforme_2(){
         html += '</div>'
         html += '<div class="col-3 mb-3" id="fecha_1">'
         html += '<label class="fw-bold" for="startDate1">Fecha de Publicación (Inicio)</label>'
-        html += '<input class="form-control mb-2" type="date" name="startDate1">'
+        html += '<input class="form-control mb-2" type="date" name="startDate1" id="startDate1">'
         html += '<label class="fw-bold" for="endDate1">Fecha de Publicación (Fin)</label>'
         html += '<input class="form-control" type="date" name="endDate1">'
         html += '</div>'
@@ -948,7 +957,7 @@ async function switch_generarInforme_3(){
         html += '</div>'
         $('#row_3').append(html)
         html = '<div class="col-4">'
-        html += '<label for="name" class="ms-1 fw-bold" id="name_label">Buscar Docente por Cédula</label>'
+        html += '<label for="name" class="ms-1 fw-bold">Buscar Docente por Cédula</label>'
         html += '<div class="input-group">'
         html += '<input id="cc" type="number" min="0" class="form-control" name="cc" placeholder="Cédula">'
         html += '<span class="input-group-text">'
@@ -965,6 +974,89 @@ async function switch_generarInforme_3(){
         $('#b_3').before(html)
         $('#switch_3').val('0');
     }
+}
+
+async function buscarDocente(){
+    let cc = $('#cc').val()
+    let docente;
+    await $.ajax({
+        type: "get",
+        url: "/docentes/search/cc",
+        data: {cc},
+        success: function(r){
+            docente = r.docente;
+        },
+        error: function (e) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Se produjo un error en la búsqueda de docente por cédula',
+                icon: 'error',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#8c141b'
+            });
+            console.log("error: ", e);
+        }
+    })
+    if(docente){
+        let nombreDocente = docente.lastname +' '+docente.name;
+        Swal.fire({
+            html: 'Se encontró al docente: <b>'+nombreDocente+'</b> con la cédula: '+ cc,
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#8c141b'
+        });
+        let docentes;
+        await $.ajax({
+            type: "get",
+            url: "/docentes/search",
+            data: {},
+            success: function(r){
+                docentes = r.docentes;
+            },
+            error: function (e) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Se produjo un error en la búsqueda de los docentes',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#8c141b'
+                });
+                console.log("error: ", e);
+            }
+        });
+        option = docentes.map((obj)=>{
+            let opt = '<option value="'+obj._id+'">'+obj.lastname+' '+obj.name+'</option>'
+            return opt;
+        })
+        $('#select_docente').append(option)
+        $('#select_docente option[value="'+docente._id+'"]').prop('selected', true)
+        $('#facultad option[value="todos"]').prop('selected', true)
+        $('#programa option[value="todos"]').prop('selected', true)
+    }
+}
+
+function checkGenerarInforme(){
+    //$('#startDate1').attr('disabled', true)
+    //$('#startDate1').attr('max', new Date().toISOString().split('T')[0])
+    let switch_1 = $('#switch_1').val();
+    let switch_2 = $('#switch_2').val();
+    let switch_3 = $('#switch_3').val();
+    if(switch_1=='0'&&switch_2=='0'&&switch_3=='0'){
+        Swal.fire({
+            html: 'Estás seguro de Generar un documento con todas las solicitudes existentes? (esto podría tardar bastante tiempo)',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Eliminar',
+            confirmButtonColor: '#8c141b',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                //$('#submitButton').click()
+            }
+        })
+    }else{
+        //$('#submitButton').click()
+    }
+    //$('#submitButton').click()
 }
 
 //DataTables

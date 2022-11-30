@@ -79,7 +79,7 @@ const PublicationSchema = Schema({
 
     estado: {
         type: String,
-        enum: ['Pendiente por revisión','Revisado', 'Rechazado','No aprobado por CAP','Aprobado'],
+        enum: ['Pendiente por revisión','Revisado', 'Editar', 'Rechazado','No aprobado por CAP','Aprobado'],
         default: 'Pendiente por revisión',
     },
 
