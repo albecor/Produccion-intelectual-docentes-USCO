@@ -730,7 +730,7 @@ publicationsCtrl.GenerarInforme = async (req,res) =>{
                 rownombre.getCell(3).value = vigencia;
                 rownombre.getCell(4).value = docente.facultad;
                 rownombre.getCell(5).value = docente.programa;
-                rownombre.getCell(7).value = docente.identification;
+                rownombre.getCell(6).value = docente.identification;
                 rownombre.getCell(8).value = docente.name + ' ' + docente.lastname;
                 rownombre.getCell(9).value = obj.modalidad;
                 rownombre.getCell(10).value = obj.name;
