@@ -1045,12 +1045,12 @@ function checkGenerarInforme(){
             html: 'Estás seguro de Generar un documento con todas las solicitudes existentes? (esto podría tardar bastante tiempo)',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Eliminar',
+            confirmButtonText: 'Descargar',
             confirmButtonColor: '#8c141b',
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                //$('#submitButton').click()
+                $('#submitButton').click()
             }
         })
     }else{

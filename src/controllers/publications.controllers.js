@@ -760,7 +760,7 @@ publicationsCtrl.GenerarInforme = async (req,res) =>{
                 throw error;
             }
             res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            res.setHeader('Content-Disposition', 'attachment; filename=Informe.xlsx');
+            res.setHeader('Content-Disposition', 'attachment; filename=Informe_Producción_Académica_USCO.xlsx');
             res.send(data);
             })
         })
