@@ -30,6 +30,7 @@ publicationsCtrl.sizeVerification = async (req,res) => {
     const storage = multer.diskStorage({
         destination: (req,file, cb)=>{
             filePath = path.join(__dirname , '../files')
+            console.log('filePath:' ,filePath)
             cb(null,filePath)
         },
         filename: (req, file, cb, filename) => {
