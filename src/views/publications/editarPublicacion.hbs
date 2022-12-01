@@ -81,7 +81,6 @@
                         <input type="text" class="form-control" name="ISSN" placeholder="ISSN" value="{{publication.ISSN}}" required>
                     </div>
                 </div>
-                {{/if}}
                 <div class="row g-3 align-items-center mb-2" id="row_7">
                     <div class="col-auto">
                         <label for="check" class="col-form-label">Para la publicación del artículo, se invirtieron recursos económicos de la Universidad</label>
@@ -101,6 +100,301 @@
                         <input type="text" class="form-control" name="nombre_proyecto_investigacion" value="{{publication.nombre_proyecto_investigacion}}">
                     </div>
                 </div>
+                {{/if}}
+                {{#if videos}}
+                <div class="form-group row">
+                    <div class="col mb-2">
+                        <label for="name" id="name_label">Título del material</label>
+                        <input id="name" type="text" class="form-control" name="name" placeholder="Escribe el título del material" value="{{publication.name}}" required>
+                    </div>
+                    <div class="col mb-2">
+                        <label for="date">Fecha de Publicación</label>
+                        <input id="datePublication" type="date" class="form-control" name="fecha_publicacion" value="{{publication.fecha_publicacion}}" required>
+                    </div>
+                </div>
+                <div class="form-group row" id="row_1">
+                    <div class="col-6 mb-2" id="modalidad">                     
+                        <select class="form-select mr-sm-2" name="modalidad" id="select_modalidad"
+                            onchange="PublicationsList(this);" required>
+                            <option disabled value="">-- Modalidad --</option>
+                            <option value="{{publication.modalidad}}" selected>{{publication.modalidad}}</option>
+                            {{#json}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/json}}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row" id="row_3">
+                    <div class="col mb-2" id="tipo">
+                        <select class="form-select mr-sm-2" name="tipo" id="select_tipo" required="">
+                            <option disabled value="">-- Impacto --</option>
+                            <option value="{{publication.tipo}}">{{publication.tipo}}</option>
+                            {{#modalidad.tipo}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/modalidad.tipo}}
+                        </select>
+                    </div>
+                    <div class="col" id="categoria">
+                        <select class="form-select mr-sm-2" name="categoria" id="select_categoria" required>
+                            <option disabled value="">Finalidad</option>
+                            <option value="{{publication.categoria}}">{{publication.categoria}}</option>
+                            {{#modalidad.categoria}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/modalidad.categoria}}
+                        </select>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if libro}}
+                <div class="form-group row">
+                    <div class="col mb-2">
+                        <label for="name" id="name_label">Título del Material</label>
+                        <input id="name" type="text" class="form-control" name="name" placeholder="Escribe el título del libro" value="{{publication.name}}" required>
+                    </div>
+                    <div class="col mb-2">
+                        <label for="date">Fecha de Publicación</label>
+                        <input id="datePublication" type="date" class="form-control" name="fecha_publicacion" value="{{publication.fecha_publicacion}}" required>
+                    </div>
+                </div>
+                <div class="form-group row" id="row_1">
+                    <div class="col mb-2" id="modalidad">                     
+                        <select class="form-select mr-sm-2" name="modalidad" id="select_modalidad"
+                            onchange="PublicationsList(this);" required>
+                            <option disabled value="">-- Modalidad --</option>
+                            <option value="{{publication.modalidad}}" selected>{{publication.modalidad}}</option>
+                            {{#json}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/json}}
+                        </select>
+                    </div>
+                    <div class="col mb-2" id="tipo">
+                        <select class="form-select mr-sm-2" name="tipo" id="select_tipo" required>
+                            <option disabled value="">-- Tipo --</option>
+                            <option value="{{publication.tipo}}">{{publication.tipo}}</option>
+                            {{#modalidad.tipo}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/modalidad.tipo}}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row mb-2" id="row_3">
+                    <div class="col">
+                        <input type="text" class="form-control" name="ISSN" placeholder="ISBN" value="{{publication.ISSN}}" required>
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" name="editorial" placeholder="Editorial" value="{{publication.editorial}}" required>
+                    </div>
+                </div>
+                <div class="form-group row mb-2" id="row_4">
+                    <div class="col-6 mb-2" id="row_2">
+                        <input id="URL" type="url" class="form-control" name="URL" placeholder="Dirección URL Editorial" value="{{publication.URL}}" required>
+                    </div>
+                </div>
+                <div class="col-6 mb-2" id="row_5">
+                    <label for="name" id="name_label">Nombre del proyecto de Invesigación del cual se genera el material, sí aplica</label>
+                    <input type="text" class="form-control" name="nombre_proyecto_investigacion" value="{{publication.nombre_proyecto_investigacion}}">
+                </div>
+                {{/if}}
+                {{#if premio}}
+                <div class="form-group row">
+                    <div class="col mb-2">
+                        <label for="name" id="name_label">Título del premio</label>
+                        <input id="name" type="text" class="form-control" name="name" placeholder="Escribe el título del premio" value="{{publication.name}}" required>
+                    </div>
+                    <div class="col mb-2">
+                        <label for="date">Fecha del evento</label>
+                        <input id="datePublication" type="date" class="form-control" name="fecha_publicacion" value="{{publication.fecha_publicacion}}" required>
+                    </div>
+                </div>
+                <div class="form-group row" id="row_1">
+                    <div class="col mb-2" id="modalidad">                     
+                        <select class="form-select mr-sm-2" name="modalidad" id="select_modalidad"
+                            onchange="PublicationsList(this);" required>
+                            <option disabled value="">-- Modalidad --</option>
+                            <option value="{{publication.modalidad}}" selected>{{publication.modalidad}}</option>
+                            {{#json}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/json}}
+                        </select>
+                    </div>
+                    <div class="col mb-2" id="tipo">
+                        <select class="form-select mr-sm-2" name="tipo" id="select_tipo" required>
+                            <option disabled value="">-- Tipo --</option>
+                            <option value="{{publication.tipo}}">{{publication.tipo}}</option>
+                            {{#modalidad.tipo}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/modalidad.tipo}}
+                        </select>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if patente}}
+                <div class="form-group row">
+                    <div class="col mb-2">
+                        <label for="name" id="name_label">Título de la patente</label>
+                        <input id="name" type="text" class="form-control" name="name" placeholder="Escribe el título de la patente" value="{{publication.name}}" required>
+                    </div>
+                    <div class="col mb-2">
+                        <label for="date">Fecha de publicación</label>
+                        <input id="datePublication" type="date" class="form-control" name="fecha_publicacion" value="{{publication.fecha_publicacion}}" required>
+                    </div>
+                </div>
+                <div class="form-group row" id="row_1">
+                    <div class="col-6 mb-2" id="modalidad">                     
+                        <select class="form-select mr-sm-2" name="modalidad" id="select_modalidad"
+                            onchange="PublicationsList(this);" required>
+                            <option disabled value="">-- Modalidad --</option>
+                            <option value="{{publication.modalidad}}" selected>{{publication.modalidad}}</option>
+                            {{#json}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/json}}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6 mb-2" id="row_5">
+                    <label for="name" id="name_label">Nombre del proyecto de Invesigación del cual se genera el material, sí aplica</label>
+                    <input type="text" class="form-control" name="nombre_proyecto_investigacion" value="{{publication.nombre_proyecto_investigacion}}">
+                </div>
+                {{/if}}
+                {{#if obra}}
+                <div class="form-group row">
+                    <div class="col mb-2">
+                        <label for="name" id="name_label">Título de la obra</label>
+                        <input id="name" type="text" class="form-control" name="name" placeholder="Escribe el título de la traducción" value="{{publication.name}}" required>
+                    </div>
+                    <div class="col mb-2">
+                        <label for="date">Fecha de publicación</label>
+                        <input id="datePublication" type="date" class="form-control" name="fecha_publicacion" value="{{publication.fecha_publicacion}}" required>
+                    </div>
+                </div>
+                <div class="form-group row" id="row_1">
+                    <div class="col-6 mb-2" id="modalidad">                     
+                        <select class="form-select mr-sm-2" name="modalidad" id="select_modalidad"
+                            onchange="PublicationsList(this);" required>
+                            <option disabled value="">-- Modalidad --</option>
+                            <option value="{{publication.modalidad}}" selected>{{publication.modalidad}}</option>
+                            {{#json}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/json}}
+                        </select>
+                    </div>
+                    <div class="col mb-2" id="tipo">
+                        <select class="form-select mr-sm-2" name="tipo" id="select_tipo" required>
+                            <option disabled value="">Tipo</option>
+                            <option value="{{publication.tipo}}">{{publication.tipo}}</option>
+                            {{#modalidad.tipo}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/modalidad.tipo}}
+                        </select>
+                    </div>
+                    <div class="col" id="categoria">
+                        <select class="form-select mr-sm-2" name="categoria" id="select_categoria" required>
+                            <option disabled value="">Categoría</option>
+                            <option value="{{publication.categoria}}">{{publication.categoria}}</option>
+                            {{#modalidad.categoria}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/modalidad.categoria}}
+                        </select>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if PTec}}
+                <div class="form-group row">
+                    <div class="col mb-2">
+                        <label for="name" id="name_label">Título de la producción técnica</label>
+                        <input id="name" type="text" class="form-control" name="name" placeholder="Escribe el título de la traducción" value="{{publication.name}}" required>
+                    </div>
+                    <div class="col mb-2">
+                        <label for="date">Fecha de publicación</label>
+                        <input id="datePublication" type="date" class="form-control" name="fecha_publicacion" value="{{publication.fecha_publicacion}}" required>
+                    </div>
+                </div>
+                <div class="form-group row" id="row_1">
+                    <div class="col-6 mb-2" id="modalidad">                     
+                        <select class="form-select mr-sm-2" name="modalidad" id="select_modalidad"
+                            onchange="PublicationsList(this);" required>
+                            <option disabled value="">-- Modalidad --</option>
+                            <option value="{{publication.modalidad}}" selected>{{publication.modalidad}}</option>
+                            {{#json}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/json}}
+                        </select>
+                    </div>
+                    <div class="col mb-2" id="tipo">
+                        <select class="form-select mr-sm-2" name="tipo" id="select_tipo" required>
+                            <option disabled value="">Tipo</option>
+                            <option value="{{publication.tipo}}">{{publication.tipo}}</option>
+                            {{#modalidad.tipo}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/modalidad.tipo}}
+                        </select>
+                    </div>
+                </div>
+                {{/if}}
+                {{#if ponencia}}
+                <div class="form-group row">
+                    <div class="col mb-2">
+                        <label for="name" id="name_label">Título de la ponencia</label>
+                        <input id="name" type="text" class="form-control" name="name" placeholder="Escribe el título de la traducción" value="{{publication.name}}" required>
+                    </div>
+                    <div class="col mb-2">
+                        <label for="date">Fecha de publicación</label>
+                        <input id="datePublication" type="date" class="form-control" name="fecha_publicacion" value="{{publication.fecha_publicacion}}" required>
+                    </div>
+                </div>
+                <div class="form-group row" id="row_1">
+                    <div class="col-6 mb-2" id="modalidad">                     
+                        <select class="form-select mr-sm-2" name="modalidad" id="select_modalidad"
+                            onchange="PublicationsList(this);" required>
+                            <option disabled value="">-- Modalidad --</option>
+                            <option value="{{publication.modalidad}}" selected>{{publication.modalidad}}</option>
+                            {{#json}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/json}}
+                        </select>
+                    </div>
+                    <div class="col mb-2" id="tipo">
+                        <select class="form-select mr-sm-2" name="tipo" id="select_tipo" required>
+                            <option disabled value="">Tipo</option>
+                            <option value="{{publication.tipo}}">{{publication.tipo}}</option>
+                            {{#modalidad.tipo}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/modalidad.tipo}}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6 mb-2" id="row_5">
+                    <label for="name" id="name_label">Nombre del proyecto de Invesigación del cual se genera el material, sí aplica</label>
+                    <input type="text" class="form-control" name="nombre_proyecto_investigacion" value="{{publication.nombre_proyecto_investigacion}}">
+                </div>
+                {{/if}}
+
+                {{#if otras}}
+                <div class="form-group row">
+                    <div class="col mb-2">
+                        <label for="name" id="name_label">Título del Material</label>
+                        <input id="name" type="text" class="form-control" name="name" placeholder="Escribe el título de la traducción" value="{{publication.name}}" required>
+                    </div>
+                    <div class="col mb-2">
+                        <label for="date">Fecha de publicación</label>
+                        <input id="datePublication" type="date" class="form-control" name="fecha_publicacion" value="{{publication.fecha_publicacion}}" required>
+                    </div>
+                </div>
+                <div class="form-group row" id="row_1">
+                    <div class="col-6 mb-2" id="modalidad">                     
+                        <select class="form-select mr-sm-2" name="modalidad" id="select_modalidad"
+                            onchange="PublicationsList(this);" required>
+                            <option disabled value="">-- Modalidad --</option>
+                            <option value="{{publication.modalidad}}" selected>{{publication.modalidad}}</option>
+                            {{#json}}
+                            <option value="{{this}}">{{this}}</option>
+                            {{/json}}
+                        </select>
+                    </div>
+                </div>
+                {{/if}}
+                <!-- --------------------------------------------------------------------- -->
+
                 <div class="row g-3 align-items-center mb-2" id="row_10">
                     <div class="col-auto">
                         <label for="check" class="col-form-label">El material presentado fue tenido en cuenta para cambio de categoría en el escalafón docente:</label>
@@ -114,6 +408,13 @@
                         <label class="form-check-label mx-0" for="inlineRadio2">NO</label>
                     </div>
                 </div>
+                {{#if articulo}}
+                {{else}}
+                <div class="col-md-5 mb-2" id="file">
+                    <label for="upFile" id="name_label">Archivo para Revisión</label>
+                    <input type="file" class="form-control mr-sm-2 p-1" id="uploadFile" name="upFile" required>
+                </div>
+                {{/if}}
                 <div class="row mb-2" id="autores">
                     <input type="number" id="counter" class="d-none" value="{{numero_autores}}">
                     <label for="numero_autores">Número de Autores</label>

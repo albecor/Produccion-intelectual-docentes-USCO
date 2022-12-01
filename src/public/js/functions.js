@@ -283,6 +283,7 @@ function resetRows(){
     $('#tipo').remove();
     $('#row_2').remove();
     $('#row_3').remove();
+    $('#row_3').remove();
     $('#row_4').remove();
     $('#row_5').remove();
     $('#row_6').remove();

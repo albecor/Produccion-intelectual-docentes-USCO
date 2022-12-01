@@ -176,7 +176,9 @@ publicationsCtrl.deleteMyPublication = async (req,res) => {
 
 publicationsCtrl.renderEditarPublicacion = async (req, res) => {
     let {id} = req.params;
-    let articulo = false, videos = false, libro = false, premio = false, PTec = false, obra = false, ponencia = false, capitulo = false;
+    let articulo = false, videos = false, libro = false, 
+    premio = false, patente=false, PTec = false, obra = false,
+    ponencia = false, otras = false;
     let publication = await Publication.findById(id).lean()
     switch (publication.modalidad) {
         case 'Artículo de Revista':
@@ -191,6 +193,9 @@ publicationsCtrl.renderEditarPublicacion = async (req, res) => {
         case 'Premio':
             premio = true
             break;
+        case 'Patentes':
+            patente = true
+            break;
         case 'Producción técnica':
             PTec = true;
             break;
@@ -201,8 +206,11 @@ publicationsCtrl.renderEditarPublicacion = async (req, res) => {
             ponencia = true;
             break;
         case 'Capítulo de Libro':
-            capitulo = true;
+            libro = true;
             break;
+        default:
+            otras = true;
+        break;
     }
     publication['createdAt'] = moment(publication.createdAt).utc().format('DD/MM/YYYY');
     publication['fecha_publicacion'] = moment(publication.fecha_publicacion).utc().format('YYYY-MM-DD');
@@ -224,7 +232,7 @@ publicationsCtrl.renderEditarPublicacion = async (req, res) => {
     let modalidad = modalidades.find(x => x.name === publication.modalidad)
     res.render('publications/editarPublicacion',{
         publication,docente,autores,Docente:true,json,modalidad,numero_autores,
-        articulo, videos, libro, premio, PTec, obra, ponencia, capitulo
+        articulo, videos, libro, premio, patente, PTec, obra, ponencia,otras
     })
 };
 
