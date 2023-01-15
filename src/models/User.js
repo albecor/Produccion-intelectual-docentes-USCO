@@ -2,7 +2,6 @@ const {Schema, model} = require('mongoose');
 bcrypt = require('bcryptjs');
 
 const UserSchema = Schema({
-/////////////// Información personal ///////////////////
     identification_type: {
         type: String
     },
@@ -21,14 +20,12 @@ const UserSchema = Schema({
     },
     sec_lastname: {
         type: String
-    }, 
-
+    },
     role: {
         type: String,   
         required: true,
         enum: ["Admin", "Funcionario", "Docente"]
     },
-
     email: {
         type: String,
         required: true,        
@@ -38,20 +35,12 @@ const UserSchema = Schema({
         type: String,
         required: true,                
     },
-
     facultad: {type:String},
-
     programa: {type:String},
-
     vinculacion : {type:Boolean},
-
     investigacion: {type:Boolean},
-
     nombreGrupo: {type:String},
-    
     lineaInvestigacion: {type:String},
-
-////////////////////////////////////////////
     last_login_date: {
         type: Date,
         default: Date.now()

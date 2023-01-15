@@ -4,13 +4,13 @@ const Publication = require('../models/publications')
 const User = require('../models/User')
 const Autor = require('../models/autor')
 const ISSN = require('../models/ISSN')
+const ISBN = require('../models/ISBN')
 const path = require('path');
 const multer = require('multer');
 const uuid = require('uuid/v4');
 const fs = require('fs');
 const moment = require('moment');
 var {Types} = require('mongoose');
-const { query } = require('express');
 let {ObjectId} = Types
 const nodemailer = require("nodemailer");
 
@@ -55,7 +55,6 @@ publicationsCtrl.sizeVerification = async (req,res) => {
 publicationsCtrl.AddPublication = async (req, res) => {
     let {
         name,
-        datePublication,
         modalidad,
         categoria,
         tipo,
@@ -63,7 +62,7 @@ publicationsCtrl.AddPublication = async (req, res) => {
         tiempo_revista,
         fecha_recepcion_revista,
         fecha_publicacion,
-        ISSN,
+        ISXN,
         recursos_U,
         nombre_proyecto_investigacion,
         editorial,
@@ -79,11 +78,12 @@ publicationsCtrl.AddPublication = async (req, res) => {
     let id_Docente = req.user.id;
     var _id = ObjectId();
     let estado =  'Pendiente por revisión';
+    let fecha_solicitud = new Date();
+    fecha_solicitud.setMinutes(fecha_solicitud.getMinutes() - fecha_solicitud.getTimezoneOffset())
     const newPublication = new Publication({
         _id,
         id_Docente,
         name,
-        datePublication,
         modalidad,
         categoria,
         tipo,
@@ -91,7 +91,8 @@ publicationsCtrl.AddPublication = async (req, res) => {
         tiempo_revista,
         fecha_recepcion_revista,
         fecha_publicacion,
-        ISSN,
+        fecha_solicitud,
+        ISXN,
         recursos_U,
         nombre_proyecto_investigacion,
         editorial,
@@ -260,7 +261,6 @@ publicationsCtrl.editarPublicacion = async (req,res) => {
             let {
                 id,
                 name,
-                datePublication,
                 modalidad,
                 categoria,
                 tipo,
@@ -268,7 +268,7 @@ publicationsCtrl.editarPublicacion = async (req,res) => {
                 tiempo_revista,
                 fecha_recepcion_revista,
                 fecha_publicacion,
-                ISSN,
+                ISXN,
                 recursos_U,
                 nombre_proyecto_investigacion,
                 editorial,
@@ -300,10 +300,11 @@ publicationsCtrl.editarPublicacion = async (req,res) => {
             }
             let id_Docente = req.user.id;
             let estado =  'Pendiente por revisión';
+            let fecha_solicitud = new Date();
+            fecha_solicitud.setMinutes(fecha_solicitud.getMinutes() - fecha_solicitud.getTimezoneOffset())
             await Publication.findByIdAndUpdate(id,{
                 id_Docente,
                 name,
-                datePublication,
                 modalidad,
                 categoria,
                 tipo,
@@ -311,7 +312,8 @@ publicationsCtrl.editarPublicacion = async (req,res) => {
                 tiempo_revista,
                 fecha_recepcion_revista,
                 fecha_publicacion,
-                ISSN,
+                fecha_solicitud,
+                ISXN,
                 recursos_U,
                 nombre_proyecto_investigacion,
                 editorial,
@@ -358,7 +360,7 @@ publicationsCtrl.renderAuditFn = async (req, res) => {
 
 publicationsCtrl.renderAuditFnId = async (req, res) => {
     let {id} = req.params;
-    let articulo = false, videos = false, libro = false, premio = false, PTec = false, obra = false, ponencia = false, capitulo = false;
+    let articulo = false, videos = false, libro = false, premio = false, PTec = false, obra = false, ponencia = false, capitulo = false, otros = false;
     let publication = await Publication.findById(id).lean()
     switch (publication.modalidad) {
         case 'Artículo de Revista':
@@ -385,6 +387,9 @@ publicationsCtrl.renderAuditFnId = async (req, res) => {
         case 'Capítulo de Libro':
             capitulo = true;
             break;
+        default:
+            otros = true;
+            break
     }
     publication['createdAt'] = moment(publication.createdAt).utc().format('DD/MM/YYYY');
     publication['fecha_publicacion'] = moment(publication.fecha_publicacion).utc().format('DD/MM/YYYY');
@@ -393,7 +398,7 @@ publicationsCtrl.renderAuditFnId = async (req, res) => {
     let autores = await Autor.find({id_publication:id}).lean()
     res.render('publications/FnOne',{
         publication,docente,autores,Funcionario:true,
-        articulo, videos, libro, premio, PTec, obra, ponencia, capitulo
+        articulo, videos, libro, premio, PTec, obra, ponencia, capitulo,otros
     })
 };
 
@@ -587,6 +592,8 @@ publicationsCtrl.dowloadFile = async (req, res) => {
     res.download(path.join(__dirname , '../files/'+filename),originalname)
 }
 
+//ISSN ISBN
+
 publicationsCtrl.renderLoadISSN = async (req,res) => {
     res.render('publications/loadissn', {Admin:true})
 }
@@ -599,7 +606,6 @@ publicationsCtrl.renderISSN = async (req,res) => {
 }
 
 publicationsCtrl.loadISSN = async (req,res) => {
-    const mongoose = require('mongoose');
     let storage = multer.diskStorage({
         destination: function (req, file, cb) {
             filePath = path.join(__dirname , '../public/xlsx')
@@ -623,9 +629,7 @@ publicationsCtrl.loadISSN = async (req,res) => {
         var workbook = XLSX.readFile(fileWB);
         var sheet_name_list = workbook.SheetNames;
         var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
-        let data = [];
         xlData.map(async(doc,i,a)=>{
-            let lengthDOC = Object.keys(doc).length
             let issn_impreso = doc['ISSN IMPRESO']
             if(!issn_impreso)issn_impreso = '---'
             let issn_electronico = doc['ISSN ELECTRÓNICO']
@@ -636,7 +640,7 @@ publicationsCtrl.loadISSN = async (req,res) => {
             let institucion_editora = doc['INSTITUCIONES EDITORAS']
             if(!institucion_editora)institucion_editora = '---'
             let categoria = doc['CATEGORÍA']
-            let issn = await ISSN.findOne({ vigencia, $or: [ { issn_impreso }, { issn_electronico }, {issn_L} ] }).lean()
+            let issn = await ISSN.findOne({ vigencia, $or: [ { issn_impreso }, { issn_electronico }, {issn_L} ] })
             if(!issn){
                 let newISSN = new ISSN({
                     titulo,
@@ -661,132 +665,114 @@ publicationsCtrl.loadISSN = async (req,res) => {
 
 publicationsCtrl.checkISSN = async (req, res) => {
     let {id} = req.query;
-    let {ISSN:query,fecha_publicacion} = await Publication.findById(id).lean()
-    let vigencia = moment(fecha_publicacion).year()
+    let {ISXN:query,fecha_publicacion} = await Publication.findById(id).lean()
+    let vigencia = moment(fecha_publicacion).utc().year()
     let issn = await ISSN.findOne({ vigencia,$or: [ { issn_impreso: query }, { issn_electronico: query }, {issn_L:query} ] }).lean()
     let validation = true;
     if(!issn)validation = false;
     res.send({validation})
 }
 
-publicationsCtrl.renderRechazadas = async (req, res) => {
-    let publications = await Publication.find({$or: [{estado:'Rechazado'}, {estado:'No aprobado por CAP'}]}).lean().sort({createdAt:1});
-    for (let i in publications) {
-        let id = publications[i].id_Docente;
-        if(id){
-            let {name, lastname, sec_lastname, facultad, programa} = await User.findById(id).lean();
-            publications[i]['docente']=name+' '+' '+lastname+' '+sec_lastname;
-            publications[i]['facultad']=facultad;
-            publications[i]['programa']=programa;
+publicationsCtrl.renderLoadISBN = async (req,res) => {
+    res.render('publications/loadisbn', {Admin:true})
+}
+
+publicationsCtrl.renderISBN = async (req,res) => {
+    let isbn = await ISBN.find().sort({vigencia:-1}).lean()
+    isbn.map((obj,i)=>{
+        obj['index'] = i+1
+    })
+    res.render('publications/isbn', {
+        isbn,Admin:true
+    })
+}
+
+publicationsCtrl.loadISBN = async (req,res) => {
+    let storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            filePath = path.join(__dirname , '../public/xlsx')
+            cb(null, filePath)
+        },
+        filename: function (req, file, cb) {
+            cb(null, 'isbn.xlsx')
         }
-        publications[i]['fecha_publicacion'] = moment(publications[i].fecha_publicacion).utc().format('DD/MM/YYYY');
-        publications[i]['index']=parseInt(i)+1;
-    };
-
-    res.render('publications/rechazadas',{publications,Funcionario:true})
-};
-
-publicationsCtrl.renderGenerarInforme = (req,res) =>{
-    res.render('publications/generarInforme', {Funcionario:true})
-}
-
-publicationsCtrl.searchDocentes = async (req,res) =>{
-    let {value} = req.query;
-    let docentes = await User.find({role:'Docente'}).lean()
-    if(value && value != 'todos'){
-        docentes = await User.find({role:'Docente',facultad:value}).lean()
-    }
-    res.send({docentes})
-}
-
-publicationsCtrl.searchDocenteCC = async (req,res)=>{
-    let {cc} = req.query;
-    let docente = await User.findOne({identification:cc,role:'Docente'}).lean()
-    res.send({docente})
-}
-
-publicationsCtrl.GenerarInforme = async (req,res) =>{
-    let {switch_1, switch_2, switch_3} = req.body;
-    switch_1 = switchToBoolean(switch_1)
-    switch_2 = switchToBoolean(switch_2)
-    switch_3 = switchToBoolean(switch_3)
-    if(!switch_1&&!switch_2&&!switch_3){
+    })
+    
+    let upload = multer({ storage }).single("file")
+    upload(req, res, async (err) => {
+        if(err){
+            console.log(err)
+        }else{
         var XLSX = require('xlsx');
-        var Excel = require('exceljs');
         const path = require('path');
-        var workbook = XLSX.readFile('src/public/xlsx/informe.xlsx');
-        var sheet_name_list = workbook.SheetNames;
         dirWB = path.dirname(__dirname)
-        fileWB = path.join(dirWB + '/public/xlsx/informe.xlsx');
-        fileWB2 = path.join(dirWB + '/public/xlsx/informe2.xlsx');
-        var workbookw = new Excel.Workbook();
-        await workbookw.xlsx.readFile(fileWB)
-        .then(async function () {
-            var worksheet1 = workbookw.getWorksheet(sheet_name_list[0]);
-            let publications = await Publication.find().lean()
-            for(let i in publications){
-                obj = publications[i]
-                index = parseInt(i)+1;
-                row = parseInt(i)+2;
-                rownombre = worksheet1.getRow(row);
-                let vigencia = parseInt(moment(obj.createdAt).utc().format('YYYY'));
-                docente = await User.findById(obj.id_Docente).lean()
-                let issn = await ISSN.findOne({ vigencia,$or: [ { issn_impreso: obj.issn }, { issn_electronico: obj.issn }, {issn_L:obj.issn} ] }).lean()
-                let autores = await Autor.find({id_publication:obj._id}).lean()
-                rownombre.getCell(1).value = index;
-                rownombre.getCell(2).value = moment(obj.createdAt).utc().format('DD/MM/YYYY');
-                rownombre.getCell(3).value = vigencia;
-                rownombre.getCell(4).value = docente.facultad;
-                rownombre.getCell(5).value = docente.programa;
-                rownombre.getCell(6).value = docente.identification;
-                rownombre.getCell(8).value = docente.name + ' ' + docente.lastname;
-                rownombre.getCell(9).value = obj.modalidad;
-                rownombre.getCell(10).value = obj.name;
-                //rownombre.getCell(11).value = traduccion;
-                rownombre.getCell(12).value = obj.nombre_revista;
-                rownombre.getCell(13).value = obj.editorial;
-                rownombre.getCell(14).value = moment(obj.fecha_publicacion).utc().format('DD/MM/YYYY');
-                rownombre.getCell(15).value = obj.ISSN;
-                rownombre.getCell(16).value = autores.length+1
-                let autores_print = '';
-                autores.map((x,i) =>{
-                    i = parseInt(i)
-                    if(i >0)autores_print += ';'
-                    autores_print += x.nombre
+        fileWB = path.join(dirWB + '/public/xlsx/isbn.xlsx');
+        var workbook = XLSX.readFile(fileWB);
+        var sheet_name_list = workbook.SheetNames;
+        var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+        console.log(xlData)
+        xlData.map(async(doc,i,a)=>{
+            let isbn = doc['No. SERIAL']
+            let impreso = SiToBoolean(doc['IMPRESO'])
+            let digital = SiToBoolean(doc['DIGITAL'])
+            let titulo = doc['TÍTULO']
+            let editorial = doc['EDITORIAL']
+            if(!editorial)editorial = '---'
+            let procedencia = doc['PROCEDENCIA']
+            if(!procedencia)procedencia = '---'
+            let editor = doc['EDITOR']
+            if(!editor)editor = '---'
+            let yyyy_publicacion = parseInt(doc['AÑO DE PUBLICACIÓN'])
+            let isbnFound = await ISBN.findOne({ isbn })
+            if(!isbnFound){
+                let newISBN = new ISBN({
+                    isbn,
+                    titulo,
+                    impreso,
+                    digital,
+                    editorial,
+                    procedencia,
+                    editor,
+                    yyyy_publicacion
                 })
-                rownombre.getCell(17).value = autores_print;
-                let categoria;
-                if(obj.categoria != 'A1'&& obj.categoria != 'A2' && obj.categoria!= 'B' && obj.categoria != 'C'){
-                    categoria= 'N/A'
-                }else{
-                    categoria= obj.categoria;
-                }
-                rownombre.getCell(18).value = categoria;
+                newISBN.save((err)=>{
+                    if(err){
+                        console.log(err)
+                    }
+                })
             }
-            await workbookw.xlsx.writeFile(fileWB2)
-            
-            
         })
-        .then(()=>{
-            const fs = require("fs");
-            fs.readFile(fileWB2, (error, data) => {
-            if(error) {
-                throw error;
-            }
-            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            res.setHeader('Content-Disposition', 'attachment; filename=Informe_Producción_Académica_USCO.xlsx');
-            res.send(data);
-            })
-        })
-        
-    }
+        res.redirect('/view/isbn');
+        }
+    });
 }
 
-function switchToBoolean(swtch){
-    if(swtch == '1'){
-        return true
-    }else{
-        return false
+publicationsCtrl.checkISBN = async (req, res) => {
+    let {id} = req.query;
+    let {ISXN:query,fecha_publicacion} = await Publication.findById(id).lean()
+    let vigencia = moment(fecha_publicacion).utc().year()
+    let issn = await ISSN.findOne({ vigencia,$or: [ { issn_impreso: query }, { issn_electronico: query }, {issn_L:query} ] }).lean()
+    let validation = true;
+    if(!issn)validation = false;
+    res.send({validation})
+}
+
+function SiToBoolean(data){
+    switch (data) {
+        case 'si':
+            return true
+        case 'SI':
+            return true
+        case 'Si':
+            return true
+        case 'true':
+            return true
+        case 'True':
+            return true
+        case 'TRUE':
+            return true
+        default:
+            return false
     }
 }
 

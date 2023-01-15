@@ -27,14 +27,13 @@ const {
     SearchPublication,
     renderRequest,
     dowloadFile,
-    renderGenerarInforme,
-    searchDocentes,
-    searchDocenteCC,
-    GenerarInforme,
 
     renderLoadISSN,
+    loadISSN,
     renderISSN,
-    loadISSN
+    renderLoadISBN,
+    loadISBN,
+    renderISBN
 } = require('../controllers/publications.controllers');
 
 //Docente
@@ -78,21 +77,21 @@ router.get('/issn/check', isAuthenticated, isFuncionario, checkISSN)
 
 router.post('/publications/reviewed',isAuthenticated, isFuncionario, primeraRevision);
 
-router.get('/generar/informe', isAuthenticated, isFuncionario, renderGenerarInforme);
-
-router.get('/docentes/search',isAuthenticated, isFuncionario, searchDocentes);
-
-router.get('/docentes/search/cc',isAuthenticated, isFuncionario, searchDocenteCC);
-
-router.post('/generar/informe', isAuthenticated, isFuncionario, GenerarInforme);
-
 
 router.get('/file/download/:id', isAuthenticated, dowloadFile);
+
+//ISSN ISBN
 
 router.get('/load/issn', isAuthenticated, isAdmin, renderLoadISSN)
 
 router.post('/load/issn', isAuthenticated, isAdmin, loadISSN)
 
 router.get('/view/issn', isAuthenticated, isAdmin, renderISSN)
+
+router.get('/load/isbn', isAuthenticated, isAdmin, renderLoadISBN)
+
+router.post('/load/isbn', isAuthenticated, isAdmin, loadISBN)
+
+router.get('/view/isbn', isAuthenticated, isAdmin, renderISBN)
 
 module.exports = router;

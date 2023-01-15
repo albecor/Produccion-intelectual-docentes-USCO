@@ -5,7 +5,6 @@ let PID_APP_DATABASE='PID_DB'
 
 const MONGODB_URI = `mongodb://${PID_APP_HOST}/${PID_APP_DATABASE}`;
 
-//mongoose.set('useFindAndModify', false);
 mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true

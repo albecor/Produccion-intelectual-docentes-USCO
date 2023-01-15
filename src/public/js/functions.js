@@ -780,30 +780,34 @@ async function switch_generarInforme_1(){
         html = '<div class="col-4">'
         html += '<h6 class="fw-bold">Estado de las Solicitudes</h6>'
         html += '<div class="form-check">'
-        html += '<input class="form-check-input custom-control-input" type="checkbox" name="estado_1" value="Pendiente por revisión">'
-        html += '<label class="form-check-label" for="inlineCheckbox1">Pendiente por revisión</label>'
+        html += '<input class="form-check-input custom-control-input" type="checkbox" name="estado_1" value="Pendiente por revisión" checked>'
+        html += '<label class="form-check-label">Pendiente por revisión</label>'
         html += '</div>'
         html += '<div class="form-check">'
-        html += '<input class="form-check-input custom-control-input" style="" type="checkbox" name="estado_2" value="Revisado">'
-        html += '<label class="form-check-label" for="inlineCheckbox2">Revisado</label>'
+        html += '<input class="form-check-input custom-control-input" style="" type="checkbox" name="estado_2" value="Revisado" checked>'
+        html += '<label class="form-check-label">Revisado</label>'
         html += '</div>'
         html += '<div class="form-check">'
-        html += '<input class="form-check-input custom-control-input" type="checkbox" name="estado_3" value="Rechazado">'
-        html += '<label class="form-check-label" for="inlineCheckbox1">Rechazado</label>'
+        html += '<input class="form-check-input custom-control-input" style="" type="checkbox" name="estado_3" value="Editar" checked>'
+        html += '<label class="form-check-label">Editar</label>'
         html += '</div>'
         html += '<div class="form-check">'
-        html += '<input class="form-check-input custom-control-input" type="checkbox" name="estado_4" value="No aprobado por CAP">'
-        html += '<label class="form-check-label" for="inlineCheckbox2">No aprobado por CAP</label>'
+        html += '<input class="form-check-input custom-control-input" type="checkbox" name="estado_4" value="Rechazado" checked>'
+        html += '<label class="form-check-label">Rechazado</label>'
         html += '</div>'
         html += '<div class="form-check">'
-        html += '<input class="form-check-input custom-control-input" type="checkbox" name="estado_5" value="Aprobado">'
-        html += '<label class="form-check-label" for="inlineCheckbox1">Aprobado</label>'
+        html += '<input class="form-check-input custom-control-input" type="checkbox" name="estado_5" value="No aprobado por CAP" checked>'
+        html += '<label class="form-check-label">No aprobado por CAP</label>'
+        html += '</div>'
+        html += '<div class="form-check">'
+        html += '<input class="form-check-input custom-control-input" type="checkbox" name="estado_6" value="Aprobado" checked>'
+        html += '<label class="form-check-label">Aprobado</label>'
         html += '</div>'
         html += '</div>'
         html += '<div class="col-4">'
         html += '<h6 class="fw-bold">Modalidad Académica</h6>'
         html += '<select class="form-select mr-sm-2" name="modalidad" id="select_modalidad">'
-        html += '<option selected disabled value=""> Selecciona una Modalidad </option>'
+        html += '<option selected value="todas"> Todas las modalidades </option>'
         let modalidades;
         await $.ajax({
             type: "get",
@@ -848,13 +852,13 @@ function switch_generarInforme_2(){
     if(switchValue=='0'){
         $('#icon_2').remove()
         $('#b_2').before(html)
-        html = '<div class="col-3">'
+        html = '<div class="col-3" onclick="YYYY_trimestre()">'
         html += '<label class="fw-bold" for="yyyy">Año</label>'
-        html += '<input type="number" min="0" class="form-control" name="yyyy" placeholder="Año">'
+        html += '<input type="number" min="0" class="form-control" name="yyyy" placeholder="Año" id="year" required>'
         html += '</div>'
-        html += '<div class="col-3">'
+        html += '<div class="col-3" onclick="YYYY_trimestre()">'
         html += '<label class="fw-bold" for="trimestre">Trimestre</label>'
-        html += '<select class="form-select mr-sm-2" name="trimestre">'
+        html += '<select class="form-select mr-sm-2" name="trimestre" id="trim">'
         html += '<option selected disabled value=""> Trimestre </option>'
         html += '<option value="1">1</option>'
         html += '<option value="2">2</option>'
@@ -862,17 +866,17 @@ function switch_generarInforme_2(){
         html += '<option value="4">4</option>'
         html += '</select>'
         html += '</div>'
-        html += '<div class="col-3 mb-3" id="fecha_1">'
+        html += '<div class="col-3 mb-3" id="fecha_1" onclick="start_end_date1()">'
         html += '<label class="fw-bold" for="startDate1">Fecha de Publicación (Inicio)</label>'
-        html += '<input class="form-control mb-2" type="date" name="startDate1" id="startDate1">'
+        html += '<input class="form-control mb-2" type="date" name="startDate" id="startDate1" required>'
         html += '<label class="fw-bold" for="endDate1">Fecha de Publicación (Fin)</label>'
-        html += '<input class="form-control" type="date" name="endDate1">'
+        html += '<input class="form-control" type="date" name="endDate" id="endDate1" required>'
         html += '</div>'
-        html += '<div class="col-3 mb-2" id="fecha_2">'
+        html += '<div class="col-3 mb-2" id="fecha_2" onclick="start_end_date2()">'
         html += '<label class="fw-bold" for="startDate2">Fecha de Solicitud (Inicio)</label>'
-        html += '<input class="form-control mb-2" type="date" name="startDate2">'
+        html += '<input class="form-control mb-2" type="date" name="startDate" id="startDate2" required>'
         html += '<label class="fw-bold" for="endDate2">Fecha de Solicitud (Fin)</label>'
-        html += '<input class="form-control" type="date" name="endDate2">'
+        html += '<input class="form-control" type="date" name="endDate" id="endDate2" required>'
         html += '</div>'
         $('#row_2').append(html)
         $('#switch_2').val('1')
@@ -1035,29 +1039,77 @@ async function buscarDocente(){
     }
 }
 
+function YYYY_trimestre(){
+    $('#year').prop('disabled',false)
+    $('#year').prop('required',true)
+    $('#trim').prop('disabled',false)
+
+    $('#startDate1').prop('disabled',true)
+    $('#endDate1').prop('disabled',true)
+
+    $('#startDate2').prop('disabled',true)
+    $('#endDate2').prop('disabled',true)
+}
+
+function start_end_date1(){
+    $('#year').prop('disabled',true)
+    $('#trim').prop('disabled',true)
+
+    $('#startDate1').prop('disabled',false)
+    $('#endDate1').prop('disabled',false)
+
+    $('#startDate2').prop('disabled',true)
+    $('#endDate2').prop('disabled',true)
+}
+
+function start_end_date2(){
+    $('#year').prop('disabled',true)
+    $('#trim').prop('disabled',true)
+
+    $('#startDate1').prop('disabled',true)
+    $('#endDate1').prop('disabled',true)
+
+    $('#startDate2').prop('disabled',false)
+    $('#endDate2').prop('disabled',false)
+}
+
 function checkGenerarInforme(){
     //$('#startDate1').attr('disabled', true)
     //$('#startDate1').attr('max', new Date().toISOString().split('T')[0])
-    let switch_1 = $('#switch_1').val();
-    let switch_2 = $('#switch_2').val();
-    let switch_3 = $('#switch_3').val();
-    if(switch_1=='0'&&switch_2=='0'&&switch_3=='0'){
-        Swal.fire({
-            html: 'Estás seguro de Generar un documento con todas las solicitudes existentes? (esto podría tardar bastante tiempo)',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Descargar',
-            confirmButtonColor: '#8c141b',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $('#submitButton').click()
-            }
-        })
-    }else{
-        //$('#submitButton').click()
+    var start = true;
+    (function () {
+        'use strict'
+        var forms = document.querySelectorAll('#FormValidate')
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                if (!form.checkValidity()) {
+                    start = false;
+                    form.classList.add('was-validated')
+                }
+            })
+    })()
+    if(start){
+        $('#realClick').click();
+        let switch_1 = $('#switch_1').val();
+        let switch_2 = $('#switch_2').val();
+        let switch_3 = $('#switch_3').val();
+        if(switch_1=='0'&&switch_2=='0'&&switch_3=='0'){
+            Swal.fire({
+                html: 'Estás seguro de Generar un documento con todas las solicitudes existentes? (esto podría tardar bastante tiempo)',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Descargar',
+                confirmButtonColor: '#8c141b',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#submitButton').click()
+                }
+            })
+        }else{
+            $('#submitButton').click()
+        }
     }
-    //$('#submitButton').click()
 }
 
 //DataTables

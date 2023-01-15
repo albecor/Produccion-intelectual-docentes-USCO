@@ -154,7 +154,6 @@ usersCtrl.createAdminForm = async (req, res)=>{
 };
 usersCtrl.createAdmin = async (req, res)=>{
     const errors = [];
-
     const { identification_type, identification, name, lastname, sec_lastname, phone, address, city, department, role, email, password, confirm_password} = req.body;
     //console.log("password",req.body.loadData)
     const userIdentification = await User.findOne({ identification }).lean();
@@ -179,7 +178,8 @@ usersCtrl.createAdmin = async (req, res)=>{
     }
 
     if (errors.length > 0) {
-        res.render('users/createAdminForm', { errors, identification_type, identification, name, lastname, sec_lastname, phone, address, city, department, role, email,});
+        req.flash('errors',errors)
+        res.redirect('/users/createAdminForm')
     }else {
         const data = { identification_type, identification, name, lastname, sec_lastname, phone, address, city, department, role, email, password,};
         const newUser = new User(data);
@@ -261,25 +261,22 @@ usersCtrl.deletUserAdmin = async (req, res) => {
     res.redirect('/users/seeAllUsersAdmin')
 };
 
-usersCtrl.myProfile = (req, res)=>{
-    //const { name, lastname, sec_lastname, identification, email } = req.user;
-    //console.log(req.user)
-    const user = req.user;
-    switch (req.user.role) {
+usersCtrl.myProfile = async (req, res)=>{
+    const {_id,role} = req.user;
+    let user = await User.findById(_id).lean()
+    let Admin = false,Funcionario = false, Docente = false;
+    switch (role) {
         case 'Admin':
-            let Admin = true;
-            res.render('users/myProfile', {Admin, user});
+            Admin = true;
             break;
         case 'Funcionario':
-            let Funcionario = true;
-            res.render('users/myProfile', {Funcionario, user});
+            Funcionario = true;
             break;
         case 'Docente':
-            let Docente = true;
-            res.render('users/myProfile', {Docente, user});
+            Docente = true;
             break;
     }
-    //res.render('users/myProfile')
+    res.render('users/myProfile', {Admin,Funcionario,Docente, user});
 }
 
 ////Cambiara la contraseña///

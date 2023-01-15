@@ -36,7 +36,11 @@ const PublicationSchema = Schema({
         type: Date
     },
 
-    ISSN:{              //ó ISBN
+    fecha_solicitud: {
+        type: Date
+    },
+
+    ISXN:{              //ó ISBN
         type:String
     },
 

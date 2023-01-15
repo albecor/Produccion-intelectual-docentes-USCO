@@ -4,13 +4,13 @@
             <h1 class="h4 text-black font-weight-bold">Agregar el primer administrador</h1>
         </div>
         <div class="card-body">
-            <form action="/users/createAdmin" method="POST" class="justify-content-center" id="fakeForm" onkeydown="return event.key != 'Enter';" novalidate>
+            <form action="/users/createAdmin" method="POST" class="justify-content-center" id="FormValidate" onkeydown="return event.key != 'Enter';" novalidate>
             <!--form id="fakeForm" class="justify-content-center" novalidate-->  
                 <h6 class="font-weight-bold mt-0 mb-1">Información personal</h6>                              
                 <div class="form-group row">
                     <div class="col mb-2">                     
                         <select class="form-select mr-sm-2" id="inlineFormCustomSelect" name="identification_type" required>                         
-                                <option value="" selected>--- Elija un tipo de identificación ---</option>                            
+                                <option value="" disabled selected>--- Elija un tipo de identificación ---</option>                            
                                 <option value="Cedula">Cédula</option>
                                 <option value="Cedula_extrangeria">Cédula de extrangeria</option>
                                 <option value="Pasaporte">Pasaporte</option>
@@ -37,8 +37,7 @@
                                 value="{{lastname}}" required>
                     </div>
                     <div class="col mb-0">
-                        <input type="text" class="form-control bg-light" name="sec_lastname"
-                                placeholder="Segundo apellido" value="{{sec_lastname}}" required>
+                        <input type="text" class="form-control bg-light" name="sec_lastname" placeholder="Segundo apellido" value="{{sec_lastname}}" required>
                     </div>
                 </div>
                                                         
@@ -91,8 +90,9 @@
                 </div>
                 <hr>        
 
-                <div class="col text-center">                  
-                    <button type="submit" style="color:white; background-color: rgb(140, 20, 27); border: 0;" class="btn btn-primary">Crear</button>
+                <div class="col text-center">
+                    <a type="button" style="color:white; background-color: rgb(140, 20, 27); border: 0;" onclick="checkInputs()" class=" btn btn-primary">Crear</a>
+                    <button id="realClick" type="submit" style="color:white; background-color: rgb(140, 20, 27); border: 0;" class="d-none btn btn-primary">Crear</button>
                 </div>        
             </form>        
         </div>
