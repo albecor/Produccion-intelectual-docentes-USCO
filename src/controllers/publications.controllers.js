@@ -78,7 +78,7 @@ publicationsCtrl.AddPublication = async (req, res) => {
     let id_Docente = req.user.id;
     var _id = ObjectId();
     let estado =  'Pendiente por revisión';
-    let fecha_solicitud = new Date();
+    let fecha_solicitud = newDate();
     fecha_solicitud.setMinutes(fecha_solicitud.getMinutes() - fecha_solicitud.getTimezoneOffset())
     const newPublication = new Publication({
         _id,
@@ -140,7 +140,7 @@ publicationsCtrl.renderMyPublications = async (req, res) => {
 publicationsCtrl.timeVerification = async (req,res) => {
     let {id} = req.query;
     let {fecha_solicitud} = await Publication.findById(id)
-    let date = new Date()
+    let date = newDate()
     date = (date-fecha_solicitud)/60000
     let allow = true;
     if(date > 5  ){
@@ -151,7 +151,7 @@ publicationsCtrl.timeVerification = async (req,res) => {
 
 publicationsCtrl.deleteMyPublication = async (req,res) => {
     let {path,fecha_solicitud} = await Publication.findById(req.params.id)
-    let date = new Date()
+    let date = newDate()
     date = (date-fecha_solicitud)/60000
     if(date > 5 ){
         req.flash('error_msg', 'El tiempo límite para eliminar es de 5min, ese tiempo ya expiró');
@@ -300,7 +300,7 @@ publicationsCtrl.editarPublicacion = async (req,res) => {
             }
             let id_Docente = req.user.id;
             let estado =  'Pendiente por revisión';
-            let fecha_solicitud = new Date();
+            let fecha_solicitud = newDate();
             fecha_solicitud.setMinutes(fecha_solicitud.getMinutes() - fecha_solicitud.getTimezoneOffset())
             await Publication.findByIdAndUpdate(id,{
                 id_Docente,
@@ -774,6 +774,30 @@ function SiToBoolean(data){
         default:
             return false
     }
+}
+
+function newDate(){
+    const date = newDate();
+    const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+    };
+    const dateTimeFormat = new Intl.DateTimeFormat('es-ES',options);
+    const parts = dateTimeFormat.formatToParts(date);
+    let formattedDate = '';
+    formattedDate += (parts.find(x => x.type === 'year')).value + '-'
+    formattedDate += ((parts.find(x => x.type === 'month')).value).padStart(2,0) + '-'
+    formattedDate += ((parts.find(x => x.type === 'day')).value).padStart(2,0) + 'T'
+    formattedDate += ((parts.find(x => x.type === 'hour')).value).padStart(2,0)+ ':'
+    formattedDate += ((parts.find(x => x.type === 'minute')).value).padStart(2,0)+ ':'
+    formattedDate += ((parts.find(x => x.type === 'second')).value).padStart(2,0)+ '.000Z'
+    formattedDate = new Date(formattedDate)
+    return formattedDate
 }
 
 module.exports = publicationsCtrl;

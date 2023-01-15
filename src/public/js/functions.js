@@ -1074,8 +1074,6 @@ function start_end_date2(){
 }
 
 function checkGenerarInforme(){
-    //$('#startDate1').attr('disabled', true)
-    //$('#startDate1').attr('max', new Date().toISOString().split('T')[0])
     var start = true;
     (function () {
         'use strict'
