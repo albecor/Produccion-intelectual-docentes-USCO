@@ -777,7 +777,7 @@ function SiToBoolean(data){
 }
 
 function newDate(){
-    const date = newDate();
+    const date = new Date();
     const options = {
         weekday: 'long',
         year: 'numeric',
