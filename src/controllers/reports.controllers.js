@@ -126,12 +126,12 @@ reportsCtrl.GenerarInforme = async (req,res) =>{
             index = parseInt(i)+1;
             row = parseInt(i)+2;
             rownombre = worksheet1.getRow(row);
-            let vigencia = parseInt(moment(obj.createdAt).utc().format('YYYY'));
+            let vigencia = parseInt(moment(obj.fecha_solicitud).utc().format('YYYY'));
             docente = await User.findById(obj.id_Docente).lean()
             let issn = await ISSN.findOne({ vigencia,$or: [ { issn_impreso: obj.issn }, { issn_electronico: obj.issn }, {issn_L:obj.issn} ] }).lean()
             let autores = await Autor.find({id_publication:obj._id}).lean()
             rownombre.getCell(1).value = index;
-            rownombre.getCell(2).value = moment(obj.createdAt).utc().format('DD/MM/YYYY');
+            rownombre.getCell(2).value = moment(obj.fecha_solicitud).utc().format('DD/MM/YYYY');
             rownombre.getCell(3).value = vigencia;
             rownombre.getCell(4).value = docente.facultad;
             rownombre.getCell(5).value = docente.programa;

@@ -729,7 +729,7 @@ function searchPublications(){
                     html += '</thead>'
                     html += '<tbody>'
                     publications.map((obj)=>{
-                        obj.createdAt = moment(obj.createdAt).utc().format('DD/MM/YYYY')
+                        obj.fecha_solicitud = moment(obj.fecha_solicitud).utc().format('DD/MM/YYYY')
                         obj.fecha_publicacion = moment(obj.fecha_publicacion).utc().format('DD/MM/YYYY')
                     })
                     for(let i in publications){
@@ -738,7 +738,7 @@ function searchPublications(){
                         html += '<th scope="row">'+index+'</th>'
                         html += '<td>'+publications[i].name+'</td>'
                         html += '<td>'+publications[i].modalidad+'</td>'
-                        html += '<td>'+publications[i].createdAt+'</td>'
+                        html += '<td>'+publications[i].fecha_solicitud+'</td>'
                         html += '<td>'+publications[i].fecha_publicacion+'</td>'
                         html += '<td>'+publications[i].estado+'</td>'
                         html += '</tr>'

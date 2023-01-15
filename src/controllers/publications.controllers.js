@@ -123,9 +123,9 @@ publicationsCtrl.AddPublication = async (req, res) => {
 
 publicationsCtrl.renderMyPublications = async (req, res) => {
     let {id} = req.user;
-    let publications = await Publication.find({id_Docente:id}).sort({createdAt:-1}).lean();
+    let publications = await Publication.find({id_Docente:id}).sort({fecha_solicitud:-1}).lean();
     for (let i in publications) {
-        publications[i]['createdAt'] = moment(publications[i].createdAt).utc().format('DD/MM/YYYY');
+        publications[i]['fecha_solicitud'] = moment(publications[i].fecha_solicitud).utc().format('DD/MM/YYYY');
         publications[i]['fecha_publicacion'] = moment(publications[i].fecha_publicacion).utc().format('DD/MM/YYYY');
         publications[i]['index']=((publications.length-parseInt(i)).toString()).padStart(3,0);
         publications[i]['editar'] = false;
@@ -139,9 +139,9 @@ publicationsCtrl.renderMyPublications = async (req, res) => {
 
 publicationsCtrl.timeVerification = async (req,res) => {
     let {id} = req.query;
-    let {createdAt} = await Publication.findById(id)
+    let {fecha_solicitud} = await Publication.findById(id)
     let date = new Date()
-    date = (date-createdAt)/60000
+    date = (date-fecha_solicitud)/60000
     let allow = true;
     if(date > 5  ){
         allow = false
@@ -150,9 +150,9 @@ publicationsCtrl.timeVerification = async (req,res) => {
 };
 
 publicationsCtrl.deleteMyPublication = async (req,res) => {
-    let {path,createdAt} = await Publication.findById(req.params.id)
+    let {path,fecha_solicitud} = await Publication.findById(req.params.id)
     let date = new Date()
-    date = (date-createdAt)/60000
+    date = (date-fecha_solicitud)/60000
     if(date > 5 ){
         req.flash('error_msg', 'El tiempo límite para eliminar es de 5min, ese tiempo ya expiró');
         res.redirect('/publications/myPublications')
@@ -213,7 +213,7 @@ publicationsCtrl.renderEditarPublicacion = async (req, res) => {
             otras = true;
         break;
     }
-    publication['createdAt'] = moment(publication.createdAt).utc().format('DD/MM/YYYY');
+    publication['fecha_solicitud'] = moment(publication.fecha_solicitud).utc().format('DD/MM/YYYY');
     publication['fecha_publicacion'] = moment(publication.fecha_publicacion).utc().format('YYYY-MM-DD');
     publication['fecha_recepcion_revista'] = moment(publication.fecha_recepcion_revista).utc().format('YYYY-MM-DD');
     let docente = await User.findById(publication.id_Docente).lean()
@@ -342,7 +342,7 @@ publicationsCtrl.editarPublicacion = async (req,res) => {
 //Funcionario
 
 publicationsCtrl.renderAuditFn = async (req, res) => {
-    let publications = await Publication.find({estado:'Pendiente por revisión'}).lean().sort({createdAt:1});
+    let publications = await Publication.find({estado:'Pendiente por revisión'}).lean().sort({fecha_solicitud:1});
     for (let i in publications) {
         let id = publications[i].id_Docente;
         if(id){
@@ -351,7 +351,7 @@ publicationsCtrl.renderAuditFn = async (req, res) => {
             publications[i]['facultad']=facultad;
             publications[i]['programa']=programa;
         }
-        publications[i]['createdAt'] = moment(publications[i].createdAt).utc().format('DD/MM/YYYY');
+        publications[i]['fecha_solicitud'] = moment(publications[i].fecha_solicitud).utc().format('DD/MM/YYYY');
         publications[i]['index']=parseInt(i)+1;
     };
 
@@ -391,7 +391,7 @@ publicationsCtrl.renderAuditFnId = async (req, res) => {
             otros = true;
             break
     }
-    publication['createdAt'] = moment(publication.createdAt).utc().format('DD/MM/YYYY');
+    publication['fecha_solicitud'] = moment(publication.fecha_solicitud).utc().format('DD/MM/YYYY');
     publication['fecha_publicacion'] = moment(publication.fecha_publicacion).utc().format('DD/MM/YYYY');
     publication['fecha_recepcion_revista'] = moment(publication.fecha_recepcion_revista).utc().format('DD/MM/YYYY');
     let docente = await User.findById(publication.id_Docente).lean()
@@ -488,7 +488,7 @@ publicationsCtrl.renderAuditCAP = async (req, res) => {
 publicationsCtrl.renderAuditCAPId = async (req, res) => {
     let {id} = req.params;
     let publication = await Publication.findById(id).lean()
-    publication['createdAt'] = moment(publication.createdAt).utc().format('DD/MM/YYYY');
+    publication['fecha_solicitud'] = moment(publication.fecha_solicitud).utc().format('DD/MM/YYYY');
     publication['fecha_publicacion'] = moment(publication.fecha_publicacion).utc().format('DD/MM/YYYY');
     publication['fecha_recepcion_revista'] = moment(publication.fecha_recepcion_revista).utc().format('DD/MM/YYYY');
     let docente = await User.findById(publication.id_Docente).lean()
@@ -539,7 +539,7 @@ publicationsCtrl.SearchPublication = async (req, res) => {
             {estado:estado_5},
             {estado:estado_6}
         ],
-        "createdAt": { $gte: startDate, $lte: endDate }
+        "fecha_solicitud": { $gte: startDate, $lte: endDate }
     }).lean();
     res.send({publications})
 }
@@ -574,7 +574,7 @@ publicationsCtrl.renderRequest = async (req, res) => {
             capitulo = true;
             break;
     }
-    publication['createdAt'] = moment(publication.createdAt).utc().format('DD/MM/YYYY');
+    publication['fecha_solicitud'] = moment(publication.fecha_solicitud).utc().format('DD/MM/YYYY');
     publication['fecha_publicacion'] = moment(publication.fecha_publicacion).utc().format('DD/MM/YYYY');
     publication['fecha_recepcion_revista'] = moment(publication.fecha_recepcion_revista).utc().format('DD/MM/YYYY');
     let docente = await User.findById(publication.id_Docente).lean()
