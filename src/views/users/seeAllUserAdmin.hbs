@@ -15,26 +15,28 @@
         <th scope="col">Identificación</th>
         <th scope="col">Correo electrónico</th>
         <th scope="col">Tipo</th>      
-        <th scope="col">Ver</th>
+        <th scope="col">Perfil</th>
         <th scope="col">Eliminar</th>  
       </tr>
     </thead>
     <tbody>   
       {{#each pList}} 
         <tr>
-          <th scope="row">{{@index}}</th>
+          <th scope="row">{{index}}</th>
           <td>{{name}}</td>
           <td>{{lastname}}</td>
           <td>{{sec_lastname}}</td>
           <td>{{identification}}</td>
           <td>{{email}}</td>
           <td>{{role}}</td>
-          <td>        
-            <a href="/users/seeUserAdminForm/{{_id}}"><button class="btn btn-success btn-block btn-sm">Perfil</button></a>        
+          <td class="text-center">
+              <a href="/users/seeUserAdminForm/{{_id}}">
+                <i class="fas fa-user"></i>
+              </a>
           </td>      
           <td>
             <form action="/users/deleteUserAdmin/{{_id}}?_method=DELETE" method="POST" onsubmit="return confirmation()">
-              <button type="=submit" class="btn btn-danger btn-block btn-sm">Eliminar</button> 
+              <button type="=submit" class="btn btn-danger btn-block btn-sm" style="background-color: rgb(140, 20, 27); border: 0;">Eliminar</button> 
             </form>
           </td> 
         </tr>

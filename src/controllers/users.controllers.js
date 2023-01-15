@@ -210,8 +210,11 @@ usersCtrl.seeAllAdmin = async (req, res)=>{
     res.render('users/seeAllUserAdmin', {pList, Admin})
 };
 usersCtrl.seeAllUsersAdmin = async (req, res)=>{
-    const pList = await User.find().lean();
     const Admin = true;
+    const pList = await User.find().lean();
+    pList.map((obj,i)=>{
+        obj['index'] = i+1;
+    })
     res.render('users/seeAllUserAdmin', {pList, Admin})
 };
 usersCtrl.findUserByIdentificationForm = (req, res)=>{
