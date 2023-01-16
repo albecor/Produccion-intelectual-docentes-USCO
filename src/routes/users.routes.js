@@ -15,15 +15,8 @@ const {
         logout, 
         changePasswdForm, 
         changePasswd, 
-        signInError, 
-        seeAllDocentesAdmin, 
-        seeAllFuncionariosAdmin,
-        seeAllAdmin,
-        seeAllUsersAdmin, 
-        findUserByIdentificationForm, 
-        findUserByIdentification, 
-        findUserByEmailForm, 
-        findUserByEmail, 
+        signInError,
+        seeAllUsersAdmin,
         editUserFormAdmin, 
         editUserAdmin, 
         seeUserAdminForm, 
@@ -58,16 +51,7 @@ router.post('/users/createAdmin', createAdmin);
 ////////////////////////////////////////////////////////////////////////////
 //////////////Consultas, borrado y edición de usuarios //////////////////////////////
 //Permite al admin ver todos los usuarios
-router.get('/users/seeAllDocentesAdmin', isAuthenticated, isAdmin, seeAllDocentesAdmin);
-router.get('/users/seeAllFuncionariosAdmin', isAuthenticated, isAdmin, seeAllFuncionariosAdmin)
-router.get('/users/seeAllAdmin', isAuthenticated, isAdmin, seeAllAdmin);
 router.get('/users/seeAllUsersAdmin', isAuthenticated, isAdmin, seeAllUsersAdmin);
-
-router.get('/users/findUserByIdentification', isAuthenticated, isAdmin, findUserByIdentificationForm);
-router.post('/users/findUserByIdentification', isAuthenticated, isAdmin,findUserByIdentification);
-
-router.get('/users/findUserByEmail', isAuthenticated, isAdmin, findUserByEmailForm);
-router.post('/users/findUserByEmail', isAuthenticated, isAdmin, findUserByEmail);
 
 ////Permite ver y editar los usuarios///////////////////////////////////////////////
 router.get('/users/seeUserAdminForm/:id', isAuthenticated, isAdmin, seeUserAdminForm)

@@ -1148,6 +1148,17 @@ function checkGenerarInforme(){
 
 //DataTables
 
+$(document).ready(function () {
+    $('#AllUsers').DataTable({
+        language: {
+            url: '/json/es-CO.json'
+        },
+        ordering:  false,
+        "scrollCollapse": true,
+        "paging": false,
+    });
+});
+
 //MyPublications
 $(document).ready(function () {
     $('#myPublications').DataTable({
