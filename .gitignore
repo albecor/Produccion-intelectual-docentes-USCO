@@ -1,7 +1,4 @@
 node_modules
-src/public/uploads
-src/public/test
 src/files/
 src/public/xlsx/issn.xlsx
 src/public/xlsx/isbn.xlsx
-src/public/xlsx/informe2.xlsx

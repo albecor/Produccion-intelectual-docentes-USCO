@@ -107,7 +107,6 @@ reportsCtrl.GenerarInforme = async (req,res) =>{
             Object.assign(data,{facultad})
         }
     }
-    console.log(data)
     publications = await Publication.find(data)
     var XLSX = require('xlsx');
     var Excel = require('exceljs');
@@ -136,28 +135,28 @@ reportsCtrl.GenerarInforme = async (req,res) =>{
             rownombre.getCell(4).value = docente.facultad;
             rownombre.getCell(5).value = docente.programa;
             rownombre.getCell(6).value = docente.identification;
-            rownombre.getCell(8).value = docente.name + ' ' + docente.lastname;
-            rownombre.getCell(9).value = obj.modalidad;
-            rownombre.getCell(10).value = obj.name;
-            rownombre.getCell(12).value = obj.nombre_revista;
-            rownombre.getCell(13).value = obj.editorial;
-            rownombre.getCell(14).value = moment(obj.fecha_publicacion).utc().format('DD/MM/YYYY');
-            rownombre.getCell(15).value = obj.ISSN;
-            rownombre.getCell(16).value = autores.length+1
+            rownombre.getCell(7).value = docente.name + ' ' + docente.lastname;
+            rownombre.getCell(8).value = obj.modalidad;
+            rownombre.getCell(9).value = obj.name;
+            rownombre.getCell(11).value = obj.nombre_revista;
+            rownombre.getCell(12).value = obj.editorial;
+            rownombre.getCell(13).value = moment(obj.fecha_publicacion).utc().format('DD/MM/YYYY');
+            rownombre.getCell(14).value = obj.ISXN;
+            rownombre.getCell(15).value = autores.length+1
             let autores_print = '';
             autores.map((x,i) =>{
                 i = parseInt(i)
                 if(i >0)autores_print += ';'
                 autores_print += x.nombre
             })
-            rownombre.getCell(17).value = autores_print;
+            rownombre.getCell(16).value = autores_print;
             let categoria;
             if(obj.categoria != 'A1'&& obj.categoria != 'A2' && obj.categoria!= 'B' && obj.categoria != 'C'){
                 categoria= 'N/A'
             }else{
                 categoria= obj.categoria;
             }
-            rownombre.getCell(18).value = categoria;
+            rownombre.getCell(17).value = categoria;
         }
         await workbookw.xlsx.writeFile(fileWB2)
         
