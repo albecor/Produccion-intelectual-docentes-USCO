@@ -777,7 +777,9 @@ function SiToBoolean(data){
 }
 
 function newDate(){
-    return moment().format('YYYY-MM-DDTHH:mm:ss')
+    //let moment = require('moment')
+    let date = new Date(moment().format('YYYY-MM-DDTHH:mm:ss')+'Z')
+    return date
     /*const date = new Date();
     const options = {
         weekday: 'long',
