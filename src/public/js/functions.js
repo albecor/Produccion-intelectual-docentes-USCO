@@ -125,7 +125,7 @@ function PublicationsList(){
                 html += '</div>'
                 html += '<div class="row g-3 align-items-center mb-2" id="row_6">'
                 html += '<div class="col-3">'
-                html += '<input type="text" class="form-control" name="ISSN" placeholder="ISSN" required>'
+                html += '<input type="text" class="form-control" name="ISXN" placeholder="ISSN" required>'
                 html += '</div>'
                 html += '</div>'
                 html += '<div class="row g-3 align-items-center mb-2" id="row_7">'
@@ -165,7 +165,7 @@ function PublicationsList(){
                 $('#modalidad').addClass('col')
                 html = '<div class="form-group row mb-2" id="row_3">'
                 html += '<div class="col">'
-                html += '<input type="text" class="form-control" name="ISSN" placeholder="ISBN" required>'
+                html += '<input type="text" class="form-control" name="ISXN" placeholder="ISBN" required>'
                 html += '</div>'
                 html += '<div class="col" id="editorial">'
                 html += '<input type="text" class="form-control" name="editorial" placeholder="Editorial" required>'
