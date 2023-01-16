@@ -22,6 +22,7 @@ const {
     renderAuditCAPId,
     revisionCAP,
     checkISSN,
+    checkISBN,
     primeraRevision,
     renderSearchPublication,
     SearchPublication,
@@ -74,6 +75,8 @@ router.post('/publications/search',isAuthenticated, isFuncionario, SearchPublica
 router.get('/publications/request/:id', isAuthenticated, isFuncionario, renderRequest);
 
 router.get('/issn/check', isAuthenticated, isFuncionario, checkISSN)
+
+router.get('/isbn/check', isAuthenticated, isFuncionario, checkISBN)
 
 router.post('/publications/reviewed',isAuthenticated, isFuncionario, primeraRevision);
 

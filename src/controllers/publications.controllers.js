@@ -749,12 +749,11 @@ publicationsCtrl.loadISBN = async (req,res) => {
 
 publicationsCtrl.checkISBN = async (req, res) => {
     let {id} = req.query;
-    let {ISXN:query,fecha_publicacion} = await Publication.findById(id).lean()
-    let vigencia = moment(fecha_publicacion).utc().year()
-    let issn = await ISSN.findOne({ vigencia,$or: [ { issn_impreso: query }, { issn_electronico: query }, {issn_L:query} ] }).lean()
+    let {ISXN} = await Publication.findById(id).lean()
+    let isbn = await ISBN.findOne({ isbn: ISXN }).lean()
     let validation = true;
-    if(!issn)validation = false;
-    res.send({validation})
+    if(!isbn)validation = false;
+    res.send({validation,isbn})
 }
 
 function SiToBoolean(data){
@@ -777,32 +776,10 @@ function SiToBoolean(data){
 }
 
 function newDate(){
-    //let moment = require('moment')
     let date = moment()
-    date.subtract(5,'h')
+    date.subtract(5,'h') //UTC -5
     date = new Date(date)
     return date
-    /*const date = new Date();
-    const options = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-    };
-    const dateTimeFormat = new Intl.DateTimeFormat('es-ES',options);
-    const parts = dateTimeFormat.formatToParts(date);
-    let formattedDate = '';
-    formattedDate += (parts.find(x => x.type === 'year')).value + '-'
-    formattedDate += ((parts.find(x => x.type === 'month')).value).padStart(2,0) + '-'
-    formattedDate += ((parts.find(x => x.type === 'day')).value).padStart(2,0) + 'T'
-    formattedDate += ((parts.find(x => x.type === 'hour')).value).padStart(2,0)+ ':'
-    formattedDate += ((parts.find(x => x.type === 'minute')).value).padStart(2,0)+ ':'
-    formattedDate += ((parts.find(x => x.type === 'second')).value).padStart(2,0)+ '.000Z'
-    formattedDate = new Date(formattedDate)
-    return formattedDate*/
 }
 
 module.exports = publicationsCtrl;

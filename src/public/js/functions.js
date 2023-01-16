@@ -181,7 +181,7 @@ function PublicationsList(){
             if(modalidad == articulo || modalidad == libro || modalidad == capitulo || modalidad == patentes || modalidad == ponencia){
                 html = '<div class="form-group row" id="row_8">'
                 html += '<div class="col-6">'
-                html += '<label for="name" id="name_label">Nombre del proyecto de Invesigación del cual se genera el material, sí aplica</label>'
+                html += '<label for="name" id="name_label">Nombre del proyecto de Investigación del cual se genera el material, sí aplica</label>'
                 html += '<input type="text" class="form-control" name="nombre_proyecto_investigacion" placeholder="">'
                 html += '</div>'
                 html += '</div>'
@@ -627,6 +627,42 @@ function checkISSN(data){
             }else{
                 Swal.fire({
                     text: 'No se encuentra este ISSN para el año de publicación',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#8c141b'
+                });
+            }
+        },
+        error: function (e) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Algo salió mal, contacta al desarrollador',
+                icon: 'error',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#8c141b'
+            });
+            console.log("error: ", e);
+        }
+    });
+}
+
+function checkISBN(data){
+    var id = data.attributes[0].value;
+    $.ajax({
+        type: "get",
+        url: "/isbn/check",
+        data: {id},
+        success: function(r){
+            if(r.validation){
+                Swal.fire({
+                    html: 'ISBN correcto, título: <b>'+r.isbn.titulo+'</b>',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: '#8c141b'
+                });
+            }else{
+                Swal.fire({
+                    text: 'No se encuentra este ISBN',
                     icon: 'error',
                     confirmButtonText: 'Aceptar',
                     confirmButtonColor: '#8c141b'
