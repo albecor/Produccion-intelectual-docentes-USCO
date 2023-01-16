@@ -778,7 +778,9 @@ function SiToBoolean(data){
 
 function newDate(){
     //let moment = require('moment')
-    let date = new Date(moment().format('YYYY-MM-DDTHH:mm:ss')+'Z')
+    let date = moment()
+    date.subtract(5,'h')
+    date = new Date(date)
     return date
     /*const date = new Date();
     const options = {
