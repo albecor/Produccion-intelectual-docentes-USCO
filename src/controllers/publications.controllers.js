@@ -777,7 +777,8 @@ function SiToBoolean(data){
 }
 
 function newDate(){
-    const date = new Date();
+    return new Date(moment.utc().add('minutes', -moment().zone()).unix() * 1000)
+    /*const date = new Date();
     const options = {
         weekday: 'long',
         year: 'numeric',
@@ -797,7 +798,7 @@ function newDate(){
     formattedDate += ((parts.find(x => x.type === 'minute')).value).padStart(2,0)+ ':'
     formattedDate += ((parts.find(x => x.type === 'second')).value).padStart(2,0)+ '.000Z'
     formattedDate = new Date(formattedDate)
-    return formattedDate
+    return formattedDate*/
 }
 
 module.exports = publicationsCtrl;

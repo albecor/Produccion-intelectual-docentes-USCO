@@ -129,8 +129,13 @@
                         <input type="text" class="form-control bg-light" value="{{publication.URL}}" disabled>
                     </div>
                     <div class="col mb-2">
-                        <label>ISBN</label>                     
-                        <input type="text" class="form-control bg-light" value="{{publication.ISXN}}" disabled>
+                        <label>ISBN</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light" value="{{publication.ISXN}}" id="inpt_ISBN" disabled>
+                            <span class="input-group-text" id="span_ISBN">
+                                <a isbn="{{publication._id}}" type="button" title="Validar ISSN" onclick="checkISBN(this)"><i class="fas fa-eye" style="color: black;"></i></a>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group row">
