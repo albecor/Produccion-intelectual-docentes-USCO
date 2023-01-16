@@ -777,7 +777,7 @@ function SiToBoolean(data){
 }
 
 function newDate(){
-    return new Date(moment.utc().add('minutes', -moment().zone()).unix() * 1000)
+    return new Date(moment.utc().add('minutes', +moment().zone()).unix() * 1000)
     /*const date = new Date();
     const options = {
         weekday: 'long',
