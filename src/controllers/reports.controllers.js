@@ -127,7 +127,6 @@ reportsCtrl.GenerarInforme = async (req,res) =>{
             rownombre = worksheet1.getRow(row);
             let vigencia = parseInt(moment(obj.fecha_solicitud).utc().format('YYYY'));
             docente = await User.findById(obj.id_Docente).lean()
-            let issn = await ISSN.findOne({ vigencia,$or: [ { issn_impreso: obj.issn }, { issn_electronico: obj.issn }, {issn_L:obj.issn} ] }).lean()
             let autores = await Autor.find({id_publication:obj._id}).lean()
             rownombre.getCell(1).value = index;
             rownombre.getCell(2).value = moment(obj.fecha_solicitud).utc().format('DD/MM/YYYY');
@@ -157,6 +156,15 @@ reportsCtrl.GenerarInforme = async (req,res) =>{
                 categoria= obj.categoria;
             }
             rownombre.getCell(17).value = categoria;
+            if(obj.conceptoCAP){
+                rownombre.getCell(18).value = obj.conceptoCAP;
+            }
+            if(obj.puntaje){
+                rownombre.getCell(19).value = obj.puntaje;
+            }
+            if(obj.tipo_puntaje){
+                rownombre.getCell(20).value = obj.tipo_puntaje;
+            }
         }
         await workbookw.xlsx.writeFile(fileWB2)
         
