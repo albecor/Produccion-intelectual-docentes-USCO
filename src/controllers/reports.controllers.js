@@ -163,12 +163,13 @@ reportsCtrl.GenerarInforme = async (req,res) =>{
                 rownombre.getCell(19).value = obj.puntaje;
             }
             if(typeof(obj.tipo_puntaje) == 'boolean'){
+                let t_puntaje = '';
                 if(obj.tipo_puntaje){
-                    obj.tipo_puntaje = 'Bonificación por productividad académica'
+                    t_puntaje = 'Bonificación por productividad académica'
                 }else{
-                    obj.tipo_puntaje = 'Reconocimiento de puntos salariales'
+                    t_puntaje = 'Reconocimiento de puntos salariales'
                 }
-                rownombre.getCell(20).value = obj.tipo_puntaje;
+                rownombre.getCell(20).value = t_puntaje;
             }
         }
         await workbookw.xlsx.writeFile(fileWB2)
