@@ -162,7 +162,12 @@ reportsCtrl.GenerarInforme = async (req,res) =>{
             if(obj.puntaje){
                 rownombre.getCell(19).value = obj.puntaje;
             }
-            if(obj.tipo_puntaje){
+            if(typeof(obj.tipo_puntaje) == 'boolean'){
+                if(obj.tipo_puntaje){
+                    obj.tipo_puntaje = 'Bonificación por productividad académica'
+                }else{
+                    obj.tipo_puntaje = 'Reconocimiento de puntos salariales'
+                }
                 rownombre.getCell(20).value = obj.tipo_puntaje;
             }
         }
