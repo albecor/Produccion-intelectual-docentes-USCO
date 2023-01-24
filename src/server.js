@@ -7,7 +7,6 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const cookieParser = require('cookie-parser')
 const passport = require('passport');
-var hbs = require('handlebars');
 
 //Initializations
 const app = express()
@@ -59,12 +58,6 @@ app.use(require('./routes/reports.routes'));
 
 //Static files
 app.use(express.static(path.join(__dirname, 'public'))); //Indica a express donde esta la carpeta pública
-
-//Helpers
-
-hbs.registerHelper("orx", function (v1, v2, options) {
-    return (v1 || v2) ? options.fn(this) : options.inverse(this);
-});
 
 
 module.exports = app;

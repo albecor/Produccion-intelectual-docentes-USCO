@@ -2,13 +2,15 @@ const {Router} = require('express')
 const router =Router();
 const multer = require('multer')
 const Upload = multer()
-
-const {isAuthenticated, isAdmin, isDocente, isFuncionario} = require('../helpers/auth');
+const {isAuthenticated, 
+    isAdmin, 
+    isDocente, 
+    isFuncionario} = require('../helpers/auth');
 const {
     //Docente
     renderAddPublication,
     AddPublication,
-    sizeVerification,
+    fileVerification,
     renderMyPublications,
     deleteMyPublication,
     timeVerification,
@@ -28,7 +30,7 @@ const {
     SearchPublication,
     renderRequest,
     dowloadFile,
-
+    //Admin
     renderLoadISSN,
     loadISSN,
     renderISSN,
@@ -43,7 +45,7 @@ router.get('/publications/add',isAuthenticated, isDocente, renderAddPublication)
 
 router.post('/publications/add',isAuthenticated, isDocente, AddPublication);
 
-router.post('/publications/verification',isAuthenticated, isDocente, sizeVerification);
+router.post('/publications/verification',isAuthenticated, isDocente, fileVerification);
 
 router.get('/publications/myPublications',isAuthenticated, isDocente, renderMyPublications);
 

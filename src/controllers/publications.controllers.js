@@ -26,7 +26,7 @@ publicationsCtrl.renderAddPublication = (req, res) => {
     res.render('publications/addPublication',{json,Docente})
 };
 
-publicationsCtrl.sizeVerification = async (req,res) => {
+publicationsCtrl.fileVerification = async (req,res) => {
     const storage = multer.diskStorage({
         destination: (req,file, cb)=>{
             filePath = path.join(__dirname , '../files')

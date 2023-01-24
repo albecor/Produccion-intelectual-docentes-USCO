@@ -3,15 +3,8 @@ const reportsCtrl = {};
 const Publication = require('../models/publications')
 const User = require('../models/User')
 const Autor = require('../models/autor')
-const ISSN = require('../models/ISSN')
-const path = require('path');
-const multer = require('multer');
-const uuid = require('uuid/v4');
 const fs = require('fs');
 const moment = require('moment');
-var {Types} = require('mongoose');
-const { query } = require('express');
-let {ObjectId} = Types
 
 reportsCtrl.renderGenerarInforme = (req,res) =>{
     res.render('publications/generarInforme', {Funcionario:true})
@@ -100,7 +93,10 @@ reportsCtrl.GenerarInforme = async (req,res) =>{
     if(switch_3){
         let{facultad,programa,docente} = req.body;
         if(docente != 'todos'){
-            Object.assign(data,{docente})
+            let {Types} = require('mongoose');
+            let {ObjectId} = Types
+            docente = ObjectId(docente)
+            Object.assign(data,{id_Docente:docente})
         }else if(programa != 'todos'){
             Object.assign(data,{programa})
         }else if(facultad != 'todos'){

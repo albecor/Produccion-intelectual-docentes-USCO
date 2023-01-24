@@ -294,7 +294,7 @@ function resetRows(){
     $('#row_10').remove();
 }
 
-async function sizeLimit(){
+async function fileLimit(){
     var start = true;
     (function () {
         'use strict'
@@ -341,7 +341,7 @@ async function sizeLimit(){
                         }else{
                             Swal.fire({
                                 title: 'Error!',
-                                text: 'El tamaño debe ser menor a 5MB',
+                                text: 'Error en la validación del archivo',
                                 icon: 'error',
                                 confirmButtonText: 'Aceptar',
                                 confirmButtonColor: '#8c141b'
@@ -904,15 +904,15 @@ function switch_generarInforme_2(){
         html += '</div>'
         html += '<div class="col-3 mb-3" id="fecha_1" onclick="start_end_date1()">'
         html += '<label class="fw-bold" for="startDate1">Fecha de Publicación (Inicio)</label>'
-        html += '<input class="form-control mb-2" type="date" name="startDate" id="startDate1" required>'
+        html += '<input class="form-control mb-2" type="date" name="startDate1" id="startDate1" required>'
         html += '<label class="fw-bold" for="endDate1">Fecha de Publicación (Fin)</label>'
-        html += '<input class="form-control" type="date" name="endDate" id="endDate1" required>'
+        html += '<input class="form-control" type="date" name="endDate1" id="endDate1" required>'
         html += '</div>'
         html += '<div class="col-3 mb-2" id="fecha_2" onclick="start_end_date2()">'
         html += '<label class="fw-bold" for="startDate2">Fecha de Solicitud (Inicio)</label>'
-        html += '<input class="form-control mb-2" type="date" name="startDate" id="startDate2" required>'
+        html += '<input class="form-control mb-2" type="date" name="startDate2" id="startDate2" required>'
         html += '<label class="fw-bold" for="endDate2">Fecha de Solicitud (Fin)</label>'
-        html += '<input class="form-control" type="date" name="endDate" id="endDate2" required>'
+        html += '<input class="form-control" type="date" name="endDate2" id="endDate2" required>'
         html += '</div>'
         $('#row_2').append(html)
         $('#switch_2').val('1')
